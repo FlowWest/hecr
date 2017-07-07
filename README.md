@@ -6,7 +6,7 @@ a user to quickly query out desired data in a tidy dataframe format.
 
 ## Installation 
 
-The install required `devtools`, install with `install.packages("devtoosl")`.
+The install required `devtools`, install with `install.packages("devtools")`.
 To install `hecr` do the following:
 
 ```r 

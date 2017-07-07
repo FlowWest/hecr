@@ -5,12 +5,11 @@ Authors@R: person("emanuel", "rodriguez", email = "erodriguez@flowwest.com", rol
 Description: hecr is a simple package that allows a user to interface with an
   hdf5 file resulting from a HecRas model run. The api allows users to extract all 
   important data from a model file without writting repetitive code.
-Depends: R (>= 3.4.0)
+Depends: R (>= 3.0.0)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Imports: h5,
-    rhdf5,
     tibble,
     lubridate,
     magrittr
