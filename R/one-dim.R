@@ -13,6 +13,10 @@ get_xs_station_index <- function(.f, station_name) {
   xs_stations <- get_xs_river_stations(.f)
   xs_index <- which(xs_stations == station_name)
   
+  if (!length(xs_index)) {
+    stop(paste0("station name '",station_name,"' not found, check value"))
+  }
+  
   return(xs_index)
 }
 
@@ -34,4 +38,26 @@ get_xs_river_name <- function(.f, station_name) {
   trimws(xs_river_name)
 }
 
-#' Function retrieves a desired time series from a cross section 
+#' Function retrieves a desired time series from a cross section part of a
+#' HEC-RAS model
+#' @param .f an hdf5 file read in via hec_file or h5::h5file 
+#' @param station_name station for the cross section to query time series from 
+#' @param ts_type time series to query out (ex 'Water Surface', 'Depth', ...)
+#' @export
+extract_xs_ts <- function(.f, station_name, ts_type) {
+  river_name <- get_xs_river_name(.f, station_name)
+  reach_name <- get_xs_reach(.f, station_name)
+  xs_index <- get_xs_station_index(.f, station_name)
+  xs_datetime <- get_model_timestamps(.f, station_name)
+  series <- .f[hdf_paths$RES_CROSS_SECTIONS][ts_type][, xs_index]
+  d_length <- nrow(xs_datetime)
+  data.frame("datetime" = datetime, 
+             "river_name" = rep(river_name, d_length), 
+             "reach_name" = rep(reach_name, d_length), 
+             "cross_section" = rep(station_name, d_length), 
+             "values" = series)
+}
+
+
+
+
