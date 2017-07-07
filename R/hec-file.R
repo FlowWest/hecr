@@ -4,4 +4,3 @@
 hec_file <- function(f, ...) {
   h5::h5file(f)
 }
-
