@@ -21,7 +21,7 @@ email [erodriguez@flowwest.com](erodriguez@flowwest.com) for one.
 Currently `hecr` is limited to extracting already embeded time series from 
 an hdf5 file. Below are several examples for querying data. 
 
-### Query Water Surface Elevation 
+### Query Water Surface Elevation from 2D Area
 
 ```r 
 library(hecr) 
@@ -37,3 +37,10 @@ If you like the pipe you can use it in `hecr`
 d <- hec_file("raw-data/ardenwoodcreek.p50.hdf") %>% 
   extract_ts(x=123, y=123, ts_type = "Water Surface")
 ```
+
+### Query Water Surface Elevation from Cross Sections 
+
+```r
+xs <- extract_xs_ts(f, "7405.382", ts_type = "Water Surface")
+```
+

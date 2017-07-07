@@ -48,10 +48,10 @@ extract_xs_ts <- function(.f, station_name, ts_type) {
   river_name <- get_xs_river_name(.f, station_name)
   reach_name <- get_xs_reach(.f, station_name)
   xs_index <- get_xs_station_index(.f, station_name)
-  xs_datetime <- get_model_timestamps(.f, station_name)
+  xs_datetime <- get_model_timestamps(.f)
   series <- .f[hdf_paths$RES_CROSS_SECTIONS][ts_type][, xs_index]
-  d_length <- nrow(xs_datetime)
-  data.frame("datetime" = datetime, 
+  d_length <- length(xs_datetime)
+  data.frame("datetime" = xs_datetime, 
              "river_name" = rep(river_name, d_length), 
              "reach_name" = rep(reach_name, d_length), 
              "cross_section" = rep(station_name, d_length), 
