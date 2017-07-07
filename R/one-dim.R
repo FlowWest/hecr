@@ -34,4 +34,4 @@ get_xs_river_name <- function(.f, station_name) {
   trimws(xs_river_name)
 }
 
-
+#' Function retrieves a desired time series from a cross section 
