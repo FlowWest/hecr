@@ -30,3 +30,10 @@ f <- hec_file("raw-data/ardenwoodcreek.p50.hdf") # read in an hdf file
 
 d <- extract_ts(f, x=123, y=123, ts_type = "Water Surface")
 ```
+
+If you like the pipe you can use it in `hecr`
+
+```r
+d <- hec_file("raw-data/ardenwoodcreek.p50.hdf") %>% 
+  extract_ts(x=123, y=123, ts_type = "Water Surface")
+```
