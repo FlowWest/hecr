@@ -4,7 +4,7 @@
 \alias{hec_file}
 \title{Function reads in an hdf5 file resulting from a HecRas model run}
 \usage{
-hec_file(f, ...)
+hec_file(f)
 }
 \arguments{
 \item{f}{an hdf5 file resulting from a HecRas model run}

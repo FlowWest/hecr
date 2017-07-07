@@ -4,10 +4,10 @@
 \alias{get_center_coordinates}
 \title{Function retrieves the center coordinates for a given hec_file}
 \usage{
-get_center_coordinates(hf)
+get_center_coordinates(.f)
 }
 \arguments{
-\item{hf}{a hdf file read in with \code{hec_file}}
+\item{.f}{a hdf file read in with \code{hec_file}}
 }
 \description{
 Function retrieves the center coordinates for a given hec_file

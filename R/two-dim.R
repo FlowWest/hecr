@@ -1,8 +1,8 @@
 #' Function retrieves the center coordinates for a given hec_file
-#' @param hf a hdf file read in with \code{hec_file}
-get_center_coordinates <- function(hf) {
-  area_name <- get_flow_area_name(hf)
-  hf[hdf_paths$GEOM_2D_AREAS][area_name]['Cells Center Coordinate']
+#' @param .f a hdf file read in with \code{hec_file}
+get_center_coordinates <- function(.f) {
+  area_name <- get_flow_area_name(.f)
+  .f[hdf_paths$GEOM_2D_AREAS][area_name]['Cells Center Coordinate'][]
 }
 
 
@@ -32,7 +32,7 @@ get_model_timestamps <- function(.f) {
 
 #' Function extracts a time series from a hdf file resulting 
 #' from a HecRas model run.
-#' @param f an hdf file read in with either hec_file or h5
+#' @param .f an hdf file read in with hec_file or h5::h5file
 #' @param x coordinate to query for
 #' @param y coordinate to query for
 #' @param ts_type the time series to extract
@@ -41,10 +41,12 @@ get_model_timestamps <- function(.f) {
 extract_ts <- function(.f, x, y, ts_type = "Water Surface") {
   cc <- get_center_coordinates(.f)
   area_name <- get_flow_area_name(.f)
-  nearest_cell_index <- get_nearest_cell_center(x, y, cc[])
+  nearest_cell_index <- get_nearest_cell_center(x, y, cc)
   series <- f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type][, nearest_cell_index]
-  timestamps <- lubridate::dmy_hms(get_model_timestamps(f))
+  datetime <- lubridate::dmy_hms(get_model_timestamps(.f))
   
-  data.frame("values"=series, 
-             "timestamp"=timestamps)
+  # build desired dataframe 
+  data.frame("datetime"=datetime,
+             "cell_index" = rep(nearest_cell_index, length(datetime)),
+             "values"=series)
 }

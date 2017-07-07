@@ -1,4 +1,4 @@
 .onLoad <- function(libname, pkgname) {
   # needed to compute distances between points
-  options(digits = 20)
+  options(digits = 15)
 }
