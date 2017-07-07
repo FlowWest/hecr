@@ -5,16 +5,16 @@
 \title{Function extracts a time series from a hdf file resulting 
 from a HecRas model run.}
 \usage{
-extract_ts(f, x, y, ts_type = "Water Surface")
+extract_ts(.f, x, y, ts_type = "Water Surface")
 }
 \arguments{
-\item{f}{an hdf file read in with either hec_file or h5}
-
 \item{x}{coordinate to query for}
 
 \item{y}{coordinate to query for}
 
 \item{ts_type}{the time series to extract}
+
+\item{f}{an hdf file read in with either hec_file or h5}
 }
 \value{
 dataframe for desired timeseries with relevant column attributes

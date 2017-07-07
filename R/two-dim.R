@@ -1,16 +1,19 @@
 #' Function retrieves the center coordinates for a given hec_file
 #' @param hf a hdf file read in with \code{hec_file}
 get_center_coordinates <- function(hf) {
-  area_path <- get_flow_area_path(hf)
-  hf[area_path]['Cells Center Coordinate']
+  area_name <- get_flow_area_name(hf)
+  hf[hdf_paths$GEOM_2D_AREAS][area_name]['Cells Center Coordinate']
 }
 
 
 #' Function returns the path to 2D flow area defined in the hdf file.
 #' @param hf a hdf file read in with hec_file
 #' @return a slash delmited path to the 2D flow area
-get_flow_area_path <- function(hf) {
-  h5::list.groups(hf[hdf_paths$GEOM_2D_AREAS])[1]
+get_flow_area_name <- function(hf) {
+  path <- h5::list.groups(hf[hdf_paths$GEOM_2D_AREAS])[1]
+  name <- tail(unlist(strsplit(path, '/')), 1)
+  
+  return(name)
 }
 
 #' Function returns the column index of the cell center coordinate nearest (x, y)
@@ -33,5 +36,9 @@ get_nearest_cell_center <- function(x, y, nodes) {
 #' @export
 extract_ts <- function(.f, x, y, ts_type = "Water Surface") {
   cc <- get_center_coordinates(.f)
-  nerest_cell_index <- get_nearest_cell_center(x, y, cc[])
+  area_name <- get_flow_area_name(.f)
+  nearest_cell_index <- get_nearest_cell_center(x, y, cc[])
+  series <- f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type]
+  
+  return(series[, nearest_cell_index])
 }
