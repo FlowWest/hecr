@@ -26,10 +26,6 @@ get_nearest_cell_center <- function(x, y, nodes) {
   return(which.min(dist))
 }
 
-get_model_timestamps <- function(.f) {
-  .f[hdf_paths$RES_UNSTEADY_TS]['Time Date Stamp'][]
-}
-
 #' Function extracts a time series from a hdf file resulting 
 #' from a HecRas model run.
 #' @param .f an hdf file read in with hec_file or h5::h5file
@@ -43,7 +39,7 @@ extract_ts <- function(.f, x, y, ts_type = "Water Surface") {
   area_name <- get_flow_area_name(.f)
   nearest_cell_index <- get_nearest_cell_center(x, y, cc)
   series <- f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type][, nearest_cell_index]
-  datetime <- lubridate::dmy_hms(get_model_timestamps(.f))
+  datetime <- get_model_timestamps(.f)
   
   # build desired dataframe 
   data.frame("datetime"=datetime,
