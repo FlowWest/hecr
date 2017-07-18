@@ -1,5 +1,6 @@
 #' Function returns cross section stations defined in the model
 #' @param .f an hdf5 file read in with hec_file or h5::h5file
+#' @export
 get_xs_river_stations <- function(.f) {
   xs_stations <- .f[hdf_paths$GEOM_CROSS]['River Stations']
   
@@ -44,7 +45,7 @@ get_xs_river_name <- function(.f, station_name) {
 #' @param station_name station for the cross section to query time series from 
 #' @param ts_type time series to query out (ex 'Water Surface', 'Depth', ...)
 #' @export
-extract_xs_ts <- function(.f, station_name, ts_type) {
+extract_ts1 <- function(.f, station_name, ts_type) {
   river_name <- get_xs_river_name(.f, station_name)
   reach_name <- get_xs_reach(.f, station_name)
   xs_index <- get_xs_station_index(.f, station_name)

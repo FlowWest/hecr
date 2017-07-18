@@ -12,5 +12,6 @@ LazyData: true
 Imports: h5,
     tibble,
     lubridate,
-    magrittr
+    magrittr,
+    stringr
 RoxygenNote: 6.0.1
