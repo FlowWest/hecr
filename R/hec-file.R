@@ -4,3 +4,8 @@
 hec_file <- function(f) {
   h5::h5file(f)
 }
+
+#' 
+is_hec_file <- function(f) {
+  attr(f, "class") == "H5File"
+}

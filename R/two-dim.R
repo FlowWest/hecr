@@ -26,8 +26,7 @@ get_nearest_cell_center <- function(x, y, nodes) {
   return(which.min(dist))
 }
 
-#' Function extracts a time series from an hdf file resulting 
-#' from a HecRas model run. ts2 version is used for 2D portions of a Hec-Ras model.
+#' Function extracts a time series from an hdf file
 #' @param .f an hdf file read in with hec_file or h5::h5file
 #' @param x coordinate to query for
 #' @param y coordinate to query for
