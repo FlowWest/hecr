@@ -4,6 +4,12 @@ A simple R package for interacting with hdf5 files resulting from a HEC-RAS
 model run. `hecr` uses the `h5` package and wraps around it functions that enable 
 a user to quickly query out desired data in a tidy dataframe format.
 
+**List of current features** 
+
+1. Extract a time series from 2d portion of model run using a hecras coordinate of choice.
+2. Extract a time series from 1d portion of model run using a hecras defined station.
+
+
 ## Installation 
 
 The install required `devtools`, install with `install.packages("devtools")`.
