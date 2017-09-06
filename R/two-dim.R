@@ -16,7 +16,8 @@ get_flow_area_name <- function(hf) {
   return(name)
 }
 
-#' Function returns the column index of the cell center coordinate nearest to (x, y)
+#' Function returns the column index of the cell center coordinate nearest to (x, y).
+#' Uses simple vectorized version of Euclid's distance formula.
 #' @param x coordinate 
 #' @param y coordinate 
 #' @param nodes set of nodes to calculate distance from
@@ -43,7 +44,7 @@ extract_ts2 <- function(.f, x, y, ts_type = "Water Surface") {
     stop("'x' and 'y' are of different lengths")
   
   m <- matrix(cbind(x, y), ncol = 2)
-  
+  print(m)
   plan_attributes <- get_plan_attributes(.f)
   cc <- get_center_coordinates(.f)
   area_name <- get_flow_area_name(.f)
@@ -53,19 +54,23 @@ extract_ts2 <- function(.f, x, y, ts_type = "Water Surface") {
     get_nearest_cell_center(m[i,1], m[i,2], cc)
   }) 
   
+  print(nearest_cell_index)
+  
   # get series from hdf file
   series <- f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type][, nearest_cell_index][, seq_len(length(nearest_cell_index))]
   series_stacked <- matrix(series, ncol=1, byrow=FALSE)
 
-  # time stamps are constants for the whole mode
-  # this should be used as length of each time series
+  # time stamps are constants for the whole model
+  # if anything needs to be repeated it should be based
+  # on the length of this vector
   datetime <- get_model_timestamps(.f)
   
   # vector used as columns for cell_index used in data
-  hdf_cell_index <- rep(nearest_cell_index, each=length(datetime))
+  # here a subtract one is required to bring the index back to 
+  # what is reported by hecRas, which uses 0 based indexes
+  hdf_cell_index <- rep(nearest_cell_index, each=length(datetime)) - 1
   
-  # build desired dataframe
-  # cell_index below returns the value reported on the hecRas file (which is 1 minus R's)
+  # build desired tibble
   tibble::tibble("datetime"=rep(datetime, length(nearest_cell_index)),
                  plan_name = rep(plan_attributes$plan_name, nrow(series_stacked)),
                  "time_series_type" = rep(ts_type, length(series_stacked)),
