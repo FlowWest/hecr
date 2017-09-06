@@ -34,7 +34,7 @@ library(hecr)
 
 f <- hec_file("raw-data/ardenwoodcreek.p50.hdf") # read in an hdf file 
 
-d <- extract_ts(f, x=123, y=123, ts_type = "Water Surface")
+d <- extract_ts2(f, x=123, y=123, ts_type = "Water Surface")
 ```
 
 If you like the pipe you can use it in `hecr`
@@ -47,6 +47,6 @@ d <- hec_file("raw-data/ardenwoodcreek.p50.hdf") %>%
 ### Query Water Surface Elevation from Cross Sections 
 
 ```r
-xs <- extract_xs_ts(f, "7405.382", ts_type = "Water Surface")
+xs <- extract_ts1(f, "7405.382", ts_type = "Water Surface")
 ```
 
