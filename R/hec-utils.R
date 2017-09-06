@@ -12,7 +12,7 @@ get_model_timestamps <- function(.f) {
 #' Function retrieves model attributes embeded in a HEC-RAS result file.
 #' @param .f an hdf5 file result from HEC-RAS
 #' @export
-get_plan_attributes <-function(.f) {
+get_plan_attributes <- function(.f) {
   
   fplan <- .f['Plan Data/Plan Information']
   

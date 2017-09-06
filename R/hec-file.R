@@ -5,7 +5,10 @@ hec_file <- function(f) {
   h5::h5file(f)
 }
 
-#' 
+#' Check whether an object is of hec_file class and not a null pointer
 is_hec_file <- function(f) {
-  attr(f, "class") == "H5File"
+  if (attr(f, "class") == "H5File") # if true class check for null pointer
+    !identical(f@pointer, new("externalptr"))
+  else 
+    FALSE
 }
