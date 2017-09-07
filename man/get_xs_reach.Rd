@@ -4,12 +4,12 @@
 \alias{get_xs_reach}
 \title{Function retrives the reach defined by the station name}
 \usage{
-get_xs_reach(.f, station_name)
+get_xs_reach(.f, station_idx)
 }
 \arguments{
 \item{.f}{an hdf5 file read in with hdf_file or h5::h5file}
 
-\item{station_name}{name of station to query reach name for}
+\item{station_idx}{index of station to query reach name for, obtained from get_xs_station_index}
 }
 \description{
 Function retrives the reach defined by the station name

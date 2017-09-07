@@ -7,7 +7,7 @@
 get_flow_area_name(hf)
 }
 \arguments{
-\item{hf}{a hdf file read in with hec_file}
+\item{hf}{an hdf5 object read in with either hec_file() or h5::h5file()}
 }
 \value{
 a slash delmited path to the 2D flow area

@@ -7,7 +7,7 @@
 get_center_coordinates(.f)
 }
 \arguments{
-\item{.f}{a hdf file read in with \code{hec_file}}
+\item{.f}{an hdf file read in with \code{hec_file}}
 }
 \description{
 Function retrieves the center coordinates for a given hec_file

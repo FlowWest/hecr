@@ -4,14 +4,12 @@
 \alias{extract_ts2}
 \title{Function extracts a time series from an hdf file}
 \usage{
-extract_ts2(.f, x, y, ts_type = "Water Surface")
+extract_ts2(.f, xy, ts_type = "Water Surface")
 }
 \arguments{
 \item{.f}{an hdf file read in with hec_file or h5::h5file}
 
-\item{x}{coordinate to query for}
-
-\item{y}{coordinate to query for}
+\item{xy}{a coordinate or set of coordinates either in a dataframe or matrix with columns x and y}
 
 \item{ts_type}{the time series to extract}
 }

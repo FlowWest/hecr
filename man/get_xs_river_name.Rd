@@ -4,12 +4,12 @@
 \alias{get_xs_river_name}
 \title{Function retrives the river name defined by the station name}
 \usage{
-get_xs_river_name(.f, station_name)
+get_xs_river_name(.f, station_idx)
 }
 \arguments{
 \item{.f}{an hdf5 file read in with hec_file or h5::h5file}
 
-\item{station_name}{name of the station to query river name for}
+\item{station_idx}{index of the station to query river name for, obtained from get_xs_station_index}
 }
 \description{
 Function retrives the river name defined by the station name
