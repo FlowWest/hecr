@@ -27,6 +27,10 @@ l <- list("one"=1:10,
 z <- modify_depth(x, 0, ~get_xs_river_stations(.))
 
 
+# corpus approach 
+corp <- create_hdf_corpus("inst/raw-data")
+
+x <- extract_ts1(corp, 6863.627, "Water Surface")
 
 
 

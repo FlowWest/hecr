@@ -10,9 +10,17 @@ create_hdf_corpus <- function(path) {
   
   message(paste("Found", length(hdf_files), "hdf file(s) in path"))
 
-  corp <- map(hdf_files, ~hec_file(.))
+  corp <- purrr::map(hdf_files, ~hec_file(.))
 
   return(corp)
+}
+
+#' Add specified file to an existing corpus
+#' @param corpus an existing hdf corpus to add to
+#' @param f filename of hdf to be added to corpus
+add_to_corpus <- function(corpus, f) {
+  l <- length(corpus)
+  corpus[l+1] <- hec_file(f)
 }
 
 #' Safely close a corpus

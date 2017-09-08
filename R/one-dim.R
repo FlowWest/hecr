@@ -38,28 +38,32 @@ get_xs_river_name <- function(.f, station_idx) {
 
 #' Function retrieves a desired time series from a cross section part of a
 #' HEC-RAS model
-#' @param .f an hdf5 file read in via hec_file or a corpus created with create_hdf_corpus
+#' @param f an hdf5 file read in via hec_file or a corpus created with create_hdf_corpus
 #' @param station_name station for the cross section to query time series from 
 #' @param ts_type time series to query out (ex 'Water Surface', 'Depth', ...)
 #' @export
-extract_ts1 <- function(.f, station_name, ts_type) {
-  xs_index <- get_xs_station_index(.f, station_name)
-  river_name <- get_xs_river_name(.f, xs_index)
-  reach_name <- get_xs_reach(.f, xs_index)
-  print(river_name)
-  print(reach_name)
-  xs_datetime <- get_model_timestamps(.f)
-  d_length <- length(xs_datetime)
-  series <- matrix(.f[hdf_paths$RES_CROSS_SECTIONS][ts_type][, xs_index], 
-                   ncol=1, byrow=FALSE)
-  print(nrow(series))
-  print(dim(series))
+extract_ts1 <- function(f, station_name, ts_type) {
+    
+  do_extract <- function(.f, station_name, ts) {
+    plan_name <- get_plan_attributes(.f)$plan_name
+    xs_index <- get_xs_station_index(.f, station_name)
+    river_name <- get_xs_river_name(.f, xs_index)
+    reach_name <- get_xs_reach(.f, xs_index)
+    xs_datetime <- get_model_timestamps(.f)
+    d_length <- length(xs_datetime)
+    series <- matrix(.f[hdf_paths$RES_CROSS_SECTIONS][ts_type][, xs_index], 
+                     ncol=1, byrow=FALSE)
+    
+    tibble:::tibble("datetime" = rep(xs_datetime, length(xs_index)),
+                    "plan_name" = plan_name,
+                    "river_name" = rep(river_name, each=d_length), 
+                    "reach_name" = rep(reach_name, each=d_length), 
+                    "cross_section" = rep(station_name, each=d_length), 
+                    "values" = series[,1])  
+  }
   
-  tibble:::tibble("datetime" = rep(xs_datetime, length(xs_index)), 
-             "river_name" = rep(river_name, each=d_length), 
-             "reach_name" = rep(reach_name, each=d_length), 
-             "cross_section" = rep(station_name, each=d_length), 
-             "values" = series[,1])
+  purrr::map_dfr(f, ~do_extract(., station_name, ts_type))
+  
 }
 
 

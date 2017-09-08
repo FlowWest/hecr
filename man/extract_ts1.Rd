@@ -5,10 +5,10 @@
 \title{Function retrieves a desired time series from a cross section part of a
 HEC-RAS model}
 \usage{
-extract_ts1(.f, station_name, ts_type)
+extract_ts1(f, station_name, ts_type)
 }
 \arguments{
-\item{.f}{an hdf5 file read in via hec_file or h5::h5file}
+\item{f}{an hdf5 file read in via hec_file or a corpus created with create_hdf_corpus}
 
 \item{station_name}{station for the cross section to query time series from}
 
