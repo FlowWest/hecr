@@ -43,7 +43,9 @@ get_xs_river_name <- function(.f, station_idx) {
 #' @param ts_type time series to query out (ex 'Water Surface', 'Depth', ...)
 #' @export
 extract_ts1 <- function(f, station_name, ts_type) {
-    
+  if (!is.list(f)) f <- list(f) # hack: look for piece below that is affected when 
+                                # when we pass either a list or vector
+  
   do_extract <- function(.f, station_name, ts) {
     plan_name <- get_plan_attributes(.f)$plan_name
     xs_index <- get_xs_station_index(.f, station_name)
