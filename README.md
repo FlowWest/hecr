@@ -4,12 +4,6 @@ A simple R package for interacting with hdf5 files resulting from a HEC-RAS
 model run. `hecr` uses the `h5` package and wraps around it functions that enable 
 a user to quickly query out desired data in a tidy dataframe format.
 
-**List of current features** 
-
-1. Extract a time series from 2d portion of model run using a hecras coordinate of choice.
-2. Extract a time series from 1d portion of model run using a hecras defined station.
-
-
 ## Installation 
 
 The install required `devtools`, install with `install.packages("devtools")`.
@@ -19,34 +13,23 @@ To install `hecr` do the following:
 devtools::install_github("flowwest/hecr", auth_token = <AUTH_TOKEN_HERE>)
 ```
 
-Currently `hecr` is internal to FlowWest, so an auth token is required to install, 
-email [erodriguez@flowwest.com](erodriguez@flowwest.com) for one.
-
 ## Usage 
 
-Currently `hecr` is limited to extracting already embeded time series from 
-an hdf5 file. Below are several examples for querying data. 
+hecr can be used to query out either time series from a 1d or 2d portion of a 
+model file. 
 
-### Query Water Surface Elevation from 2D Area
+### One Dimension 
 
-```r 
-library(hecr) 
-
-f <- hec_file("raw-data/ardenwoodcreek.p50.hdf") # read in an hdf file 
-
-d <- extract_ts2(f, x=123, y=123, ts_type = "Water Surface")
-```
-
-If you like the pipe you can use it in `hecr`
+A user is required to know the river cross section name from the hdf file. This may
+be a bit limiting at the moment, future releases will allow exploration of the 
+file via R. A simple example is shown below:
 
 ```r
-d <- hec_file("raw-data/ardenwoodcreek.p50.hdf") %>% 
-  extract_ts(x=123, y=123, ts_type = "Water Surface")
+library(hecr)
+
+# first read in the file
+f <- hecr::hec_file("inst/raw-data/ArdenwoodCreek.p50.hdf")
+
+# extract a one portion time series of Water Surface
+water_surface <- hecr::extract_ts1(f, 6863.627, ts_type = "Water Surface")
 ```
-
-### Query Water Surface Elevation from Cross Sections 
-
-```r
-xs <- extract_ts1(f, "7405.382", ts_type = "Water Surface")
-```
-
