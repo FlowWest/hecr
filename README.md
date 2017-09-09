@@ -58,7 +58,8 @@ water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 
 ![](images/cross_section_corpus.png)
 
-
+Once again the data is in a tidy form, and so it works great with ggplot or plotly. 
+Further more all of dplyr is at your disposal. 
 
 
 
