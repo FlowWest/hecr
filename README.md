@@ -10,7 +10,7 @@ The install required `devtools`, install with `install.packages("devtools")`.
 To install `hecr` do the following:
 
 ```r 
-devtools::install_github("flowwest/hecr", auth_token = <AUTH_TOKEN_HERE>)
+devtools::install_github("flowwest/hecr")
 ```
 
 ## Usage 
