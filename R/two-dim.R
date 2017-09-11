@@ -72,4 +72,4 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface") {
                  "time_series_type" = rep(ts_type, length(series_stacked)),
                  "hdf_cell_index" = hdf_cell_index,
                  "values"=series_stacked[, 1])
-} 
+}
