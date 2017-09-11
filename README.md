@@ -125,6 +125,53 @@ x %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 
 ![](images/two-dim-multiple.png)
 
+*Multiple Coordinates and Multiple Plans(Files)*
+
+We can also query mutliple coordinates and multiple files. We can supply in multiple coordinates
+by either having a vector with pairs of these, or as a matrix. One last possibility is to populate 
+as csv with these as columns and pass it in as the argument. 
+
+```r
+# create a matrix of coordinates of interest
+m <- matrix(c(6099816.76262168,	2030896.94257798,
+              6099866.76262168,	2030896.94257798,
+              6099916.76262168,	2030896.94257798,
+              6099966.76262168,	2030896.94257798,
+              6100016.76262168,	2030896.94257798,
+              6100166.76262168,	2030896.94257798,
+              6100216.76262168,	2030896.94257798,
+              6100266.76262168,	2030896.94257798,
+              6100316.76262168,	2030896.94257798,
+              6100366.76262168,	2030896.94257798,
+              6106316.76262168,	2030896.94257798,
+              6106366.76262168,	2030896.94257798), ncol = 2, byrow = TRUE)
+
+# use the previous corps object we create
+print(corp)
+
+# query the hdf files
+x <- hecr::extract_ts2(corp, xy=m, ts_type="Water Surface")
+
+# plot 
+x %>% 
+  ggplot(aes(datetime, values, color=as.character(hdf_cell_index))) + 
+  geom_line() + 
+  facet_grid(~plan_name)
+```
+
+![](images/two-dim-multiple-files-and-coords.png)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
