@@ -9,10 +9,10 @@ piece of the model run.
 
 *Tasks* 
 
-[] currently there is a small hack to make the 1d corpus work. This is because it uses the fact
+- [] currently there is a small hack to make the 1d corpus work. This is because it uses the fact
 that the input is of list type to iterate over it. However when reading just a single file this 
-breaks, Solution needs to be implemented 
-[] 
+breaks, Solution needs to be implemented. 
+- [] 
 
 
 ### 2017-09-06 
