@@ -1,0 +1,3 @@
+default:
+  corpus_path: "inst/raw-data/"
+  coords: "1 2"
