@@ -46,8 +46,11 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface") {
     
     if (is.vector(xy))
       m <- matrix(xy, ncol=2)
+    else if (is.matrix(xy))
+      m <- xy
     else
       m <- matrix(xy)
+    
     # for set of all pairs (x, y) find the nearest cell index  
     nearest_cell_index <- sapply(seq_len(nrow(m)), function(i) {
       get_nearest_cell_center_index(m[i,1], m[i,2], cc)
