@@ -18,7 +18,7 @@ devtools::install_github("flowwest/hecr")
 hecr can be used to query out either time series from a 1d or 2d portion of a 
 model file. 
 
-### One Dimension 
+## One Dimension 
 
 A user is required to know the river cross section name from the hdf file. This may
 be a bit limiting at the moment, future releases will allow exploration of the 
@@ -107,7 +107,23 @@ x %>% ggplot(aes(datetime, values)) + geom_line()
 ![](images/two-dim-one-file.png)
 
 
+*Multiple HDF Files* 
 
+Much like the one dimensional part, we can set up a corpus of hdf files and query all 
+of them for given coordinate: 
+
+```r
+# create a corpus
+corp <- hecr::create_hdf_corpus("inst/raw-data/")
+
+# query out coord from all files defined in the corpus
+x <- hecr::extract_ts2(corp, coord, ts_type = "Water Surface")
+
+# plot 
+x %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
+```
+
+![](images/two-dim-multiple.png)
 
 
 
