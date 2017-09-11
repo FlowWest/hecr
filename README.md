@@ -98,6 +98,14 @@ print(x3)
 # ... with 471 more rows
 ```
 
+Plotting 
+
+```r
+x %>% ggplot(aes(datetime, values)) + geom_line()
+```
+
+![two-dim-one-file](images/two-dim-one-file.png)
+
 
 
 
