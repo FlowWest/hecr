@@ -36,6 +36,8 @@ x <- extract_ts1(f, 6863.627, "Water Surface")
 
 x <- extract_ts1(corp, 6863.627, "Water Surface")
 
+x <- extract_ts2(corp, xy=c(1, 2))
+
 
 
 

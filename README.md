@@ -61,5 +61,53 @@ water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 Once again the data is in a tidy form, and so it works great with ggplot or plotly. 
 Further more all of dplyr is at your disposal. 
 
+## Two Dimensions
+
+Much of the same can be done for two dimensional portions of model runs. Here we show 
+the same examples above but this time getting time series for two dimension portions of
+model files. 
+
+*One HDF File* 
+
+```r
+# read in file
+f <- hecr::hec_file("inst/raw-data/ArdenwoodCreek.p50.hdf")
+
+# set up coordinate to query for
+coord <- c(6103057.45033481, 2027049.43985547)
+
+x <- hecr::extract_ts2(f, xy = coord, ts_type = "Water Surface")
+
+print(x3)
+```
+
+```
+# A tibble: 481 x 5
+              datetime          plan_name time_series_type hdf_cell_index           values
+                <dttm>              <chr>            <chr>          <dbl>            <dbl>
+ 1 2005-12-30 00:00:00 ArdenwoodCreek.p50    Water Surface          18296 6.66271018981934
+ 2 2005-12-30 00:15:00 ArdenwoodCreek.p50    Water Surface          18296 6.66538572311401
+ 3 2005-12-30 00:30:00 ArdenwoodCreek.p50    Water Surface          18296 6.66436624526978
+ 4 2005-12-30 00:45:00 ArdenwoodCreek.p50    Water Surface          18296 6.65778636932373
+ 5 2005-12-30 01:00:00 ArdenwoodCreek.p50    Water Surface          18296 6.64651870727539
+ 6 2005-12-30 01:15:00 ArdenwoodCreek.p50    Water Surface          18296 6.63137197494507
+ 7 2005-12-30 01:30:00 ArdenwoodCreek.p50    Water Surface          18296 6.61756515502930
+ 8 2005-12-30 01:45:00 ArdenwoodCreek.p50    Water Surface          18296 6.60669612884521
+ 9 2005-12-30 02:00:00 ArdenwoodCreek.p50    Water Surface          18296 6.59691762924194
+10 2005-12-30 02:15:00 ArdenwoodCreek.p50    Water Surface          18296 6.58782863616943
+# ... with 471 more rows
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
