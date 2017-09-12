@@ -30,9 +30,9 @@ z <- modify_depth(x, 0, ~get_xs_river_stations(.))
 # corpus approach 
 f <- hec_file("inst/raw-data/ArdenwoodCreek.p80.hdf")
 
-corp <- create_hdf_corpus("inst/raw-data")
-
 x <- extract_ts1(f, 6863.627, "Water Surface")
+
+corp <- create_hdf_corpus("inst/raw-data")
 
 x <- extract_ts1(corp, 6863.627, "Water Surface")
 
