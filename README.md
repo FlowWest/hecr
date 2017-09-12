@@ -2,7 +2,7 @@
 
 **KNOWN BUG!** 
 There is currently a bug when reading in a file with `hec_file()` function. 
-A temporary workaround is make the out of this into a list object
+A temporary workaround is to make the output of this into a list object:
 
 ```r
  f <- hec_file("data.hdf")
