@@ -1,7 +1,7 @@
 # hecr 
 
 **KNOWN BUG!** 
-There is currently a big when reading in a file with `hec_file()` function. 
+There is currently a bug when reading in a file with `hec_file()` function. 
 A temporary workaround is make the out of this into a list object
 
 ```r
