@@ -2,7 +2,7 @@
 #' @param f an hdf5 file resulting from a HecRas model run 
 #' @export
 hec_file <- function(f) {
-  h5::h5file(f)
+  list(h5::h5file(f))
 }
 
 #' Check whether an object is of hec_file class and not a null pointer

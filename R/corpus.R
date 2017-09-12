@@ -11,12 +11,19 @@ create_hdf_corpus <- function(path, files = NULL) {
     hdf_files <- hdf_files[stringr::str_detect(hdf_files, re)]
   }
   
-  if (!length(hdf_files)) 
+  # check for when no data is read in
+  # case when no data is found and files plans were supplied
+  if (!is.null(files) & !length(hdf_files)) {
+    stop(paste("could not find any hdf files in", path, "with plan number(s):", 
+               paste(files, collapse = ", ")))
+  }
+  # case when no files were supplied but still no hdf files found
+  else if (!length(hdf_files)) 
     stop(paste("could not find any hdf files in", path))
   
   message(paste("Found", length(hdf_files), "hdf file(s) in path"))
 
-  corp <- purrr::map(hdf_files, ~hec_file(.))
+  corp <- purrr::flatten(purrr::map(hdf_files, ~hec_file(.)))
 
   return(corp)
 }
