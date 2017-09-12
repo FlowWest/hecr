@@ -15,5 +15,6 @@ Imports: h5,
     lubridate,
     magrittr,
     stringr,
-    tidyr
+    tidyr,
+    config
 RoxygenNote: 6.0.1
