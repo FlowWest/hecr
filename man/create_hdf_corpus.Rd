@@ -4,10 +4,12 @@
 \alias{create_hdf_corpus}
 \title{Build a corpus of hdf files to execute queries on}
 \usage{
-create_hdf_corpus(path)
+create_hdf_corpus(path, files = NULL)
 }
 \arguments{
 \item{path}{directory path containing hdf files to build corpus from}
+
+\item{files}{a vector of plan number associated with hdf files. When NULL (default) all hdf files in directory are read.}
 }
 \value{
 list of files read in with hec_file
