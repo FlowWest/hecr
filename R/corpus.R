@@ -4,7 +4,7 @@
 #' @return list of files read in with hec_file
 #' @export 
 create_hdf_corpus <- function(path, files = NULL) {
-  .Deprecated("hdf_corpus", package = "hecr", msg = "Function deprecated, use `hec_file2()` instead")
+  .Deprecated("hec_file2", package = "hecr", msg = "Function deprecated, use `hec_file2()` instead")
   hec_file2(path=path, files = files)
 }
 

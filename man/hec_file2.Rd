@@ -5,12 +5,12 @@
 \title{Function reads in either a single hdf file or a collection of these specified as arguments. 
 It incorporates both hec_file and hdf_corpus into one function call from previous releases.}
 \usage{
-hec_file2(path, files = NULL)
+hec_file2(path, plan_numbers = NULL, hec_file = NULL)
 }
 \arguments{
 \item{path}{directory path to either a single hdf file or a directory of a collection of these}
 
-\item{files}{a vector of plan number associated with hdf files. For use when path is a directory.
+\item{plan_numbers}{a vector of plan number associated with hdf files. For use when path is a directory.
 Default action is to read all hdf files in path.}
 }
 \value{
