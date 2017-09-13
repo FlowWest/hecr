@@ -1,17 +1,15 @@
 # hecr 
 
-**KNOWN BUG!** 
-There is currently a bug when reading in a file with `hec_file()` function. 
-A temporary workaround is to make the output of this into a list object:
+**Changes** 
 
-```r
- f <- hec_file("data.hdf")
- f <- list(f) 
-```
+A few changes were made recently:
 
-A proper solution is being worked on. 
+* a new function `hec_file2` should now be used to read in all hdf files. The function
+allows you to read in one or multiple hdf files. Use `?hecr::hec_file2` for details.
+* metadata can now be queried on its own from a single or collection of hdf files using
+the `hdf_metadata`. Both the time series dataframes and metadata ones share a `plan_id`
+column for you to join on if need be.
 
----
 
 A simple R package for interacting with hdf5 files resulting from a HEC-RAS 
 model run. `hecr` uses the `h5` package and wraps around it functions that enable 

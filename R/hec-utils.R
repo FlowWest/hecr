@@ -37,7 +37,7 @@ hec_metadata <- function(f) {
   do_extract <- function(.f) {
     plan_attrs <- get_plan_attributes(.f)
     tibble::tibble(
-      "short_id" = plan_attrs$plan_short_id, 
+      "plan_id" = plan_attrs$plan_short_id, 
       "plan_name" = plan_attrs$plan_name, 
       "plan_file" = plan_attrs$plan_file, 
       "time_window" = plan_attrs$time_window
