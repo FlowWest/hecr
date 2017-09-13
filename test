@@ -1,0 +1,4 @@
+default:
+  hdf_directory: "path to location where all hdf files are stored"
+  hdf_numbers: ["comma seperated numbers of plans to query on"]
+  coordinates: ["comma seperated coordinates to query for"]

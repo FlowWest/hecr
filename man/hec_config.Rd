@@ -4,12 +4,12 @@
 \alias{hec_config}
 \title{Function reads in and fills in a query based on a configuration file parameter}
 \usage{
-hec_config(config_file, type = "default")
+hec_config(config_file, config = "default")
 }
 \arguments{
 \item{config_file}{path to config file used to fill query}
 
-\item{type}{a defined config type in the config file. See README for more information}
+\item{config}{the config to use within the configuration file. Defaults to 'default'}
 }
 \value{
 data frame

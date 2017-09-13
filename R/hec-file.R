@@ -21,7 +21,7 @@ is_hec_file <- function(f) {
 #' Default action is to read all hdf files in path.
 #' @return list of files read in with hec_file
 #' @export
-hec_file2 <- function(path, plan_numbers = NULL, hec_file = NULL) {
+hec_file2 <- function(path, plan_numbers = NULL) {
   # first check if path is a directory or single filename 
   is_dir <- dir.exists(path) 
   if (is_dir) { 

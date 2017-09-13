@@ -5,7 +5,7 @@
 \title{Function reads in either a single hdf file or a collection of these specified as arguments. 
 It incorporates both hec_file and hdf_corpus into one function call from previous releases.}
 \usage{
-hec_file2(path, plan_numbers = NULL, hec_file = NULL)
+hec_file2(path, plan_numbers = NULL)
 }
 \arguments{
 \item{path}{directory path to either a single hdf file or a directory of a collection of these}

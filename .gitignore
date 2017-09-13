@@ -4,3 +4,4 @@
 .Ruserdata
 raw-data/*
 *.hdf
+inst/doc

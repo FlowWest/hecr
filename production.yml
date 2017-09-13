@@ -1,0 +1,5 @@
+default:
+  hdf_directory: "inst/raw-data"
+  hdf_numbers: [50, 70]
+  coordinates: [1, 2]
+  queries: ["ts1", "ts2"]

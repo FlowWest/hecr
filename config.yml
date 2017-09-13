@@ -1,6 +1,0 @@
-default:
-  corpus_path: "inst/raw-data/"
-  filenames: [] # Enter comma seperated files names here
-  coordinates: [] # Enter comma seperated coordinates here
-
-
