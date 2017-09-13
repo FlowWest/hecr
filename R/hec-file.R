@@ -2,7 +2,8 @@
 #' @param f an hdf5 file resulting from a HecRas model run 
 #' @export
 hec_file <- function(f) {
-  list(h5::h5file(f))
+  .Deprecated("hec_file2", package = "hecr", msg = "use hec_file2")
+  hec_file2(path = f)
 }
 
 #' Check whether an object is of hec_file class and not a null pointer
