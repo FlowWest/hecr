@@ -1,31 +1,11 @@
-#' Build a corpus of hdf files to execute queries on 
+#' Build a corpus of hdf files to execute queries on. This function has been deprecated use hec_file2() instead
 #' @param path directory path containing hdf files to build corpus from
 #' @param files a vector of plan number associated with hdf files. When NULL (default) all hdf files in directory are read.
 #' @return list of files read in with hec_file
 #' @export 
 create_hdf_corpus <- function(path, files = NULL) {
-  hdf_files <- list.files(path, pattern = ".hdf", full.names = TRUE)
-  
-  if (!is.null(files)) {
-    re <- paste(files, collapse = "|")
-    hdf_files <- hdf_files[stringr::str_detect(hdf_files, re)]
-  }
-  
-  # check for when no data is read in
-  # case when no data is found and files plans were supplied
-  if (!is.null(files) & !length(hdf_files)) {
-    stop(paste("could not find any hdf files in", path, "with plan number(s):", 
-               paste(files, collapse = ", ")))
-  }
-  # case when no files were supplied but still no hdf files found
-  else if (!length(hdf_files)) 
-    stop(paste("could not find any hdf files in", path))
-  
-  message(paste("Found", length(hdf_files), "hdf file(s) in path"))
-
-  corp <- purrr::flatten(purrr::map(hdf_files, ~hec_file(.)))
-
-  return(corp)
+  .Deprecated("hdf_corpus", package = "hecr", msg = "Function deprecated, use `hec_file2()` instead")
+  hec_file2(path=path, files = files)
 }
 
 #' Add specified file to an existing corpus

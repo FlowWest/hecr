@@ -10,23 +10,41 @@ get_model_timestamps <- function(.f) {
 }
 
 #' Function retrieves model attributes embeded in a HEC-RAS result file.
-#' @param .f an hdf5 file result from HEC-RAS
-#' @export
+#' @param .f an hdf object read in with hec_file or hdf_corpus
 get_plan_attributes <- function(.f) {
   
-  fplan <- .f['Plan Data/Plan Information']
+  fplan <- .f[hdf_paths$PLAN_INFORMATION]
   
-  plan_id <- h5::h5attr(fplan, 'Plan Name')
+  plan_name <- h5::h5attr(fplan, 'Plan Name')
   plan_file <- h5::h5attr(fplan, 'Plan File')
-  plan_name <- stringr::str_extract(plan_file, "[A-Za-z]+.p[0-9]+$")
+  plan_short_id <- h5::h5attr(fplan, 'Plan ShortID')
   time_window <- h5::h5attr(fplan, 'Time Window')
   
   list(
-    "plan_id" = plan_id, 
+    "plan_short_id" = plan_short_id, 
     "plan_name" = plan_name, 
+    "plan_file" = plan_file,
     "time_window" = time_window
   )
 }
+
+#' Function takes in a hec file or a collection of these and forms a metadata
+#' dataframe from them. 
+#' @param f a hec file object or collection of these
+#' @export
+hec_metadata <- function(f) {
+  
+  do_extract <- function(.f) {
+    plan_attrs <- get_plan_attributes(.f)
+    tibble::tibble(
+      "short_id" = plan_attrs$plan_short_id, 
+      "plan_name" = plan_attrs$plan_name, 
+      "plan_file" = plan_attrs$plan_file, 
+      "time_window" = plan_attrs$time_window
+    )
+  }
+  purrr::map_dfr(f, ~do_extract(.))
+} 
 
 
 

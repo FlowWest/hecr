@@ -2,7 +2,7 @@
 % Please edit documentation in R/hec-file.R
 \name{hec_file}
 \alias{hec_file}
-\title{Function reads in an hdf5 file resulting from a HecRas model run}
+\title{Function reads in an hdf5 file resulting from a HecRas model run. This function has been deprecated in favor of hec_file2}
 \usage{
 hec_file(f)
 }
@@ -10,5 +10,5 @@ hec_file(f)
 \item{f}{an hdf5 file resulting from a HecRas model run}
 }
 \description{
-Function reads in an hdf5 file resulting from a HecRas model run
+Function reads in an hdf5 file resulting from a HecRas model run. This function has been deprecated in favor of hec_file2
 }

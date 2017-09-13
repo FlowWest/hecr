@@ -72,7 +72,7 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface") {
     
     # build desired tibble
     tibble::tibble("datetime"=rep(datetime, length(nearest_cell_index)),
-                   "plan_name" = rep(plan_attributes$plan_name, nrow(series_stacked)),
+                   "plan_id" = rep(plan_attributes$plan_short_id, nrow(series_stacked)),
                    "time_series_type" = rep(ts_type, length(series_stacked)),
                    "hdf_cell_index" = hdf_cell_index,
                    "values"=series_stacked[, 1])

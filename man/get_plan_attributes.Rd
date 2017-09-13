@@ -7,7 +7,7 @@
 get_plan_attributes(.f)
 }
 \arguments{
-\item{.f}{an hdf5 file result from HEC-RAS}
+\item{.f}{an hdf object read in with hec_file or hdf_corpus}
 }
 \description{
 Function retrieves model attributes embeded in a HEC-RAS result file.

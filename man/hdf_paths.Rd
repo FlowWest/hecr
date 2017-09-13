@@ -4,7 +4,7 @@
 \name{hdf_paths}
 \alias{hdf_paths}
 \title{Constants point to location on the hdf5 file}
-\format{An object of class \code{list} of length 5.}
+\format{An object of class \code{list} of length 6.}
 \usage{
 hdf_paths
 }

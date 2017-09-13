@@ -2,7 +2,7 @@
 % Please edit documentation in R/corpus.R
 \name{create_hdf_corpus}
 \alias{create_hdf_corpus}
-\title{Build a corpus of hdf files to execute queries on}
+\title{Build a corpus of hdf files to execute queries on. This function has been deprecated use hec_file2() instead}
 \usage{
 create_hdf_corpus(path, files = NULL)
 }
@@ -15,5 +15,5 @@ create_hdf_corpus(path, files = NULL)
 list of files read in with hec_file
 }
 \description{
-Build a corpus of hdf files to execute queries on
+Build a corpus of hdf files to execute queries on. This function has been deprecated use hec_file2() instead
 }
