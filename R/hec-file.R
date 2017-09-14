@@ -22,13 +22,18 @@ is_hec_file <- function(f) {
 #' @return list of files read in with hec_file
 #' @export
 hec_file2 <- function(path, plan_numbers = NULL) {
+  
   # first check if path is a directory or single filename 
   is_dir <- dir.exists(path) 
+  # if this is a directory then either read all files in it, or only for given plans
   if (is_dir) { 
     hdf_files <- list.files(path, pattern = ".hdf", full.names = TRUE)
+    # create the message that will be shown to the users
     msg <- paste0("found ", length(hdf_files), " in ", path)
+    
+    # if this vector has 0 elements -> no hdf files were found in the part, error
     if (!length(hdf_files)) stop(paste("No hdf files found in:", path))
-    # when a directory check if the files vector is not null
+    # when a directory check if the files vector is not null, if not then only read for the given plan numbers
     if (!is.null(plan_numbers)) {
       re <- paste(plan_numbers, collapse = "|")
       hdf_files <- hdf_files[stringr::str_detect(hdf_files, re)]
@@ -46,7 +51,9 @@ hec_file2 <- function(path, plan_numbers = NULL) {
     msg <- NULL
   }
   
+  # show the message?
   if (!is.null(msg)) message(msg)
   
+  # map all relevant files onto the h5::h5file read function
   purrr::map(hdf_files, h5::h5file)
 }
