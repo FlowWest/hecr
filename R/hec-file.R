@@ -15,11 +15,22 @@ is_hec_file <- function(f) {
 }
 
 #' Function reads in either a single hdf file or a collection of these specified as arguments. 
-#' It incorporates both hec_file and hdf_corpus into one function call from previous releases.
+#' @description Function will read in a single hdf file when the path parameter points to a single
+#' file, or a collection of these when the path is directory. User can further specify only a 
+#' certain number of these within the directory to be read using the plan_numbers parameter.
 #' @param path directory path to either a single hdf file or a directory of a collection of these
 #' @param plan_numbers a vector of plan number associated with hdf files. For use when path is a directory.
 #' Default action is to read all hdf files in path.
 #' @return list of files read in with hec_file
+#' @examples 
+#' \dontrun{
+#' # read in a single hdf file
+#' a <- hec_file2("raw-data/ArdenwoodCreek.p50.hdf")
+#' # read in a collection of hdf files in this directory
+#' b <- hec_file2("raw-data/") 
+#' # read in hdf files in this directory matching 50 and 60 plan numbers
+#' c <- hec_file2("raw-data/", plan_numbers = c(50, 60))
+#' }
 #' @export
 hec_file2 <- function(path, plan_numbers = NULL) {
   
@@ -47,7 +58,11 @@ hec_file2 <- function(path, plan_numbers = NULL) {
       }
     }
   } else {
-    hdf_files <- path
+    file_dir <- dirname(path)
+    file_name <- basename(path)
+    
+    hdf_files <- list.files(path = file_dir, pattern = file_name, full.names = TRUE)
+    if (!length(hdf_files)) stop("specified hdf files was not found")
     msg <- NULL
   }
   
