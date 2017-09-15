@@ -2,8 +2,7 @@
 % Please edit documentation in R/hec-file.R
 \name{hec_file2}
 \alias{hec_file2}
-\title{Function reads in either a single hdf file or a collection of these specified as arguments. 
-It incorporates both hec_file and hdf_corpus into one function call from previous releases.}
+\title{Function reads in either a single hdf file or a collection of these specified as arguments.}
 \usage{
 hec_file2(path, plan_numbers = NULL)
 }
@@ -17,6 +16,17 @@ Default action is to read all hdf files in path.}
 list of files read in with hec_file
 }
 \description{
-Function reads in either a single hdf file or a collection of these specified as arguments. 
-It incorporates both hec_file and hdf_corpus into one function call from previous releases.
+Function will read in a single hdf file when the path parameter points to a single
+file, or a collection of these when the path is directory. User can further specify only a 
+certain number of these within the directory to be read using the plan_numbers parameter.
+}
+\examples{
+\dontrun{
+# read in a single hdf file
+a <- hec_file2("raw-data/ArdenwoodCreek.p50.hdf")
+# read in a collection of hdf files in this directory
+b <- hec_file2("raw-data/") 
+# read in hdf files in this directory matching 50 and 60 plan numbers
+c <- hec_file2("raw-data/", plan_numbers = c(50, 60))
+}
 }

@@ -62,7 +62,7 @@ hec_file2 <- function(path, plan_numbers = NULL) {
     file_name <- basename(path)
     
     hdf_files <- list.files(path = file_dir, pattern = file_name, full.names = TRUE)
-    if (!length(hdf_files)) stop("specified hdf files was not found")
+    if (!length(hdf_files)) stop(paste0("file: '", file_name, "' was not found in '", file_dir, "'"))
     msg <- NULL
   }
   
@@ -70,5 +70,22 @@ hec_file2 <- function(path, plan_numbers = NULL) {
   if (!is.null(msg)) message(msg)
   
   # map all relevant files onto the h5::h5file read function
-  purrr::map(hdf_files, h5::h5file)
+  x <- purrr::map(hdf_files, h5::h5file)
+  structure(x, class = "hec_collection")
 }
+
+#' the print method
+#' @export 
+print <- function(x, ...) {
+  UseMethod("print")
+}
+
+#' the print generic
+#' @export
+print.hec_collection <- function(x, ...) {
+  in_collection <- length(x)
+  paste0(
+    "Hec Collection with ", in_collection, " files in collection." 
+  )
+}
+
