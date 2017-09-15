@@ -47,4 +47,18 @@ hec_metadata <- function(f) {
 } 
 
 
+#' Function appends to an existing ts1 or ts2 dataframe with the data queried from hec_metadata
+#' @param df a ts1 or ts2 dataframe
+#' @export
+#' @examples 
+#' \dontrun{
+#' # assuming x is a dataframe obtained from calling either extract_ts1 or extract_ts2
+#' x %>% append_meta()
+#' }
+append_meta <- function(df) {
+  d <- hec_metadata(attr(df, "hec_obj"))
+  dplyr::left_join(df, d, by = c("plan_id" = "plan_id"))
+}
+
+
 

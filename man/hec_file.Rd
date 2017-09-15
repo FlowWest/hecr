@@ -2,13 +2,31 @@
 % Please edit documentation in R/hec-file.R
 \name{hec_file}
 \alias{hec_file}
-\title{Function reads in an hdf5 file resulting from a HecRas model run. This function has been deprecated in favor of hec_file2}
+\title{Function reads in either a single hdf file or a collection of these specified as arguments.}
 \usage{
-hec_file(f)
+hec_file(path, plan_numbers = NULL)
 }
 \arguments{
-\item{f}{an hdf5 file resulting from a HecRas model run}
+\item{path}{directory path to either a single hdf file or a directory of a collection of these}
+
+\item{plan_numbers}{a vector of plan number associated with hdf files. For use when path is a directory.
+Default action is to read all hdf files in path.}
+}
+\value{
+list of files read in with hec_file
 }
 \description{
-Function reads in an hdf5 file resulting from a HecRas model run. This function has been deprecated in favor of hec_file2
+Function will read in a single hdf file when the path parameter points to a single
+file, or a collection of these when the path is directory. User can further specify only a 
+certain number of these within the directory to be read using the plan_numbers parameter.
+}
+\examples{
+\dontrun{
+# read in a single hdf file
+a <- hec_file("raw-data/ArdenwoodCreek.p50.hdf")
+# read in a collection of hdf files in this directory
+b <- hec_file("raw-data/") 
+# read in hdf files in this directory matching 50 and 60 plan numbers
+c <- hec_file("raw-data/", plan_numbers = c(50, 60))
+}
 }

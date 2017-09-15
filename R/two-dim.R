@@ -78,5 +78,7 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface") {
                    "values"=series_stacked[, 1])
   }
   
-  purrr::map_dfr(.f, ~do_extract(., xy, ts_type))
+  x <- purrr::map_dfr(.f, ~do_extract(., xy, ts_type))
+  attr(x, "hec_obj") <- f
+  x
 }

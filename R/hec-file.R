@@ -1,11 +1,3 @@
-#' Function reads in an hdf5 file resulting from a HecRas model run. This function has been deprecated in favor of hec_file2
-#' @param f an hdf5 file resulting from a HecRas model run 
-#' @export
-hec_file <- function(f) {
-  .Deprecated("hec_file2", package = "hecr", msg = "use hec_file2")
-  hec_file2(path = f)
-}
-
 #' Check whether an object is of hec_file class and not a null pointer
 is_hec_file <- function(f) {
   if (attr(f, "class") == "H5File") # if true class check for null pointer
@@ -25,14 +17,14 @@ is_hec_file <- function(f) {
 #' @examples 
 #' \dontrun{
 #' # read in a single hdf file
-#' a <- hec_file2("raw-data/ArdenwoodCreek.p50.hdf")
+#' a <- hec_file("raw-data/ArdenwoodCreek.p50.hdf")
 #' # read in a collection of hdf files in this directory
-#' b <- hec_file2("raw-data/") 
+#' b <- hec_file("raw-data/") 
 #' # read in hdf files in this directory matching 50 and 60 plan numbers
-#' c <- hec_file2("raw-data/", plan_numbers = c(50, 60))
+#' c <- hec_file("raw-data/", plan_numbers = c(50, 60))
 #' }
 #' @export
-hec_file2 <- function(path, plan_numbers = NULL) {
+hec_file <- function(path, plan_numbers = NULL) {
   
   # first check if path is a directory or single filename 
   is_dir <- dir.exists(path) 
@@ -70,22 +62,5 @@ hec_file2 <- function(path, plan_numbers = NULL) {
   if (!is.null(msg)) message(msg)
   
   # map all relevant files onto the h5::h5file read function
-  x <- purrr::map(hdf_files, h5::h5file)
-  structure(x, class = "hec_collection")
+  purrr::map(hdf_files, h5::h5file)
 }
-
-#' the print method
-#' @export 
-print <- function(x, ...) {
-  UseMethod("print")
-}
-
-#' the print generic
-#' @export
-print.hec_collection <- function(x, ...) {
-  in_collection <- length(x)
-  paste0(
-    "Hec Collection with ", in_collection, " files in collection." 
-  )
-}
-
