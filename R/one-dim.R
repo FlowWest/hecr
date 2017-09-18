@@ -43,6 +43,7 @@ get_xs_river_name <- function(.f, station_idx) {
 #' @param ts_type time series to query out (ex 'Water Surface', 'Depth', ...)
 #' @export
 extract_ts1 <- function(f, station_name, ts_type) {
+  # TODO: @2017-09-18 I think a recent commit solves this issue please look into it
   if (!is.list(f)) f <- list(f) # hack: look for piece below that is affected when 
                                 # when we pass either a list or vector
   

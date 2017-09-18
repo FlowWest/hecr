@@ -1,33 +1,29 @@
 # hecr 
 
-**Changes** 
-
-A few changes were made recently:
-
-* a new function `hec_file2` should now be used to read in all hdf files. The function
-allows you to read in one or multiple hdf files. Use `?hecr::hec_file2` for details.
-* metadata can now be queried on its own from a single or collection of hdf files using
-the `hdf_metadata`. Both the time series dataframes and metadata ones share a `plan_id`
-column for you to join on if need be.
-
-
 A simple R package for interacting with hdf5 files resulting from a HEC-RAS 
 model run. `hecr` uses the `h5` package and wraps around it functions that enable 
 a user to quickly query out desired data in a tidy dataframe format.
 
 ## Installation 
 
-The install required `devtools`, install with `install.packages("devtools")`.
+The install requires `devtools`, install with `install.packages("devtools")`.
 To install `hecr` do the following:
 
 ```r 
 devtools::install_github("flowwest/hecr")
 ```
 
+Installing hecr will install as dependencies: h5, dplyr, purrr and config. If detected
+on the system these will not install, but an update might be required. Both purrr and dplyr
+need to be in the latest version for hecr to work.
+
 ## Usage 
 
 hecr can be used to query out either time series from a 1d or 2d portion of a 
 model file. 
+
+Below we walk through simple examples of queries, more complex examples and real world
+applications can be found in the [Tutorial](#)
 
 ## One Dimension 
 

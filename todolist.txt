@@ -2,4 +2,5 @@
 todo:
   ☐ tackle the remaining bugs/issues left on the giuthub page
   ☐ start a tutorial that Bethany can help with and showcase a workflow and potential of hecr
-  ☐ 
+  ✔ create a license for this @done (17-09-18 15:58)
+    well I choose the MIT license, its the most permisive one, but we can always change it later... i think
