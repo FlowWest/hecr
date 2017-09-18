@@ -25,19 +25,20 @@ model file.
 Below we walk through simple examples of queries, more complex examples and real world
 applications can be found in the [Tutorial](#)
 
-## One Dimension 
+## One Dimension Queries
 
 A user is required to know the river cross section name from the hdf file. This may
 be a bit limiting at the moment, future releases will allow exploration of the 
-file via R. A simple example is shown below:
+file via R to easily pick these out. A simple example is shown below:
 
 ```r
+# load in the library
 library(hecr)
 
 # first read in the file
 f <- hecr::hec_file("inst/raw-data/ArdenwoodCreek.p50.hdf")
 
-# extract a one portion time series of Water Surface
+# extract a cross section portion of the model. 
 water_surface <- hecr::extract_ts1(f, 6863.627, ts_type = "Water Surface")
 
 # plot
@@ -47,17 +48,17 @@ water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 ![](images/cross_section_single_file.png)
 
 The above is useful, the simple fact that data is transformed to a tidy format 
-is great. However, much of this work could have been done in hecRas, the more powerful 
-aspect of hecr is when start putting together complex queries. 
+is great. However, much of this work could have been done in HEC-RAS, the more powerful 
+aspect of hecr is when we start putting together complex queries. 
 
-Here is an example where we create an hdf corpus of files we want to issue queries
-on.
+Here is an example where we read in a collection of hdf files. We can do so with the 
+same `hec_file()` function, but this time supply it a directory.
 
 ```r
 # path to directory with hdf files we wish to query on
-corp <- hecr::create_hdf_corpus("inst/raw-data/")
+f <- hecr::hec_file("inst/raw-data/")
 
-water_surface <- hecr::extract_ts1(corp, 6863.627, ts_type = "Water Surface")
+water_surface <- hecr::extract_ts1(f, 6863.627, ts_type = "Water Surface")
 
 # plot
 water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
@@ -67,6 +68,16 @@ water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 
 Once again the data is in a tidy form, and so it works great with ggplot or plotly. 
 Further more all of dplyr is at your disposal. 
+
+When running HEC-RAS models a folder is populated with all plans, we can specify
+which hdf files we can to use based on the associated plan number.
+
+```r
+# query in this directory but only hdf files associated with plans 50, 60, 70
+f <- hecr::hec_file("inst/raw-data", plan_numbers=c(50, 60, 70))
+```
+
+
 
 ## Two Dimensions
 
