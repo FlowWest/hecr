@@ -19,12 +19,14 @@ get_plan_attributes <- function(.f) {
   plan_file <- h5::h5attr(fplan, 'Plan File')
   plan_short_id <- h5::h5attr(fplan, 'Plan ShortID')
   time_window <- h5::h5attr(fplan, 'Time Window')
+  geometry_title <- h5::h5attr(fplan, 'Geometry Title')
   
   list(
     "plan_short_id" = plan_short_id, 
     "plan_name" = plan_name, 
     "plan_file" = plan_file,
-    "time_window" = time_window
+    "time_window" = time_window, 
+    "geometry_title" = geometry_title
   )
 }
 
@@ -40,7 +42,8 @@ hec_metadata <- function(f) {
       "plan_id" = plan_attrs$plan_short_id, 
       "plan_name" = plan_attrs$plan_name, 
       "plan_file" = plan_attrs$plan_file, 
-      "time_window" = plan_attrs$time_window
+      "time_window" = plan_attrs$time_window, 
+      "geometry_title" = plan_attrs$geometry_title
     )
   }
   purrr::map_dfr(f, ~do_extract(.))
