@@ -16,3 +16,4 @@ new_config(name, template = "default", in_wd = TRUE)
 Create a new configuration file can be used to automate alot of the work 
 done by the hecr package.
 }
+

@@ -1,31 +1,33 @@
-#' Function retrieves a desired time series from a cross section part of a
-#' HEC-RAS model
-#' @param f an hdf5 file read in via hec_file or a corpus created with create_hdf_corpus
-#' @param station_name station for the cross section to query time series from 
+#' Function queries an hdf file read in with hec_file for cross section time series data.
+#' @param f an hdf5 file read in via hec_file()
+#' @param station_name station(s) for the cross section to query time series from. 
+#' Multiple cross sections must be passed as a vector. 
 #' @param ts_type time series to query out (ex 'Water Surface', 'Depth', ...)
-#' @param timestatmp an optional timestamp to query, default action will not filter for a timestamp
+#' @param timestatmp an optional timestamp to query, default action will not filter for a timestamp.
+#' Use this option to speed up long queries when a desired timestamp is known.
 #' @export
 extract_ts1 <- function(f, station_name, ts_type="Water Surface", timestamp=NULL) {
   # closure for extracting each file in f
   
   do_extract <- function(.f, station_name, ts, timestamp) {
-    xs_datetime <- get_model_timestamps(.f)
-    # if user supplied timestamp argument then find its index else return all indexes
-    # TODO: case when timestamp was not found needs to have stop(ERROR)
-    timestamp_idx <- if(!is.null(timestamp)) which(xs_datetime == timestamp) else seq_len(length(xs_datetime))
+    model_datetimes <- get_model_timestamps(.f)
+
+    timestamp_index <- 
+      if(!is.null(timestamp)) which(model_datetimes == timestamp) else seq_len(length(model_datetimes))
+    if (!is.null(timestamp) & (length(timestamp_index) == 0)) 
+      stop(paste0("timestamp '", timestamp, "' does not match a datetime in the model"))
+    
     plan_id <- get_plan_attributes(.f)$plan_short_id
-    xs_index <- get_xs_station_index(.f, station_name)
-    river_name <- get_xs_river_name(.f, xs_index)
-    reach_name <- get_xs_reach(.f, xs_index)
-    d_length <- length(timestamp_idx)
-    series <-matrix(.f[hdf_paths$RES_CROSS_SECTIONS][ts_type][timestamp_idx, xs_index], 
+    cross_section_index <- get_xs_station_index(.f, station_name)
+    cross_section_reach <- get_xs_reach(.f, cross_section_index)
+    d_length <- length(timestamp_index)
+    series <-matrix(.f[hdf_paths$RES_CROSS_SECTIONS][ts_type][timestamp_index, cross_section_index], 
              ncol=1, byrow=FALSE)
     
     
-    tibble:::tibble("datetime" = rep(xs_datetime[timestamp_idx], length(xs_index)),
+    tibble:::tibble("datetime" = rep(model_datetimes[timestamp_index], length(cross_section_index)),
                     "plan_id" = plan_id,# reps on its own
-                    #"river_name" = rep(river_name, each=d_length), #might want to delete this 
-                    #"reach_name" = rep(reach_name, each=d_length), 
+                    "cross_section_reach" = rep(cross_section_reach, each=d_length), 
                     "time_series_type" = ts_type,
                     "cross_section" = rep(station_name, each=d_length), 
                     "values" = series[,1])  
@@ -48,13 +50,13 @@ get_xs_river_stations <- function(.f) {
 
 get_xs_station_index <- function(.f, station_name) {
   xs_stations <- get_xs_river_stations(.f)
-  xs_index <- which(xs_stations %in% station_name)
+  cross_section_index <- which(xs_stations %in% station_name)
   
-  if (!length(xs_index)) {
+  if (!length(cross_section_index)) {
     stop(paste0("station name '",station_name,"' not found in hdf5 file"))
   }
   
-  return(xs_index)
+  return(cross_section_index)
 }
 
 get_xs_reach <- function(.f, station_idx) {

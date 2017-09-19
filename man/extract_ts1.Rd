@@ -2,19 +2,22 @@
 % Please edit documentation in R/one-dim.R
 \name{extract_ts1}
 \alias{extract_ts1}
-\title{Function retrieves a desired time series from a cross section part of a
-HEC-RAS model}
+\title{Function queries an hdf file read in with hec_file for cross section time series data.}
 \usage{
-extract_ts1(f, station_name, ts_type)
+extract_ts1(f, station_name, ts_type = "Water Surface", timestamp = NULL)
 }
 \arguments{
-\item{f}{an hdf5 file read in via hec_file or a corpus created with create_hdf_corpus}
+\item{f}{an hdf5 file read in via hec_file()}
 
-\item{station_name}{station for the cross section to query time series from}
+\item{station_name}{station(s) for the cross section to query time series from. 
+Multiple cross sections must be passed as a vector.}
 
 \item{ts_type}{time series to query out (ex 'Water Surface', 'Depth', ...)}
+
+\item{timestatmp}{an optional timestamp to query, default action will not filter for a timestamp.
+Use this option to speed up long queries when a desired timestamp is known.}
 }
 \description{
-Function retrieves a desired time series from a cross section part of a
-HEC-RAS model
+Function queries an hdf file read in with hec_file for cross section time series data.
 }
+

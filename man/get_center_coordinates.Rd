@@ -12,3 +12,4 @@ get_center_coordinates(.f)
 \description{
 Function retrieves the center coordinates for a given hec_file
 }
+

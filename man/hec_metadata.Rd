@@ -14,3 +14,4 @@ hec_metadata(f)
 Function takes in a hec file or a collection of these and forms a metadata
 dataframe from them.
 }
+

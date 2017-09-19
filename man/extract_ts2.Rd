@@ -19,3 +19,4 @@ dataframe for desired timeseries with relevant column attributes
 \description{
 Function extracts a time series from an hdf file
 }
+

@@ -18,3 +18,4 @@ get_nearest_cell_center_index(x, y, nodes)
 Function returns the column index of the cell center coordinate nearest to (x, y).
 Uses simple vectorized version of Euclid's distance formula.
 }
+

@@ -9,3 +9,4 @@ is_hec_file(f)
 \description{
 Check whether an object is of hec_file class and not a null pointer
 }
+
