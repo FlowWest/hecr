@@ -56,22 +56,22 @@ extract_ts1 <- function(f, station_name, ts_type="Water Surface", timestamp=NULL
     river_name <- get_xs_river_name(.f, xs_index)
     reach_name <- get_xs_reach(.f, xs_index)
     d_length <- length(timestamp_idx)
-    print(d_length)
     series <-matrix(.f[hdf_paths$RES_CROSS_SECTIONS][ts_type][timestamp_idx, xs_index], 
              ncol=1, byrow=FALSE)
     
     
     # DEBUG 
-    # cat("length on creation -----------------------\n", 
-    #     "the length of datetime - ", length(xs_datetime), "\n", 
-    #     "the length of river_name - ", length(river_name), "\n", 
-    #     "the length of values - ", length(series[,1]), "\n", 
+    # cat("length on creation -----------------------\n",
+    #     "the length of datetime - ", length(xs_datetime), "\n",
+    #     "the length of datetime Index - ", length(timestamp_idx), "\n",
+    #     "the length of river_name - ", length(river_name), "\n",
+    #     "the length of values - ", length(series[,1]), "\n",
     #     "the length of cross_section - ", length(station_name), "\n")
     # 
     # cat("lengths in the tibble ----------------------\n",
-    #     "the length of datetime - ", length(rep(xs_datetime[timestamp_idx], length(xs_index))), "\n", 
-    #     "the length of river_name - ", length(rep(river_name, each=d_length)), "\n", 
-    #     "the length of values - ", length(series[,1]), "\n", 
+    #     "the length of datetime - ", length(rep(xs_datetime[timestamp_idx], length(xs_index))), "\n",
+    #     "the length of river_name - ", length(rep(river_name, each=d_length)), "\n",
+    #     "the length of values - ", length(series[,1]), "\n",
     #     "the length of cross_section - ", length(rep(station_name, each=d_length)), "\n")
     
     
