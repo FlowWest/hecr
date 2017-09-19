@@ -20,6 +20,7 @@ get_plan_attributes <- function(.f) {
   plan_short_id <- h5::h5attr(fplan, 'Plan ShortID')
   time_window <- h5::h5attr(fplan, 'Time Window')
   geometry_title <- h5::h5attr(fplan, 'Geometry Title')
+  output_interval <- h5::h5attr(fplan, 'Output Interval')
   
   # process time window a little more
   time <- trimws(unlist(strsplit(time_window, "to")))
@@ -31,7 +32,8 @@ get_plan_attributes <- function(.f) {
     "plan_file" = plan_file,
     "geometry_title" = geometry_title,
     "start_time_window" = time[1],
-    "end_time_window" = time[2]
+    "end_time_window" = time[2], 
+    "output_interval" = output_interval
   )
 }
 
@@ -43,6 +45,7 @@ hec_metadata <- function(f) {
   
   do_extract <- function(.f) {
     plan_attrs <- get_plan_attributes(.f)
+    # only add cols worth querying out of the data
     tibble::tibble(
       "plan_id" = plan_attrs$plan_short_id, 
       "plan_name" = plan_attrs$plan_name, 

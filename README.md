@@ -188,6 +188,9 @@ x %>%
 
 ![](images/two-dim-multiple-files-and-coords.png)
 
+Here is another query where we choose one point and itereate over 33 hdf files
+
+![crazy query pic](images/crazy-query.png)
 
 ## MetaData 
 

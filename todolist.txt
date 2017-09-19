@@ -1,6 +1,8 @@
-@created(17-09-18 15:47) 4:00 - 5:15
-todo:
-  ☐ tackle the remaining bugs/issues left on the giuthub page
-  ☐ start a tutorial that Bethany can help with and showcase a workflow and potential of hecr
-  ✔ create a license for this @done (17-09-18 15:58)
-    well I choose the MIT license, its the most permisive one, but we can always change it later... i think
+Notes:
+
+@created(17-09-19 09:59)
+- Currently working on querying out long profiles from an hdf files
+  - we can find the time step for the model run  under the plan information metadata
+  - we can create a sequence based on this with seq(start, end, by = "timeInterval min")
+
+  

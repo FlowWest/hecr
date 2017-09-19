@@ -41,32 +41,33 @@ get_xs_river_name <- function(.f, station_idx) {
 #' @param f an hdf5 file read in via hec_file or a corpus created with create_hdf_corpus
 #' @param station_name station for the cross section to query time series from 
 #' @param ts_type time series to query out (ex 'Water Surface', 'Depth', ...)
+#' @param ... additional query options specified by name. (e.g timestamp ="2006-01-01 18:15:00")
 #' @export
-extract_ts1 <- function(f, station_name, ts_type) {
-  # TODO: @2017-09-18 I think a recent commit solves this issue please look into it
-  if (!is.list(f)) f <- list(f) # hack: look for piece below that is affected when 
-                                # when we pass either a list or vector
-  
-  do_extract <- function(.f, station_name, ts) {
-    plan_name <- get_plan_attributes(.f)$plan_name
+extract_ts1 <- function(f, station_name, ts_type="Water Surface") {
+  # closure for extracting each file in f
+  do_extract <- function(.f, station_name, ts, timestamp=timestamp) {
+    xs_datetime <- get_model_timestamps(.f)
+    plan_id <- get_plan_attributes(.f)$plan_short_id
     xs_index <- get_xs_station_index(.f, station_name)
     river_name <- get_xs_river_name(.f, xs_index)
     reach_name <- get_xs_reach(.f, xs_index)
-    xs_datetime <- get_model_timestamps(.f)
     d_length <- length(xs_datetime)
-    series <- matrix(.f[hdf_paths$RES_CROSS_SECTIONS][ts_type][, xs_index], 
-                     ncol=1, byrow=FALSE)
+    series <-matrix(.f[hdf_paths$RES_CROSS_SECTIONS][ts_type][, xs_index], 
+             ncol=1, byrow=FALSE)
+    
+      
     
     tibble:::tibble("datetime" = rep(xs_datetime, length(xs_index)),
-                    "plan_name" = plan_name,
+                    "plan_id" = plan_id,
                     "river_name" = rep(river_name, each=d_length), 
                     "reach_name" = rep(reach_name, each=d_length), 
                     "cross_section" = rep(station_name, each=d_length), 
                     "values" = series[,1])  
   }
   
-  purrr::map_dfr(f, ~do_extract(., station_name, ts_type))
-  
+  x <- purrr::map_dfr(f, ~do_extract(., station_name, ts_type))
+  attr(x, 'hec_obj') <- f
+  x
 }
 
 

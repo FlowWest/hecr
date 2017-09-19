@@ -34,11 +34,10 @@ get_nearest_cell_center_index <- function(x, y, nodes) {
 #' @return dataframe for desired timeseries with relevant column attributes
 #' @export
 extract_ts2 <- function(.f, xy, ts_type = "Water Surface") {
-  # check for a valid hec file object, I do this since at times the h5 package
-  # will close the connection to the file, and returns a nil pointer
-  # if (!is_hec_file(.f)) 
-  #   stop(".f argument passed in is not a valid hec file")
   
+  # TODO: emanuel please refactor all this mess, either make the user
+  #       enter a vector or a matrix, giving the choice between the two
+  #       makes things kinda complex!
   do_extract <- function(f, xy, ts_type) {
     plan_attributes <- get_plan_attributes(f)
     cc <- get_center_coordinates(f)
