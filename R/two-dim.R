@@ -1,32 +1,3 @@
-#' Function retrieves the center coordinates for a given hec_file
-#' @param .f an hdf file read in with \code{hec_file}
-get_center_coordinates <- function(.f) {
-  area_name <- get_flow_area_name(.f)
-  .f[hdf_paths$GEOM_2D_AREAS][area_name]['Cells Center Coordinate'][]
-}
-
-
-#' Function returns the path to 2D flow area defined in the hdf file.
-#' @param hf an hdf5 object read in with either hec_file() or h5::h5file()
-#' @return a slash delmited path to the 2D flow area
-get_flow_area_name <- function(hf) {
-  path <- h5::list.groups(hf[hdf_paths$GEOM_2D_AREAS])[1]
-  name <- tail(unlist(strsplit(path, '/')), 1)
-  
-  return(name)
-}
-
-#' Function returns the column index of the cell center coordinate nearest to (x, y).
-#' Uses simple vectorized version of Euclid's distance formula.
-#' @param x coordinate 
-#' @param y coordinate 
-#' @param nodes set of nodes to calculate distance from
-get_nearest_cell_center_index <- function(x, y, nodes) {
-  coord <- c(x, y)
-  dist <- colSums(sqrt((coord - t(nodes))^2))
-  return(which.min(dist))
-}
-
 #' Function extracts a time series from an hdf file
 #' @param .f an hdf file read in with hec_file or h5::h5file
 #' @param ts_type the time series to extract
@@ -35,20 +6,12 @@ get_nearest_cell_center_index <- function(x, y, nodes) {
 #' @export
 extract_ts2 <- function(.f, xy, ts_type = "Water Surface") {
   
-  # TODO: emanuel please refactor all this mess, either make the user
-  #       enter a vector or a matrix, giving the choice between the two
-  #       makes things kinda complex!
   do_extract <- function(f, xy, ts_type) {
     plan_attributes <- get_plan_attributes(f)
     cc <- get_center_coordinates(f)
     area_name <- get_flow_area_name(f)
     
-    if (is.vector(xy))
-      m <- matrix(xy, ncol=2)
-    else if (is.matrix(xy))
-      m <- xy
-    else
-      m <- matrix(xy)
+    m <- make_coord_matrix(xy)
     
     # for set of all pairs (x, y) find the nearest cell index  
     nearest_cell_index <- sapply(seq_len(nrow(m)), function(i) {
@@ -80,4 +43,33 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface") {
   x <- purrr::map_dfr(.f, ~do_extract(., xy, ts_type))
   attr(x, "hec_obj") <- f
   x
+}
+
+## INTERNAL 
+
+make_coord_matrix <- function(x) {
+  if (is.matrix(x)) return(x) 
+  else {
+    if (length(x) %% 2 != 0) stop("vector must have pairs of coordintes, your vector is of odd length")
+    m <- matrix(x, ncol=2, byrow=TRUE)
+    return(m)
+  }
+}
+
+get_center_coordinates <- function(.f) {
+  area_name <- get_flow_area_name(.f)
+  .f[hdf_paths$GEOM_2D_AREAS][area_name]['Cells Center Coordinate'][]
+}
+
+get_flow_area_name <- function(hf) {
+  path <- h5::list.groups(hf[hdf_paths$GEOM_2D_AREAS])[1]
+  name <- tail(unlist(strsplit(path, '/')), 1)
+  
+  return(name)
+}
+
+get_nearest_cell_center_index <- function(x, y, nodes) {
+  coord <- c(x, y)
+  dist <- colSums(sqrt((coord - t(nodes))^2))
+  return(which.min(dist))
 }
