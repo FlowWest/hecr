@@ -71,6 +71,3 @@ append_meta <- function(df) {
   d <- hec_metadata(attr(df, "hec_obj"))
   dplyr::left_join(df, d, by = c("plan_id" = "plan_id"))
 }
-
-
-
