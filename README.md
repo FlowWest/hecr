@@ -83,7 +83,27 @@ hdf file `ArdenwoodCreek.p50.hdf` is associated with number 50.
 f <- hecr::hec_file("inst/raw-data", plan_numbers=c(50, 60, 70))
 ```
 
+*When TimeStatmp in Known* 
 
+Sometimes a user may want to capture a snapshot in time of the whole system. 
+This requires for hecr to read in up 100 hdf files each at about 200mb in size. 
+In such cases known the timestamp to query for can really speed things up. A user
+can supply this as an argument to `extract_ts1`. 
+
+```r
+z <- extract_ts1(f, "44930.9*", timestamp="2005-12-30 02:00:00")
+```
+
+```
+# A tibble: 1 x 6
+             datetime                         plan_id river_name reach_name cross_section           values
+               <dttm>                           <chr>      <chr>      <chr>         <chr>            <dbl>
+1 2005-12-30 10:00:00 Q100_ExistBaseline_Wet_20170307 AlamedaCk2   Upstream      44930.9* 27.0153141021729
+```
+
+Doing so this way allows the backend of hecr to only pull out this timestatmp per model. 
+The other way of doing this would require a full query of all timestatmps for each 
+hdf file and then issue a `filter()` statement.
 
 ## Two Dimensions
 
