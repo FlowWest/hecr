@@ -50,15 +50,15 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface") {
 make_coord_matrix <- function(x) {
   if (is.matrix(x)) return(x) 
   else {
-    if (length(x) %% 2 != 0) stop("vector must have pairs of coordintes, your vector is of odd length")
+    if (length(x) %% 2 != 0) stop("vector must have pairs of coordinates, your vector is of odd length")
     m <- matrix(x, ncol=2, byrow=TRUE)
     return(m)
   }
 }
 
-get_center_coordinates <- function(.f) {
-  area_name <- get_flow_area_name(.f)
-  .f[hdf_paths$GEOM_2D_AREAS][area_name]['Cells Center Coordinate'][]
+get_center_coordinates <- function(f) {
+  area_name <- get_flow_area_name(f)
+  f[hdf_paths$GEOM_2D_AREAS][area_name]['Cells Center Coordinate'][]
 }
 
 get_flow_area_name <- function(hf) {
