@@ -69,8 +69,9 @@ water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 Once again the data is in a tidy form, and so it works great with ggplot or plotly. 
 Further more all of dplyr is at your disposal. 
 
-When running HEC-RAS models a folder is populated with all plans, we can specify
-which hdf files we can to use based on the associated plan number.
+When running HEC-RAS models a folder is populated with all plans by defauly, we can specify
+which hdf files we want to query on based on the associated plan number. For example
+hdf file `ArdenwoodCreek.p50.hdf` is associated with number 50.
 
 ```r
 # query in this directory but only hdf files associated with plans 50, 60, 70
