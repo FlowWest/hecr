@@ -6,7 +6,7 @@
 #' @return a vector of datetimes
 get_model_timestamps <- function(.f) {
   dt <- .f[hdf_paths$RES_UNSTEADY_TS]['Time Date Stamp'][]
-  lubridate::dmy_hms(dt)
+  lubridate::dmy_hms(dt, tz='America/Los_Angeles')
 }
 
 #' Function retrieves model attributes embeded in a HEC-RAS result file.
