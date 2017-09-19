@@ -190,7 +190,7 @@ x %>%
 
 Here is another query where we choose one point and itereate over 33 hdf files
 
-![crazy query pic](images/crazy-query.png)
+![](images/crazy-query.png)
 
 ## MetaData 
 
