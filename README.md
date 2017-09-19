@@ -27,6 +27,9 @@ applications can be found in the [Tutorial](#)
 
 ## One Dimension Queries
 
+
+*One HDF File* 
+
 A user is required to know the river cross section name from the hdf file. This may
 be a bit limiting at the moment, future releases will allow exploration of the 
 file via R to easily pick these out. A simple example is shown below:
@@ -50,6 +53,8 @@ water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 The above is useful, the simple fact that data is transformed to a tidy format 
 is great. However, much of this work could have been done in HEC-RAS, the more powerful 
 aspect of hecr is when we start putting together complex queries. 
+
+*Multiple HDF Files*
 
 Here is an example where we read in a collection of hdf files. We can do so with the 
 same `hec_file()` function, but this time supply it a directory.
@@ -97,6 +102,7 @@ coord <- c(6103057.45033481, 2027049.43985547)
 
 x <- hecr::extract_ts2(f, xy = coord, ts_type = "Water Surface")
 
+# tidy data
 print(x3)
 ```
 
@@ -128,15 +134,15 @@ x %>% ggplot(aes(datetime, values)) + geom_line()
 
 *Multiple HDF Files* 
 
-Much like the one dimensional part, we can set up a corpus of hdf files and query all 
-of them for given coordinate: 
+Much like the one dimensional part, we can set up a collection of hdf files and query all 
+of them for a given coordinate: 
 
 ```r
 # create a corpus
-corp <- hecr::create_hdf_corpus("inst/raw-data/")
+f <- hecr::hec_file("inst/raw-data/")
 
-# query out coord from all files defined in the corpus
-x <- hecr::extract_ts2(corp, coord, ts_type = "Water Surface")
+# query out coord from all files defined in the collection
+x <- hecr::extract_ts2(f, coord, ts_type = "Water Surface")
 
 # plot 
 x %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
@@ -147,8 +153,10 @@ x %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 *Multiple Coordinates and Multiple Plans(Files)*
 
 We can also query mutliple coordinates and multiple files. We can supply in multiple coordinates
-by either having a vector with pairs of these, or as a matrix. One last possibility is to populate 
-as csv with these as columns and pass it in as the argument. 
+by either having a vector with pairs of these (so an even number must be the length of this vector), 
+or as a matrix. Current development features include allowing a user to set up a 
+configuration file with these as entry, and thus allowing for an arbitrary length of coordinate 
+pairs, without over populating an R script.  
 
 ```r
 # create a matrix of coordinates of interest
@@ -165,11 +173,11 @@ m <- matrix(c(6099816.76262168,	2030896.94257798,
               6106316.76262168,	2030896.94257798,
               6106366.76262168,	2030896.94257798), ncol = 2, byrow = TRUE)
 
-# use the previous corps object we create
-print(corp)
+# use the previous collection object we create
+print(f)
 
 # query the hdf files
-x <- hecr::extract_ts2(corp, xy=m, ts_type="Water Surface")
+x <- hecr::extract_ts2(f, xy=m, ts_type="Water Surface")
 
 # plot 
 x %>% 
@@ -181,7 +189,37 @@ x %>%
 ![](images/two-dim-multiple-files-and-coords.png)
 
 
+## MetaData 
 
+A lot of current development is associated with capturing all the required metadata 
+from hdf files. Here show current features. 
+
+We can query metadata from any object read in with `hec_file()` 
+
+```r
+meta <- hecr::hec_metadata(f)
+```
+
+```
+# A tibble: 1 x 4
+                          plan_id                       plan_name
+                            <chr>                           <chr>
+1 Q100_ExistBaseline_Wet_20170307 Q100_ExistBaseline_Wet_20170307
+# ... with 2 more variables: plan_file <chr>, time_window <chr>
+```
+
+Every dataframe obtained with one of the `extract_*` functions has attached to it 
+a reference to the collection that created it. This allows for easy creation of 
+helper pipe functions like `append_meta()` when we want to attach extra columns to 
+a given dataframe 
+
+```r
+# x is an already existing dataframe from calling extract_ts2
+# add metadata columns to the dataframe
+y <- x %>% append_meta() 
+```
+
+Future releases will make extensive use of this type of functionality. 
 
 
 
