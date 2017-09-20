@@ -12,17 +12,17 @@ extract_ts1 <- function(f, station_name, ts_type="Water Surface", timestamp=NULL
   do_extract <- function(.f, station_name, ts, timestamp) {
     model_datetimes <- get_model_timestamps(.f)
 
-    # if use specified a timestamp find the index (row in hdf) that correponds
-    # to the timestamp. Otherwise make this sequence just all the index(es?)
+    # if user specified a timestamp find the index (row in hdf) that correponds
+    # Otherwise make this sequence just all the index(es?)
     # lastly check when provided a timestamp it matches with one in hdf error otherwise 
     timestamp_index <- 
       if(!is.null(timestamp)) which(model_datetimes == timestamp) else seq_len(length(model_datetimes))
     if (!is.null(timestamp) & (length(timestamp_index) == 0)) 
       stop(paste0("timestamp '", timestamp, "' does not match a datetime in the model"))
     
-    plan_id <- get_plan_attributes(.f)$plan_short_id
-    cross_section_index <- get_xs_station_index(.f, station_name)
-    cross_section_reach <- get_xs_reach(.f, cross_section_index)
+    plan_id <- get_plan_attributes(.f)$plan_short_id #one per hdf file
+    cross_section_index <- get_xs_station_index(.f, station_name) #one per station
+    cross_section_reach <- get_xs_reach(.f, cross_section_index) #one per station
     d_length <- length(timestamp_index)
     series <-matrix(.f[hdf_paths$RES_CROSS_SECTIONS][ts_type][timestamp_index, cross_section_index], 
              ncol=1, byrow=FALSE)
