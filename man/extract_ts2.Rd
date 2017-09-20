@@ -4,7 +4,7 @@
 \alias{extract_ts2}
 \title{Function extracts a time series from an hdf file}
 \usage{
-extract_ts2(.f, xy, ts_type = "Water Surface")
+extract_ts2(.f, xy, ts_type = "Water Surface", timestamp = NULL)
 }
 \arguments{
 \item{.f}{an hdf file read in with hec_file or h5::h5file}

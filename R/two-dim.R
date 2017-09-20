@@ -4,38 +4,52 @@
 #' @param xy a coordinate or set of coordinates either in a dataframe or matrix with columns x and y 
 #' @return dataframe for desired timeseries with relevant column attributes
 #' @export
-extract_ts2 <- function(.f, xy, ts_type = "Water Surface") {
+extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
   
   do_extract <- function(f, xy, ts_type) {
-    plan_attributes <- get_plan_attributes(f)
-    cc <- get_center_coordinates(f)
+    plan_id <- get_plan_attributes(f)$plan_short_id
+    center_coordinates <- get_center_coordinates(f)
     area_name <- get_flow_area_name(f)
+    model_datetimes <- get_model_timestamps(f)
+    
+    timestamp_index <- 
+      if(!is.null(timestamp)) which(model_datetimes == timestamp) else seq_len(length(model_datetimes))
+    if (!is.null(timestamp) & (length(timestamp_index) == 0)) 
+      stop(paste0("timestamp '", timestamp, "' does not match a datetime in the model"))
     
     m <- make_coord_matrix(xy)
-    
-    # for set of all pairs (x, y) find the nearest cell index  
+    print("Input matrix is:")
+    print(is.matrix(m))
+    print(m)
+    print("--------------------------")
+    print("timestamp index is:")
+    print(timestamp_index)
+    print("--------------------------")
+    # for set of all pairs (x, y) find the nearest cell index 
+    # TODO: evaluate whether this should be a call to purrr::map
     nearest_cell_index <- sapply(seq_len(nrow(m)), function(i) {
-      get_nearest_cell_center_index(m[i,1], m[i,2], cc)
+      get_nearest_cell_center_index(m[i,1], m[i,2], center_coordinates)
     }) 
     
+    print("The nearest cell index are:")
+    print(nearest_cell_index)
+    print("-----------------------------")
     # get series from hdf file
-    series <- f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type][, nearest_cell_index][, seq_len(length(nearest_cell_index))]
+    series <- f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type][timestamp_index, nearest_cell_index][, seq_len(length(nearest_cell_index))]
     series_stacked <- matrix(series, ncol=1, byrow=FALSE)
     
-    # time stamps are constants for the whole model
-    # if anything needs to be repeated it should be based
-    # on the length of this vector
-    datetime <- get_model_timestamps(f)
+    length_of_timestamps <- length(timestamp_index)
     
     # vector used as columns for cell_index used in data
     # here a subtract one is required to bring the index back to 
-    # what is reported by hecRas, which uses 0 based indexes
-    hdf_cell_index <- rep(nearest_cell_index, each=length(datetime)) - 1
+    # what is reported by hecRas, which uses a 0 based index
+    hdf_cell_index <- rep(nearest_cell_index, each=length_of_timestamps)
+    
     
     # build desired tibble
-    tibble::tibble("datetime"=rep(datetime, length(nearest_cell_index)),
-                   "plan_id" = rep(plan_attributes$plan_short_id, nrow(series_stacked)),
-                   "time_series_type" = rep(ts_type, length(series_stacked)),
+    tibble::tibble("datetime"=rep(model_datetimes[timestamp_index], length(nearest_cell_index)),
+                   "plan_id" = plan_id,
+                   "time_series_type" = ts_type,
                    "hdf_cell_index" = hdf_cell_index,
                    "values"=series_stacked[, 1])
   }
@@ -48,11 +62,21 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface") {
 ## INTERNAL 
 
 make_coord_matrix <- function(x) {
-  if (is.matrix(x)) return(x) 
-  else {
+  if (is.matrix(x)) {
+    if (anyDuplicated(x)) {
+      warning("Duplicate values found in coordinate pairs, only unique pairs were kept")
+      return(matrix(x[!duplicated(x), ], ncol=2, byrow=TRUE))
+    } else 
+      return(x) 
+  } else { 
     if (length(x) %% 2 != 0) stop("vector must have pairs of coordinates, your vector is of odd length")
     m <- matrix(x, ncol=2, byrow=TRUE)
-    return(m)
+    if (anyDuplicated(m)) {
+      warning("Duplicate values found in coodinate pairs, only unique pairs were kept")
+      return(matrix(m[!duplicated(m), ], ncol=2, byrow=TRUE))
+    } else {
+      return(m)
+    }
   }
 }
 
