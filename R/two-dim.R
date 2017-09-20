@@ -28,7 +28,7 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
     # get series from hdf file
     series <- f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type][timestamp_index, nearest_cell_index][, seq_len(length(nearest_cell_index))]
     series_stacked <- matrix(series, ncol=1, byrow=FALSE)
-    
+     
     length_of_timestamps <- length(timestamp_index)
     
     # vector used as columns for cell_index used in data
@@ -43,12 +43,12 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
                    "time_series_type" = ts_type,
                    "hdf_cell_index" = hdf_cell_index,
                    "values"=series_stacked[, 1])
-  }
+  } 
   
   x <- purrr::map_dfr(.f, ~do_extract(., xy, ts_type))
   attr(x, "hec_obj") <- f
   x
-}
+} 
 
 ## INTERNAL 
 
