@@ -18,22 +18,13 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
       stop(paste0("timestamp '", timestamp, "' does not match a datetime in the model"))
     
     m <- make_coord_matrix(xy)
-    print("Input matrix is:")
-    print(is.matrix(m))
-    print(m)
-    print("--------------------------")
-    print("timestamp index is:")
-    print(timestamp_index)
-    print("--------------------------")
+    
     # for set of all pairs (x, y) find the nearest cell index 
     # TODO: evaluate whether this should be a call to purrr::map
     nearest_cell_index <- sapply(seq_len(nrow(m)), function(i) {
       get_nearest_cell_center_index(m[i,1], m[i,2], center_coordinates)
     }) 
     
-    print("The nearest cell index are:")
-    print(nearest_cell_index)
-    print("-----------------------------")
     # get series from hdf file
     series <- f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type][timestamp_index, nearest_cell_index][, seq_len(length(nearest_cell_index))]
     series_stacked <- matrix(series, ncol=1, byrow=FALSE)
@@ -43,7 +34,7 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
     # vector used as columns for cell_index used in data
     # here a subtract one is required to bring the index back to 
     # what is reported by hecRas, which uses a 0 based index
-    hdf_cell_index <- rep(nearest_cell_index, each=length_of_timestamps)
+    hdf_cell_index <- rep(nearest_cell_index, each=length_of_timestamps) - 1
     
     
     # build desired tibble
