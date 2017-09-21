@@ -19,9 +19,11 @@ Imports:
     stringr,
     tidyr,
     config,
-    dplyr
+    dplyr,
+    purrr
 RoxygenNote: 6.0.1
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr

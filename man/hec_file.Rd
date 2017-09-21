@@ -4,13 +4,15 @@
 \alias{hec_file}
 \title{Function reads in either a single hdf file or a collection of these specified as arguments.}
 \usage{
-hec_file(path, plan_numbers = NULL)
+hec_file(path, plan_numbers = NULL, ...)
 }
 \arguments{
 \item{path}{directory path to either a single hdf file or a directory of a collection of these}
 
 \item{plan_numbers}{a vector of plan number associated with hdf files. For use when path is a directory.
 Default action is to read all hdf files in path.}
+
+\item{...}{additional options.}
 }
 \value{
 list of files read in with hec_file

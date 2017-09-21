@@ -1,11 +1,3 @@
-#' Check whether an object is of hec_file class and not a null pointer
-is_hec_file <- function(f) {
-  if (attr(f, "class") == "H5File") # if true class check for null pointer
-    !identical(f@pointer, new("externalptr"))
-  else 
-    FALSE
-}
-
 #' Function reads in either a single hdf file or a collection of these specified as arguments. 
 #' @description Function will read in a single hdf file when the path parameter points to a single
 #' file, or a collection of these when the path is directory. User can further specify only a 
@@ -13,6 +5,7 @@ is_hec_file <- function(f) {
 #' @param path directory path to either a single hdf file or a directory of a collection of these
 #' @param plan_numbers a vector of plan number associated with hdf files. For use when path is a directory.
 #' Default action is to read all hdf files in path.
+#' @param ... additional options.
 #' @return list of files read in with hec_file
 #' @examples 
 #' \dontrun{
@@ -24,14 +17,14 @@ is_hec_file <- function(f) {
 #' c <- hec_file("raw-data/", plan_numbers = c(50, 60))
 #' }
 #' @export
-hec_file <- function(path, plan_numbers = NULL) {
+hec_file <- function(path, plan_numbers = NULL, ...) {
 
   if (is_url(path)) {
-    stop("url paths not yet implemented :(")
+    hdf_files <- read_files_in_url(path)
   }
 
   if (is_dir(path)) { 
-    hdf_files <- read_files_in_path(path, plan_numbers)
+    hdf_files <- read_files_in_dir(path, plan_numbers)
   } else {
     file_dir <- dirname(path)
     file_name <- basename(path)
@@ -55,7 +48,7 @@ is_dir <- function(file) {
   dir.exists(file)
 }
 
-read_files_in_path <- function(path, plan_numbers) {
+read_files_in_dir <- function(path, plan_numbers) {
   hdf_files <- list.files(path, pattern = ".hdf", full.names = TRUE)
   if (!length(hdf_files)) stop(paste("No hdf files found in:", path)) # no hdf files found
   
@@ -79,8 +72,14 @@ read_files_in_path <- function(path, plan_numbers) {
   return(hdf_files)
 }
 
-
-
+read_files_in_url <- function(path, ...) {
+  dots <- list(...)
+  name <- basename(path)
+  temp_file <- tempfile(pattern = name, tmpdir = tempdir())
+  
+  download.file(path, destfile = temp_file)
+  return(temp_file)
+}
 
 
 
