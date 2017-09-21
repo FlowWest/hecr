@@ -80,13 +80,3 @@ read_files_in_url <- function(path, ...) {
   download.file(path, destfile = temp_file)
   return(temp_file)
 }
-
-
-
-
-
-
-
-
-
-
