@@ -14,4 +14,3 @@ add_to_corpus(corpus, f)
 \description{
 Add specified file to an existing corpus
 }
-

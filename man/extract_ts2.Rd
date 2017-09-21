@@ -2,7 +2,7 @@
 % Please edit documentation in R/two-dim.R
 \name{extract_ts2}
 \alias{extract_ts2}
-\title{Function extracts a time series from an hdf file}
+\title{Function extracts a time series from 2D portion of hec ras model.}
 \usage{
 extract_ts2(.f, xy, ts_type = "Water Surface", timestamp = NULL)
 }
@@ -11,12 +11,11 @@ extract_ts2(.f, xy, ts_type = "Water Surface", timestamp = NULL)
 
 \item{xy}{a coordinate or set of coordinates either in a dataframe or matrix with columns x and y}
 
-\item{ts_type}{the time series to extract}
+\item{ts_type}{the time series to extract, option defaults to 'Water Surface'}
 }
 \value{
 dataframe for desired timeseries with relevant column attributes
 }
 \description{
-Function extracts a time series from an hdf file
+Function extracts a time series from 2D portion of hec ras model.
 }
-

@@ -18,4 +18,3 @@ Function appends to an existing ts1 or ts2 dataframe with the data queried from 
 x \%>\% append_meta()
 }
 }
-

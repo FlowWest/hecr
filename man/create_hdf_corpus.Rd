@@ -17,4 +17,3 @@ list of files read in with hec_file
 \description{
 Build a corpus of hdf files to execute queries on. This function has been deprecated use hec_file2() instead
 }
-

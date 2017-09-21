@@ -12,4 +12,3 @@ close_corpus(corp)
 \description{
 Safely close a corpus
 }
-

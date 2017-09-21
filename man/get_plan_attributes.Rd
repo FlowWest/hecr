@@ -12,4 +12,3 @@ get_plan_attributes(.f)
 \description{
 Function retrieves model attributes embeded in a HEC-RAS result file.
 }
-

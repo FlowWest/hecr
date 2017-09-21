@@ -15,4 +15,3 @@ a vector of datetimes
 \description{
 Function retrieves the timestamps defined in the HEC-RAS model run
 }
-

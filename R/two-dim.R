@@ -1,6 +1,6 @@
-#' Function extracts a time series from an hdf file
+#' Function extracts a time series from 2D portion of hec ras model.
 #' @param .f an hdf file read in with hec_file or h5::h5file
-#' @param ts_type the time series to extract
+#' @param ts_type the time series to extract, option defaults to 'Water Surface'
 #' @param xy a coordinate or set of coordinates either in a dataframe or matrix with columns x and y 
 #' @return dataframe for desired timeseries with relevant column attributes
 #' @export

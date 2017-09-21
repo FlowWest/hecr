@@ -25,42 +25,69 @@ is_hec_file <- function(f) {
 #' }
 #' @export
 hec_file <- function(path, plan_numbers = NULL) {
-  
-  # first check if path is a directory or single filename 
-  is_dir <- dir.exists(path) 
-  # if this is a directory then either read all files in it, or only for given plans
-  if (is_dir) { 
-    hdf_files <- list.files(path, pattern = ".hdf", full.names = TRUE)
-    # create the message that will be shown to the users
-    msg <- paste0("found ", length(hdf_files), " in ", path)
-    
-    # if this vector has 0 elements -> no hdf files were found in the part, error
-    if (!length(hdf_files)) stop(paste("No hdf files found in:", path))
-    # when a directory check if the files vector is not null, if not then only read for the given plan numbers
-    if (!is.null(plan_numbers)) {
-      re <- paste(plan_numbers, collapse = "|")
-      hdf_files <- hdf_files[stringr::str_detect(hdf_files, re)]
-      msg <- paste0("found ", length(hdf_files), " hdf files in ", path, " matching plan names criteria")
-      # error when no matches were made
-      if (!length(hdf_files)) stop(paste("No hdf files found in:", path, "with plan name(s):", 
-                                         paste(plan_numbers, collapse = ", ")))
-      # warning when only some matched 
-      if (length(hdf_files) != length(plan_numbers)) {
-        warning("One or more hdf files were not read in correctly")
-      }
-    }
+
+  if (is_url(path)) {
+    stop("url paths not yet implemented :(")
+  }
+
+  if (is_dir(path)) { 
+    hdf_files <- read_files_in_path(path, plan_numbers)
   } else {
     file_dir <- dirname(path)
     file_name <- basename(path)
     
     hdf_files <- list.files(path = file_dir, pattern = file_name, full.names = TRUE)
     if (!length(hdf_files)) stop(paste0("file: '", file_name, "' was not found in '", file_dir, "'"))
-    msg <- NULL
   }
-  
-  # show the message?
-  if (!is.null(msg)) message(msg)
   
   # map all relevant files onto the h5::h5file read function
   purrr::map(hdf_files, h5::h5file)
 }
+
+
+# Helpers 
+
+is_url <- function(path) {
+  grepl("^((http|ftp)s?|sftp)://", path)
+}
+
+is_dir <- function(file) {
+  dir.exists(file)
+}
+
+read_files_in_path <- function(path, plan_numbers) {
+  hdf_files <- list.files(path, pattern = ".hdf", full.names = TRUE)
+  if (!length(hdf_files)) stop(paste("No hdf files found in:", path)) # no hdf files found
+  
+  this_msg <- paste0("found ", length(hdf_files), " in ", path)
+
+    # plan numbers supplied
+  if (!is.null(plan_numbers)) {
+    re <- paste(plan_numbers, collapse = "|")
+    hdf_files <- hdf_files[stringr::str_detect(hdf_files, re)]
+    this_msg <- paste0("found ", length(hdf_files), " hdf files in ", path, " matching plan names criteria")
+    
+    # no matching plan numbers
+    if (!length(hdf_files)) stop(paste("No hdf files found in:", path, "with plan name(s):", 
+                                       paste(plan_numbers, collapse = ", ")))
+    # only some were matched
+    if (length(hdf_files) != length(plan_numbers)) {
+      warning("One or more hdf files were not read in correctly")
+    }
+  }
+  message(this_msg)
+  return(hdf_files)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -20,4 +20,3 @@ Use this option to speed up long queries when a desired timestamp is known.}
 \description{
 Function queries an hdf file read in with hec_file for cross section time series data.
 }
-
