@@ -7,13 +7,17 @@
 extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
   
   do_extract <- function(f, xy, ts_type) {
+    
     plan_id <- get_plan_attributes(f)$plan_short_id
     center_coordinates <- get_center_coordinates(f)
     area_name <- get_flow_area_name(f)
     model_datetimes <- get_model_timestamps(f)
     
-    timestamp_index <- 
-      if(!is.null(timestamp)) which(model_datetimes == timestamp) else seq_len(length(model_datetimes))
+    timestamp_index <- {
+      if(!is.null(timestamp)) which(model_datetimes == timestamp)
+      else seq_len(length(model_datetimes))
+    }
+    
     if (!is.null(timestamp) & (length(timestamp_index) == 0)) 
       stop(paste0("timestamp '", timestamp, "' does not match a datetime in the model"))
     
@@ -28,7 +32,7 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
     # get series from hdf file
     series <- f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type][timestamp_index, nearest_cell_index][, seq_len(length(nearest_cell_index))]
     series_stacked <- matrix(series, ncol=1, byrow=FALSE)
-     
+    
     length_of_timestamps <- length(timestamp_index)
     
     # vector used as columns for cell_index used in data
