@@ -1,6 +1,6 @@
 Package: hecr
 Title: An R interface to HecRas model outputs
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: person("emanuel", "rodriguez", email = "erodriguez@flowwest.com", role = c("aut", "cre"))
 Description: hecr is a simple package that allows a user to interface with an
     hdf5 file resulting from a HecRas model run. The api allows users to extract
