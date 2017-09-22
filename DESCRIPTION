@@ -7,6 +7,7 @@ Description: hecr is a simple package that allows a user to interface with an
     all important data from a model file without writting repetitive code. Data
     extraction follow the tidy data philosophy.
 URL: https://github.com/FlowWest/hecr
+BugReports: https://github.com/FlowWest/hecr/issues
 Depends:
     R (>= 3.0.0)
 License: MIT + file LICENSE
