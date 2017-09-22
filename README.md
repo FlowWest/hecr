@@ -7,7 +7,7 @@ a user to quickly query out desired data in a tidy dataframe format.
 ## Installation 
 
 The install requires `devtools`, install with `install.packages("devtools")`.
-To install `hecr` do the following:
+To install `hecr`:
 
 ```r 
 devtools::install_github("flowwest/hecr")
@@ -19,11 +19,14 @@ need to be in the latest version for hecr to work.
 
 ## Usage 
 
-hecr can be used to query out either time series from a 1d or 2d portion of a 
-model file. 
+The main goal of hecr is to allow a user to obtain and automate to process
+of obtaining time series data from an hdf file resulting from a HEC-RAS model run.
+hecr makes it easy to query data from an hdf by giving the user a consistent approach
+to querying the data. Both time series from cross sections and 2d portions of a model
+run can be obtained using the hecr package.
 
 Below we walk through simple examples of queries, more complex examples and real world
-applications can be found in the [Tutorial](#)
+applications can be found in the [Tutorial (Coming Soon)](#)
 
 ## One Dimension Queries
 

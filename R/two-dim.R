@@ -13,27 +13,26 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
     area_name <- get_flow_area_name(f)
     model_datetimes <- get_model_timestamps(f)
     
-    timestamp_index <- {
+    index_for_timestamp <- {
       if(!is.null(timestamp)) which(model_datetimes == timestamp)
       else seq_len(length(model_datetimes))
     }
     
-    if (!is.null(timestamp) & (length(timestamp_index) == 0)) 
+    if (!is.null(timestamp) & (length(index_for_timestamp) == 0)) 
       stop(paste0("timestamp '", timestamp, "' does not match a datetime in the model"))
     
     m <- make_coord_matrix(xy)
     
-    # for set of all pairs (x, y) find the nearest cell index 
     # TODO: evaluate whether this should be a call to purrr::map
     nearest_cell_index <- sapply(seq_len(nrow(m)), function(i) {
       get_nearest_cell_center_index(m[i,1], m[i,2], center_coordinates)
     }) 
     
     # get series from hdf file
-    series <- f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type][timestamp_index, nearest_cell_index][, seq_len(length(nearest_cell_index))]
+    series <- f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type][index_for_timestamp, nearest_cell_index]
     series_stacked <- matrix(series, ncol=1, byrow=FALSE)
     
-    length_of_timestamps <- length(timestamp_index)
+    length_of_timestamps <- length(index_for_timestamp)
     
     # vector used as columns for cell_index used in data
     # here a subtract one is required to bring the index back to 
@@ -42,7 +41,7 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
     
     
     # build desired tibble
-    tibble::tibble("datetime"=rep(model_datetimes[timestamp_index], length(nearest_cell_index)),
+    tibble::tibble("datetime"=rep(model_datetimes[index_for_timestamp], length(nearest_cell_index)),
                    "plan_id" = plan_id,
                    "time_series_type" = ts_type,
                    "hdf_cell_index" = hdf_cell_index,

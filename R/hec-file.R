@@ -50,25 +50,26 @@ is_dir <- function(file) {
 
 read_files_in_dir <- function(path, plan_numbers) {
   hdf_files <- list.files(path, pattern = ".hdf", full.names = TRUE)
+  
   if (!length(hdf_files)) stop(paste("No hdf files found in:", path)) # no hdf files found
   
-  this_msg <- paste0("found ", length(hdf_files), " in ", path)
+  msg <- paste0("found ", length(hdf_files), " in ", path)
 
     # plan numbers supplied
   if (!is.null(plan_numbers)) {
     re <- paste(plan_numbers, collapse = "|")
     hdf_files <- hdf_files[stringr::str_detect(hdf_files, re)]
-    this_msg <- paste0("found ", length(hdf_files), " hdf files in ", path, " matching plan names criteria")
+    msg <- paste0("found ", length(hdf_files), " hdf files in ", path, " matching plan numbers criteria")
     
     # no matching plan numbers
-    if (!length(hdf_files)) stop(paste("No hdf files found in:", path, "with plan name(s):", 
+    if (!length(hdf_files)) stop(paste("No hdf files found in:", path, "with plan numbers(s):", 
                                        paste(plan_numbers, collapse = ", ")))
     # only some were matched
     if (length(hdf_files) != length(plan_numbers)) {
       warning("One or more hdf files were not read in correctly")
     }
   }
-  message(this_msg)
+  message(msg)
   return(hdf_files)
 }
 
@@ -77,6 +78,6 @@ read_files_in_url <- function(path, ...) {
   name <- basename(path)
   temp_file <- tempfile(pattern = name, tmpdir = tempdir())
   
-  download.file(path, destfile = temp_file)
+  download.file(path, destfile = temp_file, ...)
   return(temp_file)
 }
