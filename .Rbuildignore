@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^inst/raw-data/$
 ^raw-data/$
+^docs$

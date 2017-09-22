@@ -34,8 +34,8 @@ applications can be found in the [Tutorial (Coming Soon)](#)
 *One HDF File* 
 
 A user is required to know the river cross section name from the hdf file. This may
-be a bit limiting at the moment, future releases will allow exploration of the 
-file via R to easily pick these out. A simple example is shown below:
+be a bit limiting at the moment, and requires navigating to an application like ras-mapper,
+future releases will address this issue. A simple example is shown below:
 
 ```r
 # load in the library
