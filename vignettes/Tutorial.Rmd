@@ -9,4 +9,4 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette covers several workflows that inspired the creation of the hecr package. 
+## Coming Soon
