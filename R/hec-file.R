@@ -48,6 +48,10 @@ is_dir <- function(file) {
   dir.exists(file)
 }
 
+is_file <- function(file) {
+  file.exists(file)
+}
+
 read_files_in_dir <- function(path, plan_numbers) {
   hdf_files <- list.files(path, pattern = ".hdf", full.names = TRUE)
   
