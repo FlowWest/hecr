@@ -57,11 +57,11 @@ read_files_in_dir <- function(path, plan_numbers) {
   
   if (!length(hdf_files)) stop(paste("No hdf files found in:", path)) # no hdf files found
   
-  msg <- paste0("found ", length(hdf_files), " hdf file(s) in ", path)
+  msg <- paste0("found ", length(hdf_files), " hdf file(s) in ", path) # helpful msg
 
-    # plan numbers supplied
+  # plan numbers supplied
   if (!is.null(plan_numbers)) {
-    re <- paste(plan_numbers, collapse = "|")
+    re <- or_collapse(plan_numbers)
     hdf_files <- hdf_files[stringr::str_detect(hdf_files, re)]
     msg <- paste0("found ", length(hdf_files), " hdf files in ", path, " matching plan numbers criteria")
     
@@ -85,3 +85,5 @@ read_files_in_url <- function(path, ...) {
   download.file(path, destfile = temp_file, ...)
   return(temp_file)
 }
+
+or_collapse <- function(x) paste(x, collapse = "|")

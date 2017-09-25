@@ -9,4 +9,18 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## Coming Soon
+# Introduction
+
+The goal of the hecr package is to give a user a simple and consistent interface
+to retrieving data from an hdf file produced by running a HEC-RAS model. Data 
+resulting from hecr function calls are all in a tidy form, thus allowing a user
+to use any tidyverse tool. The consistancy in hecr interface and the data returned
+from it, allows for the possibility of automation, a topic to be covered in an 
+advanced tutorial. 
+
+In the remaining of this document, we cover in detail the usage and real world 
+application of the hecr package.
+
+## What is an HDF5 File
+
+

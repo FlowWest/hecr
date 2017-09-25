@@ -21,7 +21,7 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
     if (!is.null(timestamp) & (length(index_for_timestamp) == 0)) 
       stop(paste0("timestamp '", timestamp, "' does not match a datetime in the model"))
     
-    m <- make_coord_matrix(xy)
+    m <- make_coordinate_matrix(xy)
     
     # TODO: evaluate whether this should be a call to purrr::map
     nearest_cell_index <- sapply(seq_len(nrow(m)), function(i) {
@@ -55,7 +55,7 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
 
 ## INTERNAL 
 
-make_coord_matrix <- function(x) {
+make_coordinate_matrix <- function(x) {
   if (is.matrix(x)) {
     if (anyDuplicated(x)) {
       warning("Duplicate values found in coordinate pairs, only unique pairs were kept")
