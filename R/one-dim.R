@@ -45,8 +45,11 @@ extract_ts1 <- function(f, station_name, ts_type="Water Surface", timestamp=NULL
 #' @param .f an hdf5 file read in with hec_file or h5::h5file
 #' @export
 get_xs_river_stations <- function(.f) {
-  xs_stations <- .f[hdf_paths$GEOM_CROSS]['River Stations'][]
-  return(trimws(xs_stations))
+  res <- purrr::map(.f, function(x) {
+    trimws(x[hdf_paths$GEOM_CROSS]['River Stations'][])  
+  })
+  
+  purrr::flatten_chr(res)
 }
 
 ### INTERNAL ------------------------------------------------------------------

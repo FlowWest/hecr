@@ -49,6 +49,10 @@ water_surface <- hecr::extract_ts1(f, 6863.627, ts_type = "Water Surface")
 
 # plot
 water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
+
+# you can also pull out an entire list of cross sections defined in the hdf file
+# not very useful in this release of the package but future releases will make use of it
+cross_sections_in_model <- hecr::get_xs_river_stations(f)
 ```
 
 ![](images/cross_section_single_file.png)
@@ -118,7 +122,7 @@ Moreover we can mix and match these in a single call, allowing for very complex 
 ## Two Dimensions
 
 Much of the same can be done for two dimensional portions of model runs. Here we show 
-the same examples above but this time getting time series for two dimension portions of
+the same examples as above but this time getting time series for two dimension portions of
 model files. 
 
 *One HDF File* 

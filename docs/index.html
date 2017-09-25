@@ -108,7 +108,11 @@ f &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/hec_fi
 water_surface &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/extract_ts1.html">extract_ts1</a></span>(f, <span class="fl">6863.627</span>, <span class="dt">ts_type =</span> <span class="st">"Water Surface"</span>)
 
 <span class="co"># plot</span>
-water_surface %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values, <span class="dt">color =</span> plan_name)) +<span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
+water_surface %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values, <span class="dt">color =</span> plan_name)) +<span class="st"> </span><span class="kw">geom_line</span>()
+
+<span class="co"># you can also pull out an entire list of cross sections defined in the hdf file</span>
+<span class="co"># not very useful in this release of the package but future releases will make use of it</span>
+cross_sections_in_model &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/get_xs_river_stations.html">get_xs_river_stations</a></span>(f)</code></pre></div>
 <div class="figure">
 <img src="images/cross_section_single_file.png">
 </div>
@@ -143,7 +147,7 @@ f &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/hec_fi
 <div id="two-dimensions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#two-dimensions" class="anchor"></a>Two Dimensions</h2>
-<p>Much of the same can be done for two dimensional portions of model runs. Here we show the same examples above but this time getting time series for two dimension portions of model files.</p>
+<p>Much of the same can be done for two dimensional portions of model runs. Here we show the same examples as above but this time getting time series for two dimension portions of model files.</p>
 <p><em>One HDF File</em></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read in file</span>
 f &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/hec_file.html">hec_file</a></span>(<span class="st">"inst/raw-data/ArdenwoodCreek.p50.hdf"</span>)
