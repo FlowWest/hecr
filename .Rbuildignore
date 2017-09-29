@@ -3,3 +3,4 @@
 ^inst/raw-data/$
 ^raw-data/$
 ^docs$
+^_pkgdown\.yml$

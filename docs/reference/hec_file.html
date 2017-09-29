@@ -11,8 +11,8 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -56,6 +56,9 @@
     <span class="fa fa-home fa-lg"></span>
      
   </a>
+</li>
+<li>
+  <a href="../articles/hecr.html">Get Started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -132,11 +135,13 @@ Default action is to read all hdf files in path.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># read in a single hdf file</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>hec_file</span>(<span class='st'>"raw-data/ArdenwoodCreek.p50.hdf"</span>)
+<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>hec_file</span>(<span class='st'>"examples/ArdenwoodCreek.p50.hdf"</span>)
+
 <span class='co'># read in a collection of hdf files in this directory</span>
-<span class='no'>b</span> <span class='kw'>&lt;-</span> <span class='fu'>hec_file</span>(<span class='st'>"raw-data/"</span>)
+<span class='no'>b</span> <span class='kw'>&lt;-</span> <span class='fu'>hec_file</span>(<span class='st'>"examples/"</span>)
+
 <span class='co'># read in hdf files in this directory matching 50 and 60 plan numbers</span>
-<span class='no'>c</span> <span class='kw'>&lt;-</span> <span class='fu'>hec_file</span>(<span class='st'>"raw-data/"</span>, <span class='kw'>plan_numbers</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>50</span>, <span class='fl'>60</span>))
+<span class='no'>c</span> <span class='kw'>&lt;-</span> <span class='fu'>hec_file</span>(<span class='st'>"examples/"</span>, <span class='kw'>plan_numbers</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>50</span>, <span class='fl'>60</span>))
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

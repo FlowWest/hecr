@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>An R interface to HecRas model outputs • hecr</title>
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -33,6 +33,9 @@
     <span class="fa fa-home fa-lg"></span>
      
   </a>
+</li>
+<li>
+  <a href="articles/hecr.html">Get Started</a>
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
@@ -85,163 +88,6 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>The install requires <code>devtools</code>, install with <code>install.packages("devtools")</code>. To install <code>hecr</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">"flowwest/hecr"</span>)</code></pre></div>
-<p>Installing hecr will install as dependencies: h5, dplyr, purrr and config. If detected on the system these will not install, but an update might be required. Both purrr and dplyr need to be in the latest version for hecr to work.</p>
-</div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
-<p>The main goal of hecr is to allow a user to obtain and automate to process of obtaining time series data from an hdf file resulting from a HEC-RAS model run. Hecr makes it easy to query data from an hdf by giving the user a consistent approach to querying the data. The hecr package gives an interface for obtaining both cross section and 2d time series.</p>
-<p>Below we walk through simple examples of queries, more complex examples and real world applications can be found in the <a href="#">Tutorial (Coming Soon)</a></p>
-</div>
-<div id="one-dimension-queries" class="section level2">
-<h2 class="hasAnchor">
-<a href="#one-dimension-queries" class="anchor"></a>One Dimension Queries</h2>
-<p><em>One HDF File</em></p>
-<p>A user is required to know the river cross section name from the hdf file. This may be a bit limiting at the moment, and requires navigating to an application like ras-mapper, future releases will address this issue. A simple example is shown below:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load in the library</span>
-<span class="kw">library</span>(hecr)
-
-<span class="co"># first read in the file with the hec_file function</span>
-f &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/hec_file.html">hec_file</a></span>(<span class="st">"inst/raw-data/ArdenwoodCreek.p50.hdf"</span>)
-
-<span class="co"># extract a cross section portion of the model using the extract_ts1</span>
-water_surface &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/extract_ts1.html">extract_ts1</a></span>(f, <span class="fl">6863.627</span>, <span class="dt">ts_type =</span> <span class="st">"Water Surface"</span>)
-
-<span class="co"># plot</span>
-water_surface %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values, <span class="dt">color =</span> plan_name)) +<span class="st"> </span><span class="kw">geom_line</span>()
-
-<span class="co"># you can also pull out an entire list of cross sections defined in the hdf file</span>
-<span class="co"># not very useful in this release of the package but future releases will make use of it</span>
-cross_sections_in_model &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/get_xs_river_stations.html">get_xs_river_stations</a></span>(f)</code></pre></div>
-<div class="figure">
-<img src="images/cross_section_single_file.png">
-</div>
-<p>The above is useful, the simple fact that data is transformed to a tidy format is great. However, much of this work could have been done in HEC-RAS (through more steps), the more powerful aspect of hecr is when we start putting together complex queries and mixing and matching multiple files and cross sections (and later coordinates).</p>
-<p><em>Multiple HDF Files</em></p>
-<p>Here is an example where we read in a collection of hdf files. We can do so with the same <code><a href="reference/hec_file.html">hec_file()</a></code> function, but this time supply it a directory containing the hdf files we are interested in.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># path to directory with hdf files we wish to query on</span>
-f &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/hec_file.html">hec_file</a></span>(<span class="st">"inst/raw-data/"</span>)
-
-water_surface &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/extract_ts1.html">extract_ts1</a></span>(f, <span class="fl">6863.627</span>, <span class="dt">ts_type =</span> <span class="st">"Water Surface"</span>)
-
-<span class="co"># plot</span>
-water_surface %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values, <span class="dt">color =</span> plan_name)) +<span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
-<div class="figure">
-<img src="images/cross_section_corpus.png">
-</div>
-<p>Once again the data is in a tidy form, and so it works great with ggplot or plotly.</p>
-<p>When running HEC-RAS models a folder is populated with all plans by default, in such cases we can specify which hdf files we want to query on based on the associated plan number. For example hdf file <code>ArdenwoodCreek.p50.hdf</code> is associated with number 50. We supply these plan numbers as a numeric vector to the parameter <code>plan_numbers</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># query in this directory but only hdf files associated with plans 50, 60, 70</span>
-f &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/hec_file.html">hec_file</a></span>(<span class="st">"inst/raw-data"</span>, <span class="dt">plan_numbers=</span><span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">70</span>))</code></pre></div>
-<p><em>When TimeStatmp in Known</em></p>
-<p>Sometimes a user may want to capture a snapshot in time of the whole system. This requires for hecr to read in up to 100 hdf files each at about 200mb in size. In such cases knowing the timestamp to query for can really speed things up. A user can supply this as an argument to <code>extract_ts1</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw"><a href="reference/extract_ts1.html">extract_ts1</a></span>(f, <span class="st">"44930.9*"</span>, <span class="dt">timestamp=</span><span class="st">"2005-12-30 02:00:00"</span>)</code></pre></div>
-<p>The result:</p>
-<pre><code># A tibble: 1 x 6
-             datetime                         plan_id river_name reach_name cross_section           values
-               &lt;dttm&gt;                           &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;         &lt;chr&gt;            &lt;dbl&gt;
-1 2005-12-30 10:00:00 Q100_ExistBaseline_Wet_20170307 AlamedaCk2   Upstream      44930.9* 27.0153141021729</code></pre>
-<p>Supplying a timestamp allows the backend of hecr to only pull out this timestatmp per model. The other way of doing this would require a full query of all timestatmps for each hdf file and then issue a <code>filter()</code> statement.</p>
-<p>Overall we can supply an arbitrary length of hdf files, cross sections and timestamps. Moreover we can mix and match these in a single call, allowing for very complex queries to be made.</p>
-</div>
-<div id="two-dimensions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#two-dimensions" class="anchor"></a>Two Dimensions</h2>
-<p>Much of the same can be done for two dimensional portions of model runs. Here we show the same examples as above but this time getting time series for two dimension portions of model files.</p>
-<p><em>One HDF File</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read in file</span>
-f &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/hec_file.html">hec_file</a></span>(<span class="st">"inst/raw-data/ArdenwoodCreek.p50.hdf"</span>)
-
-<span class="co"># set up coordinate to query for</span>
-coord &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">6103057.45033481</span>, <span class="fl">2027049.43985547</span>)
-
-x &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/extract_ts2.html">extract_ts2</a></span>(f, <span class="dt">xy =</span> coord, <span class="dt">ts_type =</span> <span class="st">"Water Surface"</span>)
-
-<span class="co"># tidy data</span>
-<span class="kw">print</span>(x3)</code></pre></div>
-<pre><code># A tibble: 481 x 5
-              datetime          plan_name time_series_type hdf_cell_index           values
-                &lt;dttm&gt;              &lt;chr&gt;            &lt;chr&gt;          &lt;dbl&gt;            &lt;dbl&gt;
- 1 2005-12-30 00:00:00 ArdenwoodCreek.p50    Water Surface          18296 6.66271018981934
- 2 2005-12-30 00:15:00 ArdenwoodCreek.p50    Water Surface          18296 6.66538572311401
- 3 2005-12-30 00:30:00 ArdenwoodCreek.p50    Water Surface          18296 6.66436624526978
- 4 2005-12-30 00:45:00 ArdenwoodCreek.p50    Water Surface          18296 6.65778636932373
- 5 2005-12-30 01:00:00 ArdenwoodCreek.p50    Water Surface          18296 6.64651870727539
- 6 2005-12-30 01:15:00 ArdenwoodCreek.p50    Water Surface          18296 6.63137197494507
- 7 2005-12-30 01:30:00 ArdenwoodCreek.p50    Water Surface          18296 6.61756515502930
- 8 2005-12-30 01:45:00 ArdenwoodCreek.p50    Water Surface          18296 6.60669612884521
- 9 2005-12-30 02:00:00 ArdenwoodCreek.p50    Water Surface          18296 6.59691762924194
-10 2005-12-30 02:15:00 ArdenwoodCreek.p50    Water Surface          18296 6.58782863616943
-# ... with 471 more rows</code></pre>
-<p>Plotting</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values)) +<span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
-<div class="figure">
-<img src="images/two-dim-one-file.png">
-</div>
-<p><em>Multiple HDF Files</em></p>
-<p>Much like the one dimensional part, we can set up a collection of hdf files and query all of them for a given coordinate:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create a corpus</span>
-f &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/hec_file.html">hec_file</a></span>(<span class="st">"inst/raw-data/"</span>)
-
-<span class="co"># query out coord from all files defined in the collection</span>
-x &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/extract_ts2.html">extract_ts2</a></span>(f, coord, <span class="dt">ts_type =</span> <span class="st">"Water Surface"</span>)
-
-<span class="co"># plot </span>
-x %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values, <span class="dt">color =</span> plan_name)) +<span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
-<div class="figure">
-<img src="images/two-dim-multiple.png">
-</div>
-<p><em>Multiple Coordinates and Multiple Plans(Files)</em></p>
-<p>We can also query mutliple coordinates and multiple files. We can supply in multiple coordinates by either having a vector with pairs of these (so an even number must be the length of this vector), or as a matrix. Current development features include allowing a user to set up a configuration file with these as entry, and thus allowing for an arbitrary length of coordinate pairs, without over populating an R script.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create a matrix of coordinates of interest</span>
-m &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">6099816.76262168</span>, <span class="fl">2030896.94257798</span>,
-              <span class="fl">6099866.76262168</span>, <span class="fl">2030896.94257798</span>,
-              <span class="fl">6099916.76262168</span>, <span class="fl">2030896.94257798</span>,
-              <span class="fl">6099966.76262168</span>, <span class="fl">2030896.94257798</span>,
-              <span class="fl">6100016.76262168</span>, <span class="fl">2030896.94257798</span>,
-              <span class="fl">6100166.76262168</span>, <span class="fl">2030896.94257798</span>,
-              <span class="fl">6100216.76262168</span>, <span class="fl">2030896.94257798</span>,
-              <span class="fl">6100266.76262168</span>, <span class="fl">2030896.94257798</span>,
-              <span class="fl">6100316.76262168</span>, <span class="fl">2030896.94257798</span>,
-              <span class="fl">6100366.76262168</span>, <span class="fl">2030896.94257798</span>,
-              <span class="fl">6106316.76262168</span>, <span class="fl">2030896.94257798</span>,
-              <span class="fl">6106366.76262168</span>, <span class="fl">2030896.94257798</span>), <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)
-
-<span class="co"># use the previous collection object we create</span>
-<span class="kw">print</span>(f)
-
-<span class="co"># query the hdf files</span>
-x &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/extract_ts2.html">extract_ts2</a></span>(f, <span class="dt">xy=</span>m, <span class="dt">ts_type=</span><span class="st">"Water Surface"</span>)
-
-<span class="co"># plot </span>
-x %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values, <span class="dt">color=</span><span class="kw">as.character</span>(hdf_cell_index))) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_line</span>() +<span class="st"> </span>
-<span class="st">  </span><span class="kw">facet_grid</span>(~plan_name)</code></pre></div>
-<div class="figure">
-<img src="images/two-dim-multiple-files-and-coords.png">
-</div>
-<p>Here is another query where we choose one point and itereate over 33 hdf files</p>
-<div class="figure">
-<img src="images/crazy-query.png">
-</div>
-</div>
-<div id="metadata" class="section level2">
-<h2 class="hasAnchor">
-<a href="#metadata" class="anchor"></a>MetaData</h2>
-<p>A lot of current development is associated with capturing all the required metadata from hdf files. Here show current features.</p>
-<p>We can query metadata from any object read in with <code><a href="reference/hec_file.html">hec_file()</a></code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meta &lt;-<span class="st"> </span>hecr::<span class="kw"><a href="reference/hec_metadata.html">hec_metadata</a></span>(f)</code></pre></div>
-<pre><code># A tibble: 1 x 4
-                          plan_id                       plan_name
-                            &lt;chr&gt;                           &lt;chr&gt;
-1 Q100_ExistBaseline_Wet_20170307 Q100_ExistBaseline_Wet_20170307
-# ... with 2 more variables: plan_file &lt;chr&gt;, time_window &lt;chr&gt;</code></pre>
-<p>Every dataframe obtained with one of the <code>extract_*</code> functions has attached to it a reference to the collection that created it. This allows for easy creation of helper pipe functions like <code><a href="reference/append_meta.html">append_meta()</a></code> when we want to attach extra columns to a given dataframe</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># x is an already existing dataframe from calling extract_ts2</span>
-<span class="co"># add metadata columns to the dataframe</span>
-y &lt;-<span class="st"> </span>x %&gt;%<span class="st"> </span><span class="kw"><a href="reference/append_meta.html">append_meta</a></span>() </code></pre></div>
-<p>Future releases will make extensive use of this type of functionality.</p>
 </div>
 </div>
 </div>

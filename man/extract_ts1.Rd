@@ -2,7 +2,7 @@
 % Please edit documentation in R/one-dim.R
 \name{extract_ts1}
 \alias{extract_ts1}
-\title{Function queries an hdf file read in with hec_file for cross section time series data.}
+\title{Query cross section (1d) data}
 \usage{
 extract_ts1(f, station_name, ts_type = "Water Surface", timestamp = NULL)
 }
@@ -18,5 +18,21 @@ Multiple cross sections must be passed as a vector.}
 Use this option to speed up long queries when a desired timestamp is known.}
 }
 \description{
-Function queries an hdf file read in with hec_file for cross section time series data.
+Query time series data frm a cross section of a HEC-RAS model.
+}
+\examples{
+\dontrun{
+## first read in hdf file
+f <- hec_file(examples/ArdenwoodCreek.p50.hdf)
+
+## get a water surface time series for a given cross section
+ws <- extract_ts1(f, "1456", "Water Surface")
+
+## get water surface elevation for several cross sections
+ws <- extract_ts1(f, c("1456", "8567", "12322"), "Water Surface")
+
+## get water surface for all cross sections with a fixed timestamp
+all_cross_sections <- get_xs_river_stations(f)
+ws <- extract(f, all_cross_sections, "Water Surface", timestamp = "2005-07-01 00:00:00")
+}
 }

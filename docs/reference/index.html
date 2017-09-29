@@ -11,8 +11,8 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -56,6 +56,9 @@
     <span class="fa fa-home fa-lg"></span>
      
   </a>
+</li>
+<li>
+  <a href="../articles/hecr.html">Get Started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -112,59 +115,45 @@
       <tbody>
         <tr>
           <th colspan="2">
-            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-            <p class="section-desc"></p>
+            <h2 id="section-read" class="hasAnchor"><a href="#section-read" class="anchor"></a>Read</h2>
+            <p class="section-desc"><p>Read in an hdf file reasulting from HEC-RAS model run</p></p>
           </th>
         </tr>
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="append_meta.html">append_meta</a></code> </p>
+            <p><code><a href="hec_file.html">hec_file</a></code> </p>
           </td>
-          <td><p>Function appends to an existing ts1 or ts2 dataframe with the data queried from hec_metadata</p></td>
-        </tr><tr>
+          <td><p>Function reads in either a single hdf file or a collection of these specified as arguments.</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-query-data" class="hasAnchor"><a href="#section-query-data" class="anchor"></a>Query Data</h2>
+            <p class="section-desc"><p>Query data out of an hdf file.</p></p>
+          </th>
+        </tr>
+        <tr>
           <!--  -->
           <td>
             <p><code><a href="extract_ts1.html">extract_ts1</a></code> </p>
           </td>
-          <td><p>Function queries an hdf file read in with hec_file for cross section time series data.</p></td>
+          <td><p>Query cross section (1d) data</p></td>
         </tr><tr>
           <!--  -->
           <td>
             <p><code><a href="extract_ts2.html">extract_ts2</a></code> </p>
           </td>
-          <td><p>Function extracts a time series from 2D portion of hec ras model.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_model_timestamps.html">get_model_timestamps</a></code> </p>
-          </td>
-          <td><p>Function retrieves the timestamps defined in the HEC-RAS model run</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_plan_attributes.html">get_plan_attributes</a></code> </p>
-          </td>
-          <td><p>Function retrieves model attributes embeded in a HEC-RAS result file.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_xs_river_stations.html">get_xs_river_stations</a></code> </p>
-          </td>
-          <td><p>Function returns cross section stations defined in the model</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="hec_config.html">hec_config</a></code> </p>
-          </td>
-          <td><p>Function reads in and fills in a query based on a configuration file parameter</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="hec_file.html">hec_file</a></code> </p>
-          </td>
-          <td><p>Function reads in either a single hdf file or a collection of these specified as arguments.</p></td>
-        </tr><tr>
+          <td><p>Query coordinate 2d data</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-metadata" class="hasAnchor"><a href="#section-metadata" class="anchor"></a>Metadata</h2>
+            <p class="section-desc"><p>Query and append metadata</p></p>
+          </th>
+        </tr>
+        <tr>
           <!--  -->
           <td>
             <p><code><a href="hec_metadata.html">hec_metadata</a></code> </p>
@@ -174,10 +163,9 @@ dataframe from them.</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="new_config.html">new_config</a></code> </p>
+            <p><code><a href="append_meta.html">append_meta</a></code> </p>
           </td>
-          <td><p>Create a new configuration file can be used to automate alot of the work 
-done by the hecr package.</p></td>
+          <td><p>Function appends to an existing ts1 or ts2 dataframe with the data queried from hec_metadata</p></td>
         </tr>
       </tbody>
       </table>
@@ -187,7 +175,9 @@ done by the hecr package.</p></td>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-read">Read</a></li>
+      <li><a href="#section-query-data">Query Data</a></li>
+      <li><a href="#section-metadata">Metadata</a></li>
     </ul>
   </div>
 </div>
