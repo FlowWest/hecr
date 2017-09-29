@@ -5,6 +5,19 @@
 #' @param ts_type time series to query out (ex 'Water Surface', 'Depth', ...)
 #' @param timestatmp an optional timestamp to query, default action will not filter for a timestamp.
 #' Use this option to speed up long queries when a desired timestamp is known.
+#' @examples
+#' # first read in hdf file
+#' f <- hec_file(examples/ArdenwoodCreek.p50.hdf)
+#' 
+#' # get a water surface time series for a given cross section
+#' ws <- extract_ts1(f, "1456", "Water Surface")
+#' 
+#' # get water surface elevation for several cross sections
+#' ws <- extract_ts1(f, c("1456", "8567", "12322"), "Water Surface")
+#' 
+#' # get water surface for all cross sections with a fixed timestamp
+#' all_cross_sections <- get_xs_river_stations(f)
+#' ws <- extract(f, all_cross_sections, "Water Surface", timestamp = "2005-07-01 00:00:00")
 #' @export
 extract_ts1 <- function(f, station_name, ts_type="Water Surface", timestamp=NULL) {
   # closure for extracting each file in f

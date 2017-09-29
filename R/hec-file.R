@@ -8,14 +8,14 @@
 #' @param ... additional options.
 #' @return list of files read in with hec_file
 #' @examples 
-#' \dontrun{
 #' # read in a single hdf file
-#' a <- hec_file("raw-data/ArdenwoodCreek.p50.hdf")
+#' a <- hec_file("examples/ArdenwoodCreek.p50.hdf")
+#' 
 #' # read in a collection of hdf files in this directory
-#' b <- hec_file("raw-data/") 
+#' b <- hec_file("examples/") 
+#' 
 #' # read in hdf files in this directory matching 50 and 60 plan numbers
-#' c <- hec_file("raw-data/", plan_numbers = c(50, 60))
-#' }
+#' c <- hec_file("examples/", plan_numbers = c(50, 60))
 #' @export
 hec_file <- function(path, plan_numbers = NULL, ...) {
 
