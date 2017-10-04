@@ -65,7 +65,7 @@ extract_ts2 <- function(.f, xy, ts_type = "Water Surface", timestamp = NULL) {
   } 
   
   x <- purrr::map_dfr(.f, ~do_extract(., xy, ts_type))
-  attr(x, "hec_obj") <- f # attach a reference to files
+  attr(x, "hec_obj") <- .f # attach a reference to files
   x
 } 
 
