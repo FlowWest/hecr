@@ -55,7 +55,7 @@ is_file <- function(file) {
 }
 
 read_files_in_dir <- function(path, plan_numbers) {
-  hdf_files <- list.files(path, pattern = ".hdf$", full.names = TRUE)
+  hdf_files <- list.files(path, pattern = "p[0-9][0-9].hdf$", full.names = TRUE)
   
   if (!length(hdf_files)) stop(paste("No hdf files found in:", path)) # no hdf files found
   

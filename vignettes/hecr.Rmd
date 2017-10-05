@@ -8,8 +8,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-A simple R package for interacting with hdf5 files resulting from a HEC-RAS 
-model run. `hecr` uses the `h5` package and wraps around it functions that enable 
+An R package for interacting with hdf5 files resulting from HEC-RAS 
+model runs. `hecr` uses the `h5` package and wraps around it functions that enable 
 a user to quickly query out desired data in a tidy dataframe format.
 
 ## Installation 
@@ -21,14 +21,14 @@ To install `hecr`:
 devtools::install_github("flowwest/hecr")
 ```
 
-Installing hecr will install as dependencies: h5, dplyr, purrr and config. If detected
-on the system these will not install, but an update might be required. Both purrr and dplyr
-need to be in the latest version for hecr to work.
+Installing hecr will install as dependencies: h5, dplyr, purrr, and config. If detected
+on the system these will not install, but an update might be required. The latest
+versions of both purrr and dplyr are required for hecr to function properly.
 
 ## Usage 
 
-The main goal of hecr is to allow a user to obtain and automate to process
-of obtaining time series data from an hdf file resulting from a HEC-RAS model run.
+The main goal of hecr is to allow a user to obtain and automate the process
+of obtaining output data from an hdf file resulting from a HEC-RAS model run.
 Hecr makes it easy to query data from an hdf by giving the user a consistent approach
 to querying the data. The hecr package gives an interface for obtaining both 
 cross section and 2d time series.
