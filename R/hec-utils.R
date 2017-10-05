@@ -9,6 +9,7 @@ get_model_timestamps <- function(.f) {
   lubridate::dmy_hms(dt, tz='America/Los_Angeles')
 }
 
+
 #' Function retrieves model attributes embeded in a HEC-RAS result file.
 #' @param .f an hdf object read in with hec_file or hdf_corpus
 get_plan_attributes <- function(.f) {
