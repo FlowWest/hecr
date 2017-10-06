@@ -36,7 +36,7 @@ hec_file <- function(path, plan_numbers = NULL, ...) {
   }
   
   # map all relevant files onto the h5::h5file read function
-  purrr::map(hdf_files, h5::h5file)
+  purrr::map(hdf_files, ~h5::h5file(., mode = 'r'))
 }
 
 
