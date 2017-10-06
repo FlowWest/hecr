@@ -4,7 +4,7 @@
 \alias{get_xs_river_stations}
 \title{Function returns cross section stations defined in the model}
 \usage{
-get_xs_river_stations(.f)
+get_xs_river_stations(f)
 }
 \arguments{
 \item{.f}{an hdf5 file read in with hec_file or h5::h5file}

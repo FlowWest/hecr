@@ -25,8 +25,8 @@
 extract_ts1 <- function(f, station_name, ts_type="Water Surface", timestamp=NULL) {
   # closure for extracting each file in f
   
-  do_extract <- function(.f, station_name, ts, timestamp) {
-    model_datetimes <- get_model_timestamps(.f)
+  do_extract <- function(f_internal, station_name, ts, timestamp) {
+    model_datetimes <- get_model_timestamps(f_internal)
 
     # if user specified a timestamp find the index (row in hdf) that correponds
     # Otherwise make this sequence just all the index(es?)
@@ -36,11 +36,11 @@ extract_ts1 <- function(f, station_name, ts_type="Water Surface", timestamp=NULL
     if (!is.null(timestamp) & (length(timestamp_index) == 0)) 
       stop(paste0("timestamp '", timestamp, "' does not match a datetime in the model"))
     
-    plan_id <- get_plan_attributes(.f)$plan_short_id #one per hdf file
-    cross_section_index <- get_xs_station_index(.f, station_name) #one per station
-    cross_section_reach <- get_xs_reach(.f, cross_section_index) #one per station
+    plan_id <- get_plan_attributes(f_internal)$plan_short_id #one per hdf file
+    cross_section_index <- get_xs_station_index(f_internal, station_name) #one per station
+    cross_section_reach <- get_xs_reach(f_internal, cross_section_index) #one per station
     d_length <- length(timestamp_index)
-    series <-matrix(.f[hdf_paths$RES_CROSS_SECTIONS][ts_type][timestamp_index, cross_section_index], 
+    series <-matrix(f_internal[hdf_paths$RES_CROSS_SECTIONS][ts_type][timestamp_index, cross_section_index], 
              ncol=1, byrow=FALSE)
     
     
@@ -60,9 +60,12 @@ extract_ts1 <- function(f, station_name, ts_type="Water Surface", timestamp=NULL
 #' Function returns cross section stations defined in the model
 #' @param .f an hdf5 file read in with hec_file or h5::h5file
 #' @export
-get_xs_river_stations <- function(.f) {
-  res <- purrr::map(.f, function(x) {
-    trimws(x[hdf_paths$GEOM_CROSS]['River Stations'][])  
+get_xs_river_stations <- function(f) {
+  res <- purrr::map(f, function(x) {
+    cat(class(x))
+    v <- x[hdf_paths$GEOM_CROSS]['River Stations'][]
+    cat(class(v))
+    trimws(v)  
   })
   
   purrr::flatten_chr(res)
@@ -70,8 +73,13 @@ get_xs_river_stations <- function(.f) {
 
 ### INTERNAL ------------------------------------------------------------------
 
+.get_xs_river_stations <- function(f) {
+  v <- f[hdf_paths$GEOM_CROSS]['River Stations'][]
+  trimws(v) 
+}
+
 get_xs_station_index <- function(.f, station_name) {
-  xs_stations <- get_xs_river_stations(.f)
+  xs_stations <- .get_xs_river_stations(.f)
   cross_section_index <- which(xs_stations %in% station_name)
   
   if (!length(cross_section_index)) {
