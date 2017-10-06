@@ -27,113 +27,136 @@ versions of both purrr and dplyr are required for hecr to function properly.
 
 ## Usage 
 
-The main goal of hecr is to allow a user to obtain and automate the process
-of obtaining output data from an hdf file resulting from a HEC-RAS model run.
-Hecr makes it easy to query data from an hdf by giving the user a consistent approach
-to querying the data. The hecr package gives an interface for obtaining both 
-cross section and 2d time series.
+The main goal of hecr is to streamline and automate the process of obtaining 
+and analyzing output data from plan hdf files created from HEC-RAS unsteady 
+simulation model runs. The hecr package provides an interface for obtaining data 
+from 1-D cross sections and 2-D point locations and profiles at multiple time 
+series or a single timestep. 
 
-Below we walk through simple examples of queries, more complex examples and real world
+Below we walk through simple examples. More complex examples and real world
 applications can be found in the [Tutorial (Coming Soon)](#)
 
-## One Dimension Queries
+**#EMANUEL: CAN WE PUT SOMETHING ABOUT UPCOMMING FEATURES HERE? 
++GET 1-D LONG PROFILE ALONG THE 1-D RIVER CENTERLINE
++2-D profiles (one timestep, values at multiple points and draw a line to 
+connect the dots). I think this can already be done w/ what we have, but I 
+need to verify
++CAN WE ALSO GET MAXIMUM VALUES? WE SHOULD TALK ABOUT THIS. 
++Velocity output
++Select plans by name rather than number
++flow across a line? This might be hard
++Current development features include allowing a user to set up a 
+configuration file with these as entry, and thus allowing for an arbitrary 
+length of coordinate pairs, without over populating an R script. Not sure what
+this  means, but copied from below.**
 
 
-*One HDF File* 
+## One-Dimensional Domain Queries
 
-A user is required to know the river cross section name from the hdf file. This may
-be a bit limiting at the moment, and requires navigating to an application like ras-mapper,
-future releases will address this issue. A simple example is shown below:
+*1-D Timeseries Output for a Single Plan* 
+
+The user must provide the 1-D river cross-section name(s) as defined in the model.
+A simple example is shown below:
 
 ```r
 # load in the library
 library(hecr)
 
-# first read in the file with the hec_file function
+# first read in the plan hdf file using the hec_file function
 f <- hecr::hec_file("inst/raw-data/ArdenwoodCreek.p50.hdf")
 
-# extract a cross section portion of the model using the extract_ts1
-water_surface <- hecr::extract_ts1(f, 6863.627, ts_type = "Water Surface")
+# extract timeseries output at a 1-D cross-section using the extract_ts1
+water_surface <- hecr::extract_ts1(f, station_name = 6863.627, ts_type = "Water Surface")
+
+# A list of all cross sections from any hdf file can be generated
+cross_sections_in_model <- hecr::get_xs_river_stations(f)
 
 # plot
 water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 
-# you can also pull out an entire list of cross sections defined in the hdf file
-# not very useful in this release of the package but future releases will make use of it
-cross_sections_in_model <- hecr::get_xs_river_stations(f)
 ```
 
 ![](images/cross_section_single_file.png)
 
-The above is useful, the simple fact that data is transformed to a tidy format 
-is great. However, much of this work could have been done in HEC-RAS (through more steps), the more powerful 
-aspect of hecr is when we start putting together complex queries and mixing and 
-matching multiple files and cross sections (and later coordinates). 
+The output data has been transformed to a tidy format and plotted
+using ggplot. This is quite an improvement over using the RAS Mapper interface, 
+which can often run into memory problems when generating profile data. Additionally,
+once the R code has been defined, changes to the plans and model output can be 
+read in, plotted, and other analyses performed at the push of a button.
 
-*Multiple HDF Files*
+An even more more powerful aspect of hecr is revealed when analysis requires
+querying multiple plans at multiple locations within the model domain. 
 
-Here is an example where we read in a collection of hdf files. We can do so with the 
-same `hec_file()` function, but this time supply it a directory containing the hdf
-files we are interested in.
+*1-D Timeseries Output for Multiple Plans*
+
+In this example, we read in a collection of hdf files. This can be accomplished
+using the same `hec_file()` function, but this time supply it a directory 
+containing the hdf files we are interested in. 
 
 ```r
 # path to directory with hdf files we wish to query on
 f <- hecr::hec_file("inst/raw-data/")
 
-water_surface <- hecr::extract_ts1(f, 6863.627, ts_type = "Water Surface")
+water_surface <- hecr::extract_ts1(f, station_name = 6863.627, ts_type = "Water Surface")
 
 # plot
 water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 ```
 
 ![](images/cross_section_corpus.png)
-
+ 
 Once again the data is in a tidy form, and so it works great with ggplot or plotly.
 
-When running HEC-RAS models a folder is populated with all plans by default, in such cases
-we can specify which hdf files we want to query on based on the associated plan number. For example
-hdf file `ArdenwoodCreek.p50.hdf` is associated with number 50. We supply 
-these plan numbers as a numeric vector to the parameter `plan_numbers`.
+If a subset of hdf files from the directory is desired, plan numbers can be 
+supplied as a numeric vector to the parameter `plan_numbers` in the `hec_file` 
+function.
 
 ```r
 # query in this directory but only hdf files associated with plans 50, 60, 70
 f <- hecr::hec_file("inst/raw-data", plan_numbers=c(50, 60, 70))
+
+# EMANUEL:  CAN WE GET THE METADATA HERE TOO AND PICK BASED ON PLAN NAME?
 ```
 
-*When TimeStatmp in Known* 
-
-Sometimes a user may want to capture a snapshot in time of the whole system. 
-This requires for hecr to read in up to 100 hdf files each at about 200mb in size. 
-In such cases knowing the timestamp to query for can really speed things up. 
-A user can supply this as an argument to `extract_ts1`. 
+*Developing a 1-D Long Profile* 
+Creating a 1-D profile requires extracting output at all 1-D cross-sections
+at a particular moment in time. This can be accomplished by using `all_cross_sections` 
+and the `timestamp` argument in the `extract_ts1` function as shown below. 
 
 ```r
-z <- extract_ts1(f, "44930.9*", timestamp="2005-12-30 02:00:00")
+
+z <- extract_ts1(f, all_cross_sections, timestamp="2005-12-30 02:00:00")
 ```
 
-The result:
+As a result, hecr returns output at the `timestamp` value at each of the cross-sections
+in the model:
 
 ```
+#EMANUEL:  REPLACE THIS WITH A LONG PROFILE TIBBLE
 # A tibble: 1 x 6
              datetime                         plan_id river_name reach_name cross_section           values
                <dttm>                           <chr>      <chr>      <chr>         <chr>            <dbl>
 1 2005-12-30 10:00:00 Q100_ExistBaseline_Wet_20170307 AlamedaCk2   Upstream      44930.9* 27.0153141021729
 ```
 
-Supplying a timestamp allows the backend of hecr to only pull out this timestatmp per model. 
-The other way of doing this would require a full query of all timestatmps for each 
-hdf file and then issue a `filter()` statement. 
+The output can be plotted to reveal the long profile.
 
-Overall we can supply an arbitrary length of hdf files, cross sections and timestamps.
-Moreover we can mix and match these in a single call, allowing for very complex queries to be made.
+**EMANUEL:  CREATE A FIGURE AND PUT IT HERE PLEASE - one long profile**
 
-## Two Dimensions
+Ofcourse, this can be expanded to include multple plans:
 
-Much of the same can be done for two dimensional portions of model runs. Here we show 
-the same examples as above but this time getting time series for two dimension portions of
-model files. 
+**EMANUEL:  CREATE A FIGURE AND PUT IT HERE PLEASE - multiple long profiles**
 
-*One HDF File* 
+## Two-Dimensional Domain Querries
+
+The same querries can be done for 2-D portions of the model. Examples
+similar to those shown above are provided in this section for the 2-D model domain. 
+
+*2-D Timeseries Output at a Single Point for a Single Plan* 
+For 2-D model output, the user must provide a set of coordinates defining 
+the point at which results are desired. Coordinates can be extracted from 
+RAS Mapper by double-clicking the ruler tool **(EMANUEL: HOW DO I ADD A JPG?)** in 
+the 2-D model domain. 
 
 ```r
 # read in file
@@ -147,6 +170,10 @@ x <- hecr::extract_ts2(f, xy = coord, ts_type = "Water Surface")
 # tidy data
 print(x3)
 ```
+
+`hecr` uses the distance formula to locate the nearest cell centerpoint and 
+reports output for that cell. The resulting tibble records the cell index that
+was selected.
 
 ```
 # A tibble: 481 x 5
@@ -174,16 +201,17 @@ x %>% ggplot(aes(datetime, values)) + geom_line()
 ![](images/two-dim-one-file.png)
 
 
-*Multiple HDF Files* 
+*2-D Timeseries Output at a Single Point for Multiple Plans* 
 
 Much like the one dimensional part, we can set up a collection of hdf files and query all 
 of them for a given coordinate: 
 
 ```r
-# create a corpus
-f <- hecr::hec_file("inst/raw-data/")
 
-# query out coord from all files defined in the collection
+# create a collection of plan hdf files
+f <- hecr::hec_file("inst/raw-data/", plan_numbers=c(50, 80))
+
+# query output from all files defined in the collection
 x <- hecr::extract_ts2(f, coord, ts_type = "Water Surface")
 
 # plot 
@@ -192,13 +220,10 @@ x %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 
 ![](images/two-dim-multiple.png)
 
-*Multiple Coordinates and Multiple Plans(Files)*
+*2-D Timeseries Output at Multiple Coordinates Across Multiple Plans*
 
-We can also query mutliple coordinates and multiple files. We can supply in multiple coordinates
-by either having a vector with pairs of these (so an even number must be the length of this vector), 
-or as a matrix. Current development features include allowing a user to set up a 
-configuration file with these as entry, and thus allowing for an arbitrary length of coordinate 
-pairs, without over populating an R script.  
+Multiple timeseries output can be querried at mutliple locations for multiple plans.
+`extract_ts2` will accept sets of ordered pairs as a vector or a matrix. 
 
 ```r
 # create a matrix of coordinates of interest
@@ -215,9 +240,6 @@ m <- matrix(c(6099816.76262168,	2030896.94257798,
               6106316.76262168,	2030896.94257798,
               6106366.76262168,	2030896.94257798), ncol = 2, byrow = TRUE)
 
-# use the previous collection object we create
-print(f)
-
 # query the hdf files
 x <- hecr::extract_ts2(f, xy=m, ts_type="Water Surface")
 
@@ -230,9 +252,27 @@ x %>%
 
 ![](images/two-dim-multiple-files-and-coords.png)
 
-Here is another query where we choose one point and itereate over 33 hdf files
+*Generating 2-D Profiles* 
+BETHANY LEFT OFF HERE. I'LL WORK ON THIS SECTION NEXT
 
-![](images/crazy-query.png)
+Sometimes a user may want to capture a snapshot in time rather than producing 
+timeseries data. Output at a particular time can be specified as an argument 
+to `extract_ts1`. 
+
+```r
+z <- extract_ts1(f, "44930.9*", timestamp="2005-12-30 02:00:00")
+```
+
+As a result, hecr returns only output at the `timestamp` value in each hdf file 
+specified:
+
+```
+# A tibble: 1 x 6
+             datetime                         plan_id river_name reach_name cross_section           values
+               <dttm>                           <chr>      <chr>      <chr>         <chr>            <dbl>
+1 2005-12-30 10:00:00 Q100_ExistBaseline_Wet_20170307 AlamedaCk2   Upstream      44930.9* 27.0153141021729
+```
+
 
 ## MetaData 
 
