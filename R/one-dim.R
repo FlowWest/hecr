@@ -73,6 +73,8 @@ get_xs_river_stations <- function(f) {
 
 ### INTERNAL ------------------------------------------------------------------
 
+# TODO (emanuel) this is a workaround, ideally a single function will cover 
+# both the case below and the case above this one.
 .get_xs_river_stations <- function(f) {
   v <- f[hdf_paths$GEOM_CROSS]['River Stations'][]
   trimws(v) 
