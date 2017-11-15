@@ -84,3 +84,14 @@ or_collapse <- function(x) paste(x, collapse = "|")
 is_hec_collection <- function(f) {
   (identical(class(f), "hec_collection"))
 }
+
+#' S3 class hec_collection.
+#' @exportClass hec_collection
+
+#' print hec_collection
+#' @export 
+print.hec_collection <- function(h) {
+  items_in_collection <- length(h$collection)
+  cat("A hec collection with", items_in_collection, "item(s)\n")
+  cat("Files in collection\n", sprintf("name: %s\n", h$files), "\n")
+}
