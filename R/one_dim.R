@@ -1,3 +1,9 @@
+#' @title Query one dimensional domains
+#' @description provide station(s), a type of time series and optionally a timestamp
+#' to query out data from an hdf5 file resulting from a HEC-RAS model run
+#' @param f a hec_collection object produced by calling hec_file()
+#' @param station_name name(s) for station(s) defined in the model run
+#' @param ts_type a valid time series type defined in the model run
 #' @export 
 extract_ts1 <- function(f, station_name, ts_type="Water Surface", time_stamp=NULL) {
   
@@ -61,7 +67,7 @@ get_cross_sections_index <- function(station, model_stations) {
     stop(sprintf("station '%s' not found in model", station), call. = FALSE)
   }
   
-  return(cross_section_idx)
+  cross_section_idx
 }
 
 get_cross_section_reach <- function(f, station_index) {
