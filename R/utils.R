@@ -1,4 +1,3 @@
-
 #' Get model timestamps 
 #' This should correspond with the width of raw time series dataframes
 get_model_timestamps <- function(f) {
@@ -27,5 +26,8 @@ get_model_metadata <- function(f) {
   )
 }
 
+is_hec_collection <- function(f) {
+  identical(class(f), "hec_collection")
+}
 
 is_empty <- function(x) length(x) == 0L
