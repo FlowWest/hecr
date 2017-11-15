@@ -1,25 +1,4 @@
-#' @title Query coordinate 2d data
-#' @description Function extracts a time series from a 2D portion of hec ras model.
-#' @param .f an hdf file read in with hec_file
-#' @param ts_type the time series to extract, option defaults to Water Surface
-#' @param xy a coordinate or set of coordinates either in a dataframe or matrix 
-#' with columns x and y
-#' @examples
-#' \dontrun{
-#' ## first read in file
-#' f <- hec_file("examples/ArdenwoodCreek.p50.hdf")
-#' 
-#' ## water surface time series at the coordinate 4567654.0, 2167453.0
-#' ws <- extract_ts2(f, xy=c(4567654.0, 2167453.0), "Water Surface")
-#' 
-#' ## water surface time series at multiple coordinates
-#' coords <- c(4567654.0, 2167453.0, 3456124.0, 7856124.0)
-#' ws <- extract_ts2(f, xy=coords, "Water Surface")
-#' 
-#' ## water surface for a fixed timestamp, useful when querying for large amounts of coordinates. 
-#' ws <- extract_ts2(f, xy=c(4567654.0, 2167453.0), "Water Surface", timestamp="2005-09-12 00:00:00")
-#' }
-#' @export
+
 extract_ts2 <- function(f, xy, ts_type = "Water Surface", timestamp = NULL) {
   
   do_extract <- function(.f, xy, ts_type) {
@@ -109,8 +88,6 @@ get_flow_area_name <- function(hf) {
 
 get_nearest_cell_center_index <- function(x, y, nodes) {
   coord <- c(x, y)
-  tmp <- nodes[]
-  on.exit(rm(tmp))
-  dist <- colSums(sqrt((coord - t(tmp))^2))
+  dist <- colSums(sqrt((coord - t(nodes))^2))
   return(which.min(dist))
 }

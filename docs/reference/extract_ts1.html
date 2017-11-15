@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Query cross section (1d) data — extract_ts1 • hecr</title>
+<title>Query one dimensional domains — extract_ts1 • hecr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -98,62 +98,40 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Query cross section (1d) data</h1>
+    <h1>Query one dimensional domains</h1>
     </div>
 
     
-    <p>Query time series data frm a cross section of a HEC-RAS model.</p>
+    <p>provide station(s), a type of time series and optionally a timestamp
+to query out data from an hdf5 file resulting from a HEC-RAS model run</p>
     
 
-    <pre class="usage"><span class='fu'>extract_ts1</span>(<span class='no'>f</span>, <span class='no'>station_name</span>, <span class='kw'>ts_type</span> <span class='kw'>=</span> <span class='st'>"Water Surface"</span>, <span class='kw'>timestamp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>extract_ts1</span>(<span class='no'>f</span>, <span class='no'>station_name</span>, <span class='kw'>ts_type</span> <span class='kw'>=</span> <span class='st'>"Water Surface"</span>, <span class='kw'>time_stamp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>f</th>
-      <td><p>an hdf5 file read in via hec_file()</p></td>
+      <td><p>a hec_collection object produced by calling hec_file()</p></td>
     </tr>
     <tr>
       <th>station_name</th>
-      <td><p>station(s) for the cross section to query time series from. 
-Multiple cross sections must be passed as a vector.</p></td>
+      <td><p>name(s) for station(s) defined in the model run</p></td>
     </tr>
     <tr>
       <th>ts_type</th>
-      <td><p>time series to query out (ex 'Water Surface', 'Depth', ...)</p></td>
-    </tr>
-    <tr>
-      <th>timestatmp</th>
-      <td><p>an optional timestamp to query, default action will not filter for a timestamp.
-Use this option to speed up long queries when a desired timestamp is known.</p></td>
+      <td><p>a valid time series type defined in the model run</p></td>
     </tr>
     </table>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'>## first read in hdf file</span>
-<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hec_file.html'>hec_file</a></span>(<span class='no'>examples</span>/<span class='no'>ArdenwoodCreek.p50.hdf</span>)
-
-<span class='co'>## get a water surface time series for a given cross section</span>
-<span class='no'>ws</span> <span class='kw'>&lt;-</span> <span class='fu'>extract_ts1</span>(<span class='no'>f</span>, <span class='st'>"1456"</span>, <span class='st'>"Water Surface"</span>)
-
-<span class='co'>## get water surface elevation for several cross sections</span>
-<span class='no'>ws</span> <span class='kw'>&lt;-</span> <span class='fu'>extract_ts1</span>(<span class='no'>f</span>, <span class='fu'>c</span>(<span class='st'>"1456"</span>, <span class='st'>"8567"</span>, <span class='st'>"12322"</span>), <span class='st'>"Water Surface"</span>)
-
-<span class='co'>## get water surface for all cross sections with a fixed timestamp</span>
-<span class='no'>all_cross_sections</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_xs_river_stations.html'>get_xs_river_stations</a></span>(<span class='no'>f</span>)
-<span class='no'>ws</span> <span class='kw'>&lt;-</span> <span class='fu'>extract</span>(<span class='no'>f</span>, <span class='no'>all_cross_sections</span>, <span class='st'>"Water Surface"</span>, <span class='kw'>timestamp</span> <span class='kw'>=</span> <span class='st'>"2005-07-01 00:00:00"</span>)
-<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>

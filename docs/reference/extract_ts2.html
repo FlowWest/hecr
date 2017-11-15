@@ -105,15 +105,11 @@
     <p>Function extracts a time series from a 2D portion of hec ras model.</p>
     
 
-    <pre class="usage"><span class='fu'>extract_ts2</span>(<span class='no'>.f</span>, <span class='no'>xy</span>, <span class='kw'>ts_type</span> <span class='kw'>=</span> <span class='st'>"Water Surface"</span>, <span class='kw'>timestamp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>extract_ts2</span>(<span class='no'>f</span>, <span class='no'>xy</span>, <span class='kw'>ts_type</span> <span class='kw'>=</span> <span class='st'>"Water Surface"</span>, <span class='kw'>timestamp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>.f</th>
-      <td><p>an hdf file read in with hec_file</p></td>
-    </tr>
     <tr>
       <th>xy</th>
       <td><p>a coordinate or set of coordinates either in a dataframe or matrix 
@@ -122,6 +118,10 @@ with columns x and y</p></td>
     <tr>
       <th>ts_type</th>
       <td><p>the time series to extract, option defaults to Water Surface</p></td>
+    </tr>
+    <tr>
+      <th>.f</th>
+      <td><p>an hdf file read in with hec_file</p></td>
     </tr>
     </table>
     
