@@ -1,0 +1,94 @@
+#' @export 
+extract_ts1 <- function(f, station_name, ts_type="Water Surface", time_stamp=NULL) {
+  
+  if (!is_hec_collection(f)) {
+    stop(sprintf("supplied 'f' is not a valid hec_collection"))
+  }
+  
+  do_extract <- function(.f) {
+    
+    model_timestamps <- get_model_timestamps(.f) 
+    model_attributes <- get_model_metadata(.f)
+    model_stations <- get_cross_section_stations(.f)
+    
+    if (!is.null(time_stamp)) {
+      time_idx <- which(model_timestamps == time_stamp)
+    } else {
+      time_idx <- seq_len(length(model_timestamps))
+    }
+    
+    if (!is.null(time_stamp) && (length(time_idx) == 0)) {
+      stop(sprintf('supplied timestamp did match a timestamp defined in this model'), 
+           call. = FALSE)
+    }
+    
+    
+    cross_section_index <- get_cross_sections_index(model_stations, station_name)
+    cross_section_reach <- get_cross_section_reach(.f, cross_section_index)[1]
+    cross_section_river <- get_cross_section_river(.f, cross_section_index)[1]
+    
+    time_series <- .f[[hdf_paths$RES_CROSS_SECTIONS]][[ts_type]][cross_section_index, time_idx]
+    other_attr_lengths <- length(station_name) * length(time_idx)
+    #on.exit(time_series$close())
+    time_series_stacked <- matrix(t(time_series[]), ncol = 1, byrow = TRUE)
+    
+    tibble::tibble(
+      "datetime" = rep(model_timestamps[time_idx], length(cross_section_index)), 
+      "plan_id" = model_attributes$plan_id, 
+      "plan_name" = model_attributes$plan_name,
+      "plan_file" = model_attributes$plan_file,
+      "cross_section_reach" = cross_section_reach, 
+      "cross_section_river" = cross_section_river, 
+      "station" = rep(station_name, each = length(time_idx)),
+      "values" = as.vector(time_series_stacked)
+    )
+    
+  }
+  
+  purrr::map_dfr(f$collection, ~do_extract(.))
+}
+
+# INTERNALS 
+
+get_cross_section_stations <- function(f) {
+  df <- f[[hdf_paths$GEOM_CROSS]][['River Stations']]
+  on.exit(df$close())
+  
+  trimws(df[])
+}
+
+get_cross_sections_index <- function(station, model_stations) {
+  cross_section_idx <- which(model_stations %in% station)
+  
+  if (is_empty(cross_section_idx)) {
+    stop(sprintf("station '%s' not found in model", station), call. = FALSE)
+  }
+  
+  return(cross_section_idx)
+}
+
+get_cross_section_reach <- function(f, station_index) {
+  cross_section_reaches <- f[[hdf_paths$GEOM_CROSS]][["Reach Names"]]
+  on.exit(cross_section_reaches$close())
+  
+  trimws(cross_section_reaches[station_index])
+}
+
+
+get_cross_section_river <- function(f, station_index) {
+  cross_section_rivers <- f[[hdf_paths$GEOM_CROSS]][["River Names"]]
+  on.exit(cross_section_rivers$close())
+  
+  trimws(cross_section_rivers[station_index])
+}
+
+
+
+
+
+
+
+
+
+
+

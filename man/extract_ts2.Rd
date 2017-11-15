@@ -4,15 +4,15 @@
 \alias{extract_ts2}
 \title{Query coordinate 2d data}
 \usage{
-extract_ts2(.f, xy, ts_type = "Water Surface", timestamp = NULL)
+extract_ts2(f, xy, ts_type = "Water Surface", timestamp = NULL)
 }
 \arguments{
-\item{.f}{an hdf file read in with hec_file}
-
 \item{xy}{a coordinate or set of coordinates either in a dataframe or matrix 
 with columns x and y}
 
 \item{ts_type}{the time series to extract, option defaults to Water Surface}
+
+\item{.f}{an hdf file read in with hec_file}
 }
 \description{
 Function extracts a time series from a 2D portion of hec ras model.
