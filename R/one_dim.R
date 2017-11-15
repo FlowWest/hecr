@@ -13,15 +13,12 @@ extract_ts1 <- function(f, station_name, ts_type="Water Surface", time_stamp=NUL
     
     if (!is.null(time_stamp)) {
       time_idx <- which(model_timestamps == time_stamp)
+      if (length(time_idx) == 0) stop("supplied value for time_stamp was not found in the model", 
+                                      call. = FALSE)
     } else {
       time_idx <- seq_len(length(model_timestamps))
     }
-    
-    if (!is.null(time_stamp) && (length(time_idx) == 0)) {
-      stop(sprintf('supplied timestamp did match a timestamp defined in this model'), 
-           call. = FALSE)
-    }
-    
+
     
     cross_section_index <- get_cross_sections_index(model_stations, station_name)
     cross_section_reach <- get_cross_section_reach(.f, cross_section_index)[1]
