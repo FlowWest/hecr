@@ -45,6 +45,12 @@ extract_ts2 <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
     
     nearest_cell_index_values <- sort(unique(unlist(nearest_cell_index)))
     
+    # Warn the user when some coordinates provided were within the same cell
+    if (length(nearest_cell_index) != length(nearest_cell_index_values)) {
+      warning("some of the coordinates provided were mapped to the same cell", 
+              call. = FALSE)
+    }
+    
     time_series <- .f[[hdf_paths$RES_2D_FLOW_AREAS]][[model_flow_area_name]][[ts_type]][nearest_cell_index_values, time_idx]
     stacked_time_series <- matrix(t(time_series), ncol=1, byrow = TRUE)
     
