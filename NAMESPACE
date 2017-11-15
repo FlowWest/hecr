@@ -3,7 +3,5 @@
 export(append_meta)
 export(extract_ts1)
 export(extract_ts2)
-export(hec_config)
 export(hec_file)
 export(hec_metadata)
-export(new_config)

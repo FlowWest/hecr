@@ -72,12 +72,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<p>An R package for interacting with hdf5 files resulting from HEC-RAS model runs. <code>hecr</code> uses the <code>h5</code> package and wraps around it functions that enable a user to quickly query out desired data in a tidy dataframe format.</p>
+<p>An R package for interacting with hdf5 files resulting from HEC-RAS model runs. <code>hecr</code> uses the <code>hdf5r</code> package and wraps around it functions that enable a user to quickly query out desired data in a tidy dataframe format.</p>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
-<p>The install requires <code>devtools</code>, install with <code>install.packages(&quot;devtools&quot;)</code>. To install <code>hecr</code>:</p>
+<p>The install requires <code>devtools</code>, you can install with <code>install.packages(&quot;devtools&quot;)</code>. With <code>devtools</code> installed, you can install <code>hecr</code> with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;flowwest/hecr&quot;</span>)</code></pre></div>
-<p>Installing hecr will install as dependencies: h5, dplyr, purrr, and config. If detected on the system these will not install, but an update might be required. The latest versions of both purrr and dplyr are required for hecr to function properly.</p>
+<p>Installing hecr will install as dependencies: hdf5r, dplyr, purrr, and config. If detected on the system these will not install, but an update might be required. The latest versions of both purrr and dplyr are required for hecr to function properly.</p>
 </div>
 <div id="usage" class="section level2">
 <h2>Usage</h2>

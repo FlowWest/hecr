@@ -9,19 +9,19 @@ vignette: >
 ---
 
 An R package for interacting with hdf5 files resulting from HEC-RAS 
-model runs. `hecr` uses the `h5` package and wraps around it functions that enable 
+model runs. `hecr` uses the `hdf5r` package and wraps around it functions that enable 
 a user to quickly query out desired data in a tidy dataframe format.
 
 ## Installation 
 
-The install requires `devtools`, install with `install.packages("devtools")`.
-To install `hecr`:
+The install requires `devtools`, you can install with `install.packages("devtools")`.
+With `devtools` installed, you can install `hecr` with:
 
 ```r 
 devtools::install_github("flowwest/hecr")
 ```
 
-Installing hecr will install as dependencies: h5, dplyr, purrr, and config. If detected
+Installing hecr will install as dependencies: hdf5r, dplyr, purrr, and config. If detected
 on the system these will not install, but an update might be required. The latest
 versions of both purrr and dplyr are required for hecr to function properly.
 

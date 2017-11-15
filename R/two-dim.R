@@ -1,60 +1,91 @@
-
-extract_ts2 <- function(f, xy, ts_type = "Water Surface", timestamp = NULL) {
+#' @title Query coordinate 2d data
+#' @description Function extracts a time series from a 2D portion of hec ras model.
+#' @param .f an hdf file read in with hec_file
+#' @param ts_type the time series to extract, option defaults to Water Surface
+#' @param xy a coordinate or set of coordinates either in a dataframe or matrix 
+#' with columns x and y
+#' @examples
+#' \dontrun{
+#' ## first read in file
+#' f <- hec_file("examples/ArdenwoodCreek.p50.hdf")
+#' 
+#' ## water surface time series at the coordinate 4567654.0, 2167453.0
+#' ws <- extract_ts2(f, xy=c(4567654.0, 2167453.0), "Water Surface")
+#' 
+#' ## water surface time series at multiple coordinates
+#' coords <- c(4567654.0, 2167453.0, 3456124.0, 7856124.0)
+#' ws <- extract_ts2(f, xy=coords, "Water Surface")
+#' 
+#' ## water surface for a fixed timestamp, useful when querying for large amounts of coordinates. 
+#' ws <- extract_ts2(f, xy=c(4567654.0, 2167453.0), "Water Surface", timestamp="2005-09-12 00:00:00")
+#' }
+#' @export
+extract_ts2 <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
   
-  do_extract <- function(.f, xy, ts_type) {
+  do_extract <- function(.f) {
     
-    # get per plan metadata
-    plan_id <- get_plan_attributes(.f)$plan_short_id
-    area_name <- get_flow_area_name(.f)
-    center_coordinates <- get_center_coordinates(.f, area_name)
-    model_datetimes <- get_model_timestamps(.f)
+    model_timestamps <- get_model_timestamps(.f)
+    model_attributes <- get_model_metadata(.f) 
+    model_flow_area_name <- get_model_flow_area_name(.f)
+    model_center_coordinates <- get_model_center_coordinates(.f, model_flow_area_name)
     
-    if (!is.null(timestamp)) {
-      timestamp_index <- which(model_datetimes == timestamp)
+    if (!is.null(time_stamp)) {
+      time_idx <- which(model_timestamps == time_stamp)
+      if (length(time_idx) == 0) stop("supplied value for time_stamp was not found in the model", 
+                                      call. = FALSE)
     } else {
-      timestamp_index <- seq_len(length(model_datetimes))
+      time_idx <- seq_len(length(model_timestamps))
     }
-
-    if (!is.null(timestamp) & (length(timestamp_index) == 0)) 
-      stop(paste0("timestamp '", timestamp, "' does not match a datetime in the model"))
     
-    m <- make_coordinate_matrix(xy)
+    input_coordinates <- make_coordinate_matrix(xy)
     
-    # TODO: evaluate whether this should be a call to purrr::map
-    nearest_cell_index <- sapply(seq_len(nrow(m)), function(i) {
-      get_nearest_cell_center_index(m[i,1], m[i,2], center_coordinates)
+    nearest_cell_index <- sapply(seq_len(nrow(input_coordinates)), function(i) {
+      get_nearest_cell_center_index(input_coordinates[i,], model_center_coordinates)
     }) 
     
-    print(timestamp_index)
-    print(nearest_cell_index)
+    nearest_cell_index_values <- sort(unique(unlist(nearest_cell_index)))
     
-    # get series from hdf file
-    series <- .f[hdf_paths$RES_2D_FLOW_AREAS][area_name][ts_type][timestamp_index, nearest_cell_index]
-    series_stacked <- matrix(series, ncol=1, byrow=FALSE)
+    time_series <- .f[[hdf_paths$RES_2D_FLOW_AREAS]][[model_flow_area_name]][[ts_type]][nearest_cell_index_values, time_idx]
+    stacked_time_series <- matrix(t(time_series), ncol=1, byrow = TRUE)
     
-    length_of_timestamps <- length(timestamp_index)
+    hdf_cell_index <- nearest_cell_index_values - 1
     
-    # vector used as columns for cell_index used in data
-    # here a subtract one is required to bring the index back to 
-    # what is reported by hecRas, which uses a 0 based index
-    hdf_cell_index <- rep(nearest_cell_index, each=length_of_timestamps) - 1
-    
-    
-    # build desired tibble
-    tibble::tibble("datetime"=rep(model_datetimes[timestamp_index], length(nearest_cell_index)),
-                   "plan_id" = plan_id,
-                   "time_series_type" = ts_type,
-                   "hdf_cell_index" = hdf_cell_index,
-                   "values"=series_stacked[, 1])
-  } 
+    tibble::tibble(
+      "datetime" = rep(model_timestamps[time_idx], length(nearest_cell_index_values)), 
+      "plan_id" = model_attributes$plan_id,
+      "plan_file" = model_attributes$plan_file,
+      "time_series_type" = ts_type, 
+      "hdf_cell_index" = rep(hdf_cell_index, each = length(time_idx)), 
+      "values" = as.vector(stacked_time_series)
+    )
+  }
   
-  #purrr::map_dfr(f, ~do_extract(., xy, ts_type))
-  lapply(f, function(x) {
-    do_extract(x, xy, ts_type)
-  })
-} 
+  purrr::map_dfr(f$collection, ~do_extract(.))
+  
+}
 
-## INTERNAL 
+
+
+
+# INTERNALS
+
+# the structure of the return is a matrix with columns are cells and rows
+# are x, y coordinates i.e m[, 1] gives coordinates of cell 1 in column vector form
+get_model_center_coordinates <- function(f, area_name) {
+  d <- f[[hdf_paths$GEOM_2D_AREAS]][[area_name]][["Cells Center Coordinate"]]
+  on.exit(d$close())
+  
+  return(d[,])
+}
+
+get_nearest_cell_center_index <- function(coords, nodes) {
+  dist <- colSums(sqrt((coords - nodes)^2))
+  which.min(dist)[1]
+}
+
+get_model_flow_area_name <- function(f) {
+  hdf5r::list.groups(f[[hdf_paths$GEOM_2D_AREAS]])[1]
+}
 
 make_coordinate_matrix <- function(x) {
   if (is.matrix(x)) {
@@ -73,21 +104,4 @@ make_coordinate_matrix <- function(x) {
       return(m)
     }
   }
-}
-
-get_center_coordinates <- function(f, area_name) {
-  f[hdf_paths$GEOM_2D_AREAS][area_name]['Cells Center Coordinate']
-}
-
-get_flow_area_name <- function(hf) {
-  path <- h5::list.groups(hf[hdf_paths$GEOM_2D_AREAS])[1]
-  name <- tail(unlist(strsplit(path, '/')), 1)
-  
-  return(name)
-}
-
-get_nearest_cell_center_index <- function(x, y, nodes) {
-  coord <- c(x, y)
-  dist <- colSums(sqrt((coord - t(nodes))^2))
-  return(which.min(dist))
 }
