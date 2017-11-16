@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get model timestamps 
-This should correspond with the width of raw time series dataframes — get_model_timestamps • hecr</title>
+<title>List Available Time Series Data — available_time_series • hecr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -99,22 +98,39 @@ This should correspond with the width of raw time series dataframes — get_mode
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get model timestamps 
-This should correspond with the width of raw time series dataframes</h1>
+    <h1>List Available Time Series Data</h1>
     </div>
 
     
-    <p>Get model timestamps 
-This should correspond with the width of raw time series dataframes</p>
+    <p>list available time series in the model that can be extracted with 
+one of the extract_* functions</p>
     
 
-    <pre class="usage"><span class='fu'>get_model_timestamps</span>(<span class='no'>f</span>)</pre>
-        
+    <pre class="usage"><span class='fu'>available_time_series</span>(<span class='no'>f</span>, <span class='no'>area_name</span>, <span class='kw'>domain</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>f</th>
+      <td><p>a hec_collection object read in with hec_file()</p></td>
+    </tr>
+    <tr>
+      <th>area_name</th>
+      <td><p>the flow area name defined in the model</p></td>
+    </tr>
+    <tr>
+      <th>domain</th>
+      <td><p>either 'one' or 'two' corresponding to one-d or two-d domains</p></td>
+    </tr>
+    </table>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
   </div>

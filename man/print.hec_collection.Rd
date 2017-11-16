@@ -2,10 +2,10 @@
 % Please edit documentation in R/hec-file.R
 \name{print.hec_collection}
 \alias{print.hec_collection}
-\title{S3 class hec_collection.}
+\title{print hec_collection}
 \usage{
 \method{print}{hec_collection}(h)
 }
 \description{
-S3 class hec_collection.
+print hec_collection
 }

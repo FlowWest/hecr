@@ -83,31 +83,34 @@
     
     
 <div class="contents">
-<p>An R package for interacting with hdf5 files resulting from HEC-RAS model runs. <code>hecr</code> uses the <code>h5</code> package and wraps around it functions that enable a user to quickly query out desired data in a tidy dataframe format.</p>
+<p>An R package for interacting with hdf5 files resulting from HEC-RAS model runs. <code>hecr</code> uses the <code>hdf5r</code> package and wraps around it functions that enable a user to quickly query out desired data in a tidy dataframe format.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>The install requires <code>devtools</code>, install with <code>install.packages("devtools")</code>. To install <code>hecr</code>:</p>
+<p>The install requires <code>devtools</code>, you can install with <code>install.packages("devtools")</code>. With <code>devtools</code> installed, you can install <code>hecr</code> with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"flowwest/hecr"</span>)</code></pre></div>
-<p>Installing hecr will install as dependencies: h5, dplyr, purrr, and config. If detected on the system these will not install, but an update might be required. The latest versions of both purrr and dplyr are required for hecr to function properly.</p>
+<p>Installing hecr will install as dependencies: hdf5r, dplyr, purrr, and config. If detected on the system these will not install, but an update might be required. The latest versions of both purrr and dplyr are required for hecr to function properly.</p>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>The main goal of hecr is to streamline and automate the process of obtaining and analyzing output data from plan hdf files created from HEC-RAS unsteady simulation model runs. The hecr package provides an interface for obtaining data from 1-D cross sections and 2-D point locations and profiles at multiple time series or a single timestep.</p>
 <p>Below we walk through simple examples. More complex examples and real world applications can be found in the <a href="#">Tutorial (Coming Soon)</a></p>
-<p><strong>#EMANUEL: CAN WE PUT SOMETHING ABOUT UPCOMMING FEATURES HERE? +Pulling terrain elevations along 1-D and 2-D profiles +2-D profiles (one timestep, values at multiple points and draw a line to connect the dots). I think this can already be done w/ what we have, but I need to verify +CAN WE ALSO GET MAXIMUM VALUES? WE SHOULD TALK ABOUT THIS. +Velocity output +read in vertices of profile line from csv +Select plans by name rather than number +flow across a line? This might be hard +Current development features include allowing a user to set up a configuration file with these as entry, and thus allowing for an arbitrary length of coordinate pairs, without over populating an R script. Not sure what this means, but copied from below.</strong></p>
 </div>
 <div id="one-dimensional-domain-queries" class="section level2">
 <h2 class="hasAnchor">
 <a href="#one-dimensional-domain-queries" class="anchor"></a>One-Dimensional Domain Queries</h2>
-<p><em>1-D Timeseries Output for a Single Plan</em></p>
+<div id="d-timeseries-output-for-a-single-plan" class="section level3">
+<h3 class="hasAnchor">
+<a href="#d-timeseries-output-for-a-single-plan" class="anchor"></a>1-D Timeseries Output for a Single Plan</h3>
 <p>The user must provide the 1-D river cross-section name(s) as defined in the model. A simple example is shown below:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load in the library</span>
 <span class="kw">library</span>(hecr)
 
 <span class="co"># first read in the plan hdf file using the hec_file function</span>
 f &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/hecr/topics/hec_file">hec_file</a></span>(<span class="st">"inst/raw-data/ArdenwoodCreek.p50.hdf"</span>)
+
+<span class="kw">print</span>(f) <span class="co"># to view details of what was read</span>
 
 <span class="co"># extract timeseries output at a 1-D cross-section using the extract_ts1</span>
 water_surface &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/hecr/topics/extract_ts1">extract_ts1</a></span>(f, <span class="dt">station_name =</span> <span class="fl">6863.627</span>, <span class="dt">ts_type =</span> <span class="st">"Water Surface"</span>)
@@ -118,11 +121,14 @@ cross_sections_in_model &lt;-<span class="st"> </span>hecr<span class="op">::</s
 <span class="co"># plot</span>
 water_surface <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values, <span class="dt">color =</span> plan_name)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
 <div class="figure">
-<img src="images/cross_section_single_file.png">
+<img src="images/cross_section_example_plan_50.png">
 </div>
 <p>The output data has been transformed to a tidy format and plotted using ggplot. This is quite an improvement over using the RAS Mapper interface, which can often run into memory problems when generating profile data. Additionally, once the R code has been defined, changes to the plans and model output can be read in, plotted, and other analyses performed at the push of a button.</p>
 <p>An even more more powerful aspect of hecr is revealed when analysis requires querying multiple plans at multiple locations within the model domain.</p>
-<p><em>1-D Timeseries Output for Multiple Plans</em></p>
+</div>
+<div id="d-timeseries-output-for-multiple-plans" class="section level3">
+<h3 class="hasAnchor">
+<a href="#d-timeseries-output-for-multiple-plans" class="anchor"></a>1-D Timeseries Output for Multiple Plans</h3>
 <p>In this example, we read in a collection of hdf files. This can be accomplished using the same <code><a href="../reference/hec_file.html">hec_file()</a></code> function, but this time supply it a directory containing the hdf files we are interested in.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># path to directory with hdf files we wish to query on</span>
 f &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/hecr/topics/hec_file">hec_file</a></span>(<span class="st">"inst/raw-data/"</span>)
@@ -132,14 +138,19 @@ water_surface &lt;-<span class="st"> </span>hecr<span class="op">::</span><span 
 <span class="co"># plot</span>
 water_surface <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values, <span class="dt">color =</span> plan_name)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
 <div class="figure">
-<img src="images/cross_section_corpus.png">
+<img src="images/cross_section_wse_multiple_plans.png">
 </div>
 <p>Once again the data is in a tidy form, and so it works great with ggplot or plotly.</p>
 <p>If a subset of hdf files from the directory is desired, plan numbers can be supplied as a numeric vector to the parameter <code>plan_numbers</code> in the <code>hec_file</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># query in this directory but only hdf files associated with plans 50, 60, 70</span>
-f &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/hecr/topics/hec_file">hec_file</a></span>(<span class="st">"inst/raw-data"</span>, <span class="dt">plan_numbers=</span><span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">70</span>))
+f &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/hecr/topics/hec_file">hec_file</a></span>(<span class="st">"inst/raw-data"</span>, <span class="dt">plan_numbers=</span><span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">70</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(z)
 
-<span class="co"># EMANUEL:  CAN WE GET THE METADATA HERE TOO AND PICK BASED ON PLAN NAME?</span></code></pre></div>
+<span class="co"># A hec collection with 3 item(s)</span>
+<span class="co"># Files in collection</span>
+<span class="co">#  name: raw-data//ArdenwoodCreek.p50.hdf</span>
+<span class="co">#  name: raw-data//ArdenwoodCreek.p60.hdf</span>
+<span class="co">#  name: raw-data//ArdenwoodCreek.p70.hdf</span></code></pre></div>
 <p><em>Developing a 1-D Long Profile</em></p>
 <p>Creating a 1-D profile requires extracting output at all 1-D cross-sections at a particular moment in time. This can be accomplished by using <code>all_cross_sections</code> and the <code>timestamp</code> argument in the <code>extract_ts1</code> function as shown below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
@@ -154,6 +165,7 @@ z &lt;-<span class="st"> </span><span class="kw"><a href="../reference/extract_t
 <p><strong>EMANUEL: CREATE A FIGURE AND PUT IT HERE PLEASE - one long profile</strong></p>
 <p>Of course, this can be expanded to include multiple plans:</p>
 <p><strong>EMANUEL: CREATE A FIGURE AND PUT IT HERE PLEASE - multiple long profiles</strong></p>
+</div>
 </div>
 <div id="two-dimensional-domain-querries" class="section level2">
 <h2 class="hasAnchor">
@@ -254,17 +266,17 @@ z &lt;-<span class="st"> </span><span class="kw"><a href="../reference/extract_t
 <h2 class="hasAnchor">
 <a href="#metadata" class="anchor"></a>MetaData</h2>
 <p>A lot of current development is associated with capturing all the required metadata from hdf files. The <code>hec_metadata</code> function reports metadata for the plan hdfs read in with <code><a href="../reference/hec_file.html">hec_file()</a></code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meta &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/hecr/topics/hec_metadata">hec_metadata</a></span>(f)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meta &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw">hec_metadata</span>(f)</code></pre></div>
 <p>Fields returned by the function include plan ID, plan name, plan file name, and time window of the plan run.</p>
 <pre><code># A tibble: 1 x 4
                           plan_id                       plan_name
                             &lt;chr&gt;                           &lt;chr&gt;
 1 Q100_ExistBaseline_Wet_20170307 Q100_ExistBaseline_Wet_20170307
 # ... with 2 more variables: plan_file &lt;chr&gt;, time_window &lt;chr&gt;</code></pre>
-<p>Every dataframe obtained with one of the <code>extract_*</code> functions has attached to it a reference to the collection that created it. This allows for easy creation of helper pipe functions like <code><a href="../reference/append_meta.html">append_meta()</a></code> when we want to attach extra columns to a given dataframe</p>
+<p>Every dataframe obtained with one of the <code>extract_*</code> functions has attached to it a reference to the collection that created it. This allows for easy creation of helper pipe functions like <code>append_meta()</code> when we want to attach extra columns to a given dataframe</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># x is an already existing dataframe from calling extract_ts2</span>
 <span class="co"># add metadata columns to the dataframe</span>
-y &lt;-<span class="st"> </span>x <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/append_meta.html">append_meta</a></span>() </code></pre></div>
+y &lt;-<span class="st"> </span>x <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">append_meta</span>() </code></pre></div>
 <p>Future releases will make extensive use of this type of functionality.</p>
 </div>
 </div>

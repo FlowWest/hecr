@@ -48,7 +48,9 @@ extract_ts1 <- function(f, station_name, ts_type="Water Surface", time_stamp=NUL
     
   }
   
-  purrr::map_dfr(f$collection, ~do_extract(.))
+  df <- purrr::map_dfr(f$collection, ~do_extract(.))
+  class(df) <- append(class(df), "hec_oneD")
+  df
 }
 
 # INTERNALS 
@@ -60,11 +62,11 @@ get_cross_section_stations <- function(f) {
   trimws(df[])
 }
 
-get_cross_sections_index <- function(station, model_stations) {
+get_cross_sections_index <- function(model_stations, station) {
   cross_section_idx <- which(model_stations %in% station)
   
   if (is_empty(cross_section_idx)) {
-    stop(sprintf("station '%s' not found in model", station), call. = FALSE)
+    stop(sprintf("supplied station '%s' not found in model", station), call. = FALSE)
   }
   
   cross_section_idx

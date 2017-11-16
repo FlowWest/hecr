@@ -85,9 +85,6 @@ is_hec_collection <- function(f) {
   (identical(class(f), "hec_collection"))
 }
 
-#' S3 class hec_collection.
-#' @exportClass hec_collection
-
 #' print hec_collection
 #' @export 
 print.hec_collection <- function(h) {

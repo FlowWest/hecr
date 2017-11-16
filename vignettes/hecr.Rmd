@@ -36,25 +36,9 @@ series or a single timestep.
 Below we walk through simple examples. More complex examples and real world
 applications can be found in the [Tutorial (Coming Soon)](#)
 
-**#EMANUEL: CAN WE PUT SOMETHING ABOUT UPCOMMING FEATURES HERE? 
-+Pulling terrain elevations along 1-D and 2-D profiles
-+2-D profiles (one timestep, values at multiple points and draw a line to 
-connect the dots). I think this can already be done w/ what we have, but I 
-need to verify
-+CAN WE ALSO GET MAXIMUM VALUES? WE SHOULD TALK ABOUT THIS. 
-+Velocity output
-+read in vertices of profile line from csv
-+Select plans by name rather than number
-+flow across a line? This might be hard
-+Current development features include allowing a user to set up a 
-configuration file with these as entry, and thus allowing for an arbitrary 
-length of coordinate pairs, without over populating an R script. Not sure what
-this  means, but copied from below.**
-
-
 ## One-Dimensional Domain Queries
 
-*1-D Timeseries Output for a Single Plan* 
+### 1-D Timeseries Output for a Single Plan
 
 The user must provide the 1-D river cross-section name(s) as defined in the model.
 A simple example is shown below:
@@ -65,6 +49,8 @@ library(hecr)
 
 # first read in the plan hdf file using the hec_file function
 f <- hecr::hec_file("inst/raw-data/ArdenwoodCreek.p50.hdf")
+
+print(f) # to view details of what was read
 
 # extract timeseries output at a 1-D cross-section using the extract_ts1
 water_surface <- hecr::extract_ts1(f, station_name = 6863.627, ts_type = "Water Surface")
@@ -77,7 +63,7 @@ water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 
 ```
 
-![](images/cross_section_single_file.png)
+![](images/cross_section_example_plan_50.png)
 
 The output data has been transformed to a tidy format and plotted
 using ggplot. This is quite an improvement over using the RAS Mapper interface, 
@@ -88,7 +74,7 @@ read in, plotted, and other analyses performed at the push of a button.
 An even more more powerful aspect of hecr is revealed when analysis requires
 querying multiple plans at multiple locations within the model domain. 
 
-*1-D Timeseries Output for Multiple Plans*
+### 1-D Timeseries Output for Multiple Plans
 
 In this example, we read in a collection of hdf files. This can be accomplished
 using the same `hec_file()` function, but this time supply it a directory 
@@ -104,7 +90,7 @@ water_surface <- hecr::extract_ts1(f, station_name = 6863.627, ts_type = "Water 
 water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 ```
 
-![](images/cross_section_corpus.png)
+![](images/cross_section_wse_multiple_plans.png)
  
 Once again the data is in a tidy form, and so it works great with ggplot or plotly.
 
@@ -115,8 +101,16 @@ function.
 ```r
 # query in this directory but only hdf files associated with plans 50, 60, 70
 f <- hecr::hec_file("inst/raw-data", plan_numbers=c(50, 60, 70))
+```
 
-# EMANUEL:  CAN WE GET THE METADATA HERE TOO AND PICK BASED ON PLAN NAME?
+```r
+print(z)
+
+# A hec collection with 3 item(s)
+# Files in collection
+#  name: raw-data//ArdenwoodCreek.p50.hdf
+#  name: raw-data//ArdenwoodCreek.p60.hdf
+#  name: raw-data//ArdenwoodCreek.p70.hdf
 ```
 
 *Developing a 1-D Long Profile* 

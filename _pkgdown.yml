@@ -11,8 +11,3 @@ reference:
     desc: Query data out of an hdf file.
     contents:
       - starts_with("extract_")
-  - title: Metadata
-    desc: Query and append metadata
-    contents:
-      - hec_metadata
-      - append_meta
