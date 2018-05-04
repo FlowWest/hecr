@@ -1,12 +1,12 @@
-#' Function reads in either a single hdf file or a collection of these specified as arguments. 
+#' Read HEC-Ras Output Data 
 #' @description Function will read in a single hdf file when the path parameter points to a single
-#' file, or a collection of these when the path is directory. User can further specify only a 
-#' certain number of these within the directory to be read using the plan_numbers parameter.
+#' file, or a collection of these when the path is a directory. User can further specify only a 
+#' certain number of these within the directory to be read using the plan_numbers argument.
 #' @param path directory path to either a single hdf file or a directory of a collection of these
 #' @param plan_numbers a vector of plan number associated with hdf files. For use when path is a directory.
 #' Default action is to read all hdf files in path.
 #' @param ... additional options.
-#' @return list of files read in with hec_file
+#' @return a "hec_collection" object 
 #' @examples 
 #' \dontrun{
 #' # read in a single hdf file

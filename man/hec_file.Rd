@@ -2,7 +2,7 @@
 % Please edit documentation in R/hec-file.R
 \name{hec_file}
 \alias{hec_file}
-\title{Function reads in either a single hdf file or a collection of these specified as arguments.}
+\title{Read HEC-Ras Output Data}
 \usage{
 hec_file(path, plan_numbers = NULL, ...)
 }
@@ -15,12 +15,12 @@ Default action is to read all hdf files in path.}
 \item{...}{additional options.}
 }
 \value{
-list of files read in with hec_file
+a "hec_collection" object
 }
 \description{
 Function will read in a single hdf file when the path parameter points to a single
-file, or a collection of these when the path is directory. User can further specify only a 
-certain number of these within the directory to be read using the plan_numbers parameter.
+file, or a collection of these when the path is a directory. User can further specify only a 
+certain number of these within the directory to be read using the plan_numbers argument.
 }
 \examples{
 \dontrun{

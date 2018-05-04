@@ -5,7 +5,7 @@
 #' @param station_name name(s) for station(s) defined in the model run
 #' @param ts_type a valid time series type defined in the model run
 #' @export 
-extract_ts1 <- function(f, station_name, ts_type="Water Surface", time_stamp=NULL) {
+hec_ts1 <- function(f, station_name, ts_type="Water Surface", time_stamp=NULL) {
   
   if (!is_hec_collection(f)) {
     stop(sprintf("supplied 'f' is not a valid hec_collection"))
@@ -13,8 +13,8 @@ extract_ts1 <- function(f, station_name, ts_type="Water Surface", time_stamp=NUL
   
   do_extract <- function(.f) {
     
-    model_timestamps <- get_model_timestamps(.f) 
-    model_attributes <- get_model_metadata(.f)
+    model_timestamps <- hec_timestamps_(.f) 
+    model_attributes <- hec_info_(.f)
     model_stations <- get_cross_section_stations(.f)
     
     if (!is.null(time_stamp)) {
