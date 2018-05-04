@@ -22,13 +22,19 @@
 hec_file <- function(path, plan_numbers = NULL, ...) {
   
   if (is_dir(path)) { 
-    hdf_files <- read_files_in_dir(path, plan_numbers)
+    hdf_files <- list_hec_files_in_dir(path, plan_numbers)
   } else {
+    
+    if(!is.null(plan_numbers))
+      message("plan number(s) supplied but ignored, since 'path' points to a single file")
+    
     file_dir <- dirname(path)
     file_name <- basename(path)
     
     hdf_files <- list.files(path = file_dir, pattern = file_name, full.names = TRUE)
+    
     if (!length(hdf_files)) stop(paste0("file: '", file_name, "' was not found in '", file_dir, "'"))
+    if (!hdf5r::is_hdf5(hdf_files[1])) stop("Supplied file is not an hdf5 file.")
   }
   
   # map all relevant files onto the h5::h5file read function
@@ -54,7 +60,7 @@ is_file <- function(file) {
   file.exists(file)
 }
 
-read_files_in_dir <- function(path, plan_numbers) {
+list_hec_files_in_dir <- function(path, plan_numbers) {
   hdf_files <- list.files(path, pattern = "p[0-9][0-9].hdf$", full.names = TRUE)
   
   if (!length(hdf_files)) stop(paste("No hdf files found in:", path)) # no hdf files found

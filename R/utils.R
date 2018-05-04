@@ -26,8 +26,30 @@ get_model_metadata <- function(f) {
   )
 }
 
+
+#' Hec Plan Information
+#' @description get plan information for a given hec file or collection of these
+#' @param f a hec object 
+hec_info <- function(f) {
+  do_hec_info <- function(.f) {
+    g <- .f[["Plan Data/Plan Information"]]
+    list(
+    comp_time_step = hdf5r::h5attr(g, "Computation Time Step"),
+    geom_name = hdf5r::h5attr(g, "Geometry Name"),
+    geom_title = hdf5r::h5attr(g, "Geometry Title"),
+    output_int = hdf5r::h5attr(g, "Output Interval"),
+    plan_file = hdf5r::h5attr(g, "Plan File"),
+    plan_name = hdf5r::h5attr(g, "Plan Name"),
+    plan_shorid = hdf5r::h5attr(g, "Plan ShortID"),
+    time_window = hdf5r::h5attr(g, "Time Window")
+    )
+  }
+  
+  purrr::map(f$collection, ~do_hec_info(.))
+}
+
 is_hec_collection <- function(f) {
-  identical(class(f), "hec_collection")
+  !is.atomic(f) & identical(class(f), "hec_collection")
 }
 
 is_empty <- function(x) length(x) == 0L
