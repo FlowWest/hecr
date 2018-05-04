@@ -19,6 +19,10 @@ hec_info <- function(hc) {
 # sometimes these are called through an exported function to surface the 
 # funcionality to the user as is the case with hec_info_
 
+has_crossections <- function(h) {
+  "Cross Sections" %in% names(h[["Geometry"]])
+}
+
 hec_timestamps_ <- function(h) {
   as.POSIXct(h[["Results/Unsteady/Output/Output Blocks/Base Output/Unsteady Time Series/Time Date Stamp"]]$read(), 
              format = "%d%b%Y %H:%M:%S")
