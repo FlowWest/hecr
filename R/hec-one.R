@@ -29,8 +29,8 @@ hec_one <- function(f, station_name, ts_type="Water Surface", time_stamp=NULL) {
 
     
     cross_section_index <- cross_section_index(model_stations, station_name)
-    cross_section_reach <- cross_section_reach(.f, cross_section_index)[1]
-    cross_section_river <- cross_section_river(.f, cross_section_index)[1]
+    cross_section_reach <- trimws(.f[[hdf_paths$GEOM_CROSS]][["Reach Names"]]$read()[cross_section_index])[1]
+    cross_section_river <- trimws(.f[[hdf_paths$GEOM_CROSS]][["River Names"]]$read()[cross_section_index])[1]
     
     time_series <- .f[[hdf_paths$RES_CROSS_SECTIONS]][[ts_type]][cross_section_index, time_idx]
     other_attr_lengths <- length(station_name) * length(time_idx)
@@ -67,14 +67,6 @@ cross_section_index <- function(model_stations, station) {
   cross_section_idx
 }
 
-cross_section_reach <- function(f, station_index) {
-  trimws(f[[hdf_paths$GEOM_CROSS]][["Reach Names"]]$read()[station_index])
-}
-
-
-cross_section_river <- function(f, station_index) {
-  trimws(f[[hdf_paths$GEOM_CROSS]][["River Names"]]$read()[station_index])
-}
 
 
 
