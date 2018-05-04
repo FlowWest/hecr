@@ -48,8 +48,5 @@ hec_info_ <- function(h) {
   )
 }
 
-hec_crosssections_ <- function(h) {
-  trimws(h[['Geometry/Cross Sections/River Stations']]$read())
-}
 
 

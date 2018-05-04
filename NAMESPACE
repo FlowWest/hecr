@@ -2,6 +2,7 @@
 
 S3method(print,hec_collection)
 export(extract_ts2)
+export(hec_crosssections)
 export(hec_file)
 export(hec_info)
-export(hec_ts1)
+export(hec_one)

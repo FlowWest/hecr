@@ -5,18 +5,20 @@
 #' @param station_name name(s) for station(s) defined in the model run
 #' @param ts_type a valid time series type defined in the model run
 #' @export 
-hec_ts1 <- function(f, station_name, ts_type="Water Surface", time_stamp=NULL) {
+hec_one <- function(f, station_name, ts_type="Water Surface", time_stamp=NULL) {
   
   if (!is_hec_collection(f)) {
     stop(sprintf("supplied 'f' is not a valid hec_collection"))
   }
+
   
   do_extract <- function(.f) {
     
     model_timestamps <- hec_timestamps_(.f) 
     model_attributes <- hec_info_(.f)
-    model_stations <- get_cross_section_stations(.f)
+    model_stations <- hec_crosssections_(.f)
     
+    # when user supplied a timestamp
     if (!is.null(time_stamp)) {
       time_idx <- which(model_timestamps == time_stamp)
       if (length(time_idx) == 0) stop("supplied value for time_stamp was not found in the model", 
@@ -26,9 +28,9 @@ hec_ts1 <- function(f, station_name, ts_type="Water Surface", time_stamp=NULL) {
     }
 
     
-    cross_section_index <- get_cross_sections_index(model_stations, station_name)
-    cross_section_reach <- get_cross_section_reach(.f, cross_section_index)[1]
-    cross_section_river <- get_cross_section_river(.f, cross_section_index)[1]
+    cross_section_index <- cross_section_index(model_stations, station_name)
+    cross_section_reach <- cross_section_reach(.f, cross_section_index)[1]
+    cross_section_river <- cross_section_river(.f, cross_section_index)[1]
     
     time_series <- .f[[hdf_paths$RES_CROSS_SECTIONS]][[ts_type]][cross_section_index, time_idx]
     other_attr_lengths <- length(station_name) * length(time_idx)
@@ -37,7 +39,7 @@ hec_ts1 <- function(f, station_name, ts_type="Water Surface", time_stamp=NULL) {
     
     tibble::tibble(
       "datetime" = rep(model_timestamps[time_idx], length(cross_section_index)), 
-      "plan_id" = model_attributes$plan_id, 
+      "plan_id" = model_attributes$plan_short_id, 
       "plan_name" = model_attributes$plan_name,
       "plan_file" = model_attributes$plan_file,
       "cross_section_reach" = cross_section_reach, 
@@ -49,20 +51,13 @@ hec_ts1 <- function(f, station_name, ts_type="Water Surface", time_stamp=NULL) {
   }
   
   df <- purrr::map_dfr(f$collection, ~do_extract(.))
-  class(df) <- append(class(df), "hec_oneD")
+  class(df) <- append(class(df), "hec_one")
   df
 }
 
 # INTERNALS 
 
-get_cross_section_stations <- function(f) {
-  df <- f[[hdf_paths$GEOM_CROSS]][['River Stations']]
-  on.exit(df$close())
-  
-  trimws(df[])
-}
-
-get_cross_sections_index <- function(model_stations, station) {
+cross_section_index <- function(model_stations, station) {
   cross_section_idx <- which(model_stations %in% station)
   
   if (is_empty(cross_section_idx)) {
@@ -72,19 +67,13 @@ get_cross_sections_index <- function(model_stations, station) {
   cross_section_idx
 }
 
-get_cross_section_reach <- function(f, station_index) {
-  cross_section_reaches <- f[[hdf_paths$GEOM_CROSS]][["Reach Names"]]
-  on.exit(cross_section_reaches$close())
-  
-  trimws(cross_section_reaches[station_index])
+cross_section_reach <- function(f, station_index) {
+  trimws(f[[hdf_paths$GEOM_CROSS]][["Reach Names"]]$read()[station_index])
 }
 
 
-get_cross_section_river <- function(f, station_index) {
-  cross_section_rivers <- f[[hdf_paths$GEOM_CROSS]][["River Names"]]
-  on.exit(cross_section_rivers$close())
-  
-  trimws(cross_section_rivers[station_index])
+cross_section_river <- function(f, station_index) {
+  trimws(f[[hdf_paths$GEOM_CROSS]][["River Names"]]$read()[station_index])
 }
 
 
