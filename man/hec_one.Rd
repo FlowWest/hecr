@@ -4,10 +4,10 @@
 \alias{hec_one}
 \title{Query one dimensional domains}
 \usage{
-hec_one(f, station_name, ts_type = "Water Surface", time_stamp = NULL)
+hec_one(hc, station_name = NULL, ts_type = NULL, time_stamp = NULL)
 }
 \arguments{
-\item{f}{a hec_collection object produced by calling hec_file()}
+\item{hc}{a hec_collection object produced by calling hec_file()}
 
 \item{station_name}{name(s) for station(s) defined in the model run}
 

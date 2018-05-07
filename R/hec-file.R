@@ -87,10 +87,6 @@ list_hec_files_in_dir <- function(path, plan_numbers) {
 
 or_collapse <- function(x) paste(x, collapse = "|")
 
-is_hec_collection <- function(f) {
-  (identical(class(f), "hec_collection"))
-}
-
 #' print hec_collection
 #' @export 
 print.hec_collection <- function(h) {
@@ -98,3 +94,7 @@ print.hec_collection <- function(h) {
   cat("A hec collection with", items_in_collection, "item(s)\n")
   cat("Files in collection\n", sprintf("name: %s\n", h$files), "\n")
 }
+
+
+
+

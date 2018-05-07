@@ -5,17 +5,13 @@
 #' @param hc a hec_collection
 #' @return data frame 
 #' @export
-hec_crosssections <- function(hc, flatten=FALSE) {
+hec_crosssections <- function(hc) {
   if (!is_hec_collection(hc)) {
     stop("supplied argument is not a hec_collection", call. = FALSE)
   }
   
-  if (flatten) {
-    purrr::map_chr(hc$collection, ~hec_crosssections_(.)) 
-  } else {
-    purrr::map(hc$collection, ~hec_crosssections_(.))
-  }
-  
+  purrr::set_names(purrr::map(hc$collection, ~hec_crosssections_(.)), 
+                   hc$files)
 }
 
 hec_crosssections_ <- function(h) {

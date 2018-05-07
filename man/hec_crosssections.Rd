@@ -4,7 +4,7 @@
 \alias{hec_crosssections}
 \title{Plan Cross Sections}
 \usage{
-hec_crosssections(hc, flatten = FALSE)
+hec_crosssections(hc)
 }
 \arguments{
 \item{hc}{a hec_collection}

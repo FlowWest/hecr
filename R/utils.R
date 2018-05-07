@@ -49,7 +49,7 @@ hec_info <- function(f) {
 }
 
 is_hec_collection <- function(f) {
-  !is.atomic(f) & identical(class(f), "hec_collection")
+  !is.atomic(f) & inherits(f, "hec_collection")
 }
 
 is_empty <- function(x) length(x) == 0L
