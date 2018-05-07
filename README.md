@@ -1,6 +1,6 @@
 # hecr 
 
-**Currently rewritting entire package to use new HDF interface**
+# Currently rewritting entire package to use new HDF interface
 
 A simple R package for interacting with hdf5 files resulting from a HEC-RAS 
 model run. `hecr` uses the `h5` package and wraps around it functions that enable 
