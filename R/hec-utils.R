@@ -10,7 +10,7 @@ hec_info <- function(hc) {
     stop("argument is not a hec_collection")
   }
   
-  purrr::map_df(hc$collection, ~hec_info_(.))
+  dplyr::bind_rows(purrr::map(hc$collection, ~hec_info_(.)))
 }
 
 

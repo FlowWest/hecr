@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get model metadata — get_model_metadata • hecr</title>
+<title>Extract a time series — hec_extract • hecr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,9 +28,10 @@
 
 
 
-<meta property="og:title" content="Get model metadata — get_model_metadata" />
+<meta property="og:title" content="Extract a time series — hec_extract" />
 
-<meta property="og:description" content="Get model metadata" />
+<meta property="og:description" content="given a hec_collection object passed through one of 'hec_one' or 'hec_two'
+extract a time series" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,18 +113,19 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get model metadata</h1>
-    <small class="dont-index">Source: <a href='https://github.com/FlowWest/hecr/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
-    <div class="hidden name"><code>get_model_metadata.Rd</code></div>
+    <h1>Extract a time series</h1>
+    <small class="dont-index">Source: <a href='https://github.com/FlowWest/hecr/blob/master/R/hecr.R'><code>R/hecr.R</code></a></small>
+    <div class="hidden name"><code>hec_extract.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Get model metadata</p>
+    <p>given a hec_collection object passed through one of 'hec_one' or 'hec_two'
+extract a time series</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_model_metadata</span>(<span class='no'>f</span>)</pre>
+    <pre class="usage"><span class='fu'>hec_extract</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
         
 
   </div>

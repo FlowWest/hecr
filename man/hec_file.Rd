@@ -2,17 +2,21 @@
 % Please edit documentation in R/hec-file.R
 \name{hec_file}
 \alias{hec_file}
+\alias{hec_file.character}
+\alias{hec_file.H5File}
 \title{Read HEC-Ras Output Data}
 \usage{
-hec_file(path, plan_numbers = NULL, ...)
+hec_file(x, ...)
+
+\method{hec_file}{character}(path, plan_numbers = NULL)
+
+\method{hec_file}{H5File}(f, ...)
 }
 \arguments{
 \item{path}{directory path to either a single hdf file or a directory of a collection of these}
 
 \item{plan_numbers}{a vector of plan number associated with hdf files. For use when path is a directory.
 Default action is to read all hdf files in path.}
-
-\item{...}{additional options.}
 }
 \value{
 a "hec_collection" object

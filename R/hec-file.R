@@ -5,7 +5,6 @@
 #' @param path directory path to either a single hdf file or a directory of a collection of these
 #' @param plan_numbers a vector of plan number associated with hdf files. For use when path is a directory.
 #' Default action is to read all hdf files in path.
-#' @param ... additional options.
 #' @return a "hec_collection" object 
 #' @examples 
 #' \dontrun{
@@ -19,7 +18,13 @@
 #' c <- hec_file("examples/", plan_numbers = c(50, 60))
 #' }
 #' @export
-hec_file <- function(path, plan_numbers = NULL, ...) {
+hec_file <- function(x, ...) {
+  UseMethod("hec_file", x)
+}
+
+#' @rdname hec_file
+#' @export
+hec_file.character <- function(path, plan_numbers = NULL) {
   
   if (is_dir(path)) { 
     hdf_files <- list_hec_files_in_dir(path, plan_numbers)
@@ -40,12 +45,25 @@ hec_file <- function(path, plan_numbers = NULL, ...) {
   # map all relevant files onto the h5::h5file read function
   f <- purrr::map(hdf_files, ~hdf5r::H5File$new(.))
   
+  # return a hec_collection object
   structure(
     list(
       collection = f, 
       files = hdf_files
     ), 
-    class = "hec_collection"
+    class = c("hec_collection", "list")
+  )
+}
+
+#' @rdname hec_file
+#' @export 
+hec_file.H5File <- function(f, ...) {
+  structure(
+    list(
+      collection = list(f), 
+      files = f$filename
+    ), 
+    class = c("hec_collection", "list")
   )
 }
 

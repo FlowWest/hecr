@@ -8,14 +8,17 @@
 <title>Introduction to hecr • hecr</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to hecr">
+<meta property="og:description" content="">
+<meta name="twitter:card" content="summary">
+<!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -24,18 +27,22 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">hecr</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">hecr</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../articles/hecr.html">Get Started</a>
+  <a href="../articles/hecr.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -53,7 +60,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -73,16 +80,19 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Introduction to hecr</h1>
                         <h4 class="author">Emanuel</h4>
             
-          </div>
+      
+      <small class="dont-index">Source: <a href="https://github.com/FlowWest/hecr/blob/master/vignettes/hecr.Rmd"><code>vignettes/hecr.Rmd</code></a></small>
+      <div class="hidden name"><code>hecr.Rmd</code></div>
+
+    </div>
 
     
     
-<div class="contents">
 <p>An R package for interacting with hdf5 files resulting from HEC-RAS model runs. <code>hecr</code> uses the <code>hdf5r</code> package and wraps around it functions that enable a user to quickly query out desired data in a tidy dataframe format.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -113,7 +123,7 @@ f &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw"><
 <span class="kw">print</span>(f) <span class="co"># to view details of what was read</span>
 
 <span class="co"># extract timeseries output at a 1-D cross-section using the extract_ts1</span>
-water_surface &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/hecr/topics/extract_ts1">extract_ts1</a></span>(f, <span class="dt">station_name =</span> <span class="fl">6863.627</span>, <span class="dt">ts_type =</span> <span class="st">"Water Surface"</span>)
+water_surface &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw">extract_ts1</span>(f, <span class="dt">station_name =</span> <span class="fl">6863.627</span>, <span class="dt">ts_type =</span> <span class="st">"Water Surface"</span>)
 
 <span class="co"># A list of all cross sections from any hdf file can be generated</span>
 cross_sections_in_model &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw">get_xs_river_stations</span>(f)
@@ -133,7 +143,7 @@ water_surface <span class="op">%&gt;%</span><span class="st"> </span><span class
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># path to directory with hdf files we wish to query on</span>
 f &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/hecr/topics/hec_file">hec_file</a></span>(<span class="st">"inst/raw-data/"</span>)
 
-water_surface &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/hecr/topics/extract_ts1">extract_ts1</a></span>(f, <span class="dt">station_name =</span> <span class="fl">6863.627</span>, <span class="dt">ts_type =</span> <span class="st">"Water Surface"</span>)
+water_surface &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw">extract_ts1</span>(f, <span class="dt">station_name =</span> <span class="fl">6863.627</span>, <span class="dt">ts_type =</span> <span class="st">"Water Surface"</span>)
 
 <span class="co"># plot</span>
 water_surface <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values, <span class="dt">color =</span> plan_name)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
@@ -154,7 +164,7 @@ f &lt;-<span class="st"> </span>hecr<span class="op">::</span><span class="kw"><
 <p><em>Developing a 1-D Long Profile</em></p>
 <p>Creating a 1-D profile requires extracting output at all 1-D cross-sections at a particular moment in time. This can be accomplished by using <code>all_cross_sections</code> and the <code>timestamp</code> argument in the <code>extract_ts1</code> function as shown below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-z &lt;-<span class="st"> </span><span class="kw"><a href="../reference/extract_ts1.html">extract_ts1</a></span>(f, all_cross_sections, <span class="dt">timestamp=</span><span class="st">"2005-12-30 02:00:00"</span>)</code></pre></div>
+z &lt;-<span class="st"> </span><span class="kw">extract_ts1</span>(f, all_cross_sections, <span class="dt">timestamp=</span><span class="st">"2005-12-30 02:00:00"</span>)</code></pre></div>
 <p>As a result, hecr returns output at the <code>timestamp</code> value at each of the cross-sections in the model:</p>
 <pre><code>#EMANUEL:  REPLACE THIS WITH A LONG PROFILE TIBBLE
 # A tibble: 1 x 6
@@ -279,7 +289,6 @@ z &lt;-<span class="st"> </span><span class="kw"><a href="../reference/extract_t
 y &lt;-<span class="st"> </span>x <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">append_meta</span>() </code></pre></div>
 <p>Future releases will make extensive use of this type of functionality.</p>
 </div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -304,11 +313,13 @@ y &lt;-<span class="st"> </span>x <span class="op">%&gt;%</span><span class="st"
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

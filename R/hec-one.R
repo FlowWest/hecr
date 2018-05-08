@@ -88,7 +88,13 @@ hec_ls.hec_one <- function(hc) {
     names(h[[path_to_ls]])
   }
   
-  purrr::map(hc$collection, ~ls_(.)) %>% purrr::set_names(hc$files)
+  ret <- purrr::map(hc$collection, ~ls_(.)) %>% purrr::set_names(hc$files)
+  class(ret) <- append(class(ret), c("hec_one_ls"))
+}
+
+
+print.hec_one_ls <- function(x, ...) {
+  
 }
 
 # INTERNALS 
@@ -102,6 +108,7 @@ cross_section_index <- function(model_stations, station) {
   
   cross_section_idx
 }
+
 
 
 

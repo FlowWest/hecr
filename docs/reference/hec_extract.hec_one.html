@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get model metadata — get_model_metadata • hecr</title>
+<title>Extract a time series from One D — hec_extract.hec_one • hecr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,9 +28,9 @@
 
 
 
-<meta property="og:title" content="Get model metadata — get_model_metadata" />
+<meta property="og:title" content="Extract a time series from One D — hec_extract.hec_one" />
 
-<meta property="og:description" content="Get model metadata" />
+<meta property="og:description" content="describe this" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,24 +112,47 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get model metadata</h1>
-    <small class="dont-index">Source: <a href='https://github.com/FlowWest/hecr/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
-    <div class="hidden name"><code>get_model_metadata.Rd</code></div>
+    <h1>Extract a time series from One D</h1>
+    <small class="dont-index">Source: <a href='https://github.com/FlowWest/hecr/blob/master/R/hec-one.R'><code>R/hec-one.R</code></a></small>
+    <div class="hidden name"><code>hec_extract.hec_one.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Get model metadata</p>
+    <p>describe this</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_model_metadata</span>(<span class='no'>f</span>)</pre>
-        
+    <pre class="usage"><span class='co'># S3 method for hec_one</span>
+<span class='fu'><a href='hec_extract.html'>hec_extract</a></span>(<span class='no'>hc</span>, <span class='no'>station_name</span>, <span class='no'>ts_type</span>, <span class='kw'>time_stamp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>hc</th>
+      <td><p>a hec one collection</p></td>
+    </tr>
+    <tr>
+      <th>station_name</th>
+      <td><p>one or more stations names</p></td>
+    </tr>
+    <tr>
+      <th>ts_type</th>
+      <td><p>a time series type</p></td>
+    </tr>
+    <tr>
+      <th>time_stamp</th>
+      <td><p>optional timestamp to filter query by</p></td>
+    </tr>
+    </table>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
   </div>
