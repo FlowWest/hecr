@@ -18,13 +18,7 @@
 #' c <- hec_file("examples/", plan_numbers = c(50, 60))
 #' }
 #' @export
-hec_file <- function(x, ...) {
-  UseMethod("hec_file", x)
-}
-
-#' @rdname hec_file
-#' @export
-hec_file.character <- function(path, plan_numbers = NULL) {
+hec_file <- function(path, plan_numbers = NULL) {
   
   if (is_dir(path)) { 
     hdf_files <- list_hec_files_in_dir(path, plan_numbers)
@@ -54,19 +48,6 @@ hec_file.character <- function(path, plan_numbers = NULL) {
     class = c("hec_collection", "list")
   )
 }
-
-#' @rdname hec_file
-#' @export 
-hec_file.H5File <- function(f, ...) {
-  structure(
-    list(
-      collection = list(f), 
-      files = f$filename
-    ), 
-    class = c("hec_collection", "list")
-  )
-}
-
 
 # INTERNAL 
 

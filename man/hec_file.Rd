@@ -2,15 +2,9 @@
 % Please edit documentation in R/hec-file.R
 \name{hec_file}
 \alias{hec_file}
-\alias{hec_file.character}
-\alias{hec_file.H5File}
 \title{Read HEC-Ras Output Data}
 \usage{
-hec_file(x, ...)
-
-\method{hec_file}{character}(path, plan_numbers = NULL)
-
-\method{hec_file}{H5File}(f, ...)
+hec_file(path, plan_numbers = NULL)
 }
 \arguments{
 \item{path}{directory path to either a single hdf file or a directory of a collection of these}

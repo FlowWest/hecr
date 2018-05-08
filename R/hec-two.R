@@ -20,14 +20,14 @@
 #' ws <- extract_ts2(f, xy=c(4567654.0, 2167453.0), "Water Surface", timestamp="2005-09-12 00:00:00")
 #' }
 #' @export
-extract_ts2 <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
+hec_two <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
   
   do_extract <- function(.f) {
     
-    model_timestamps <- get_model_timestamps(.f)
-    model_attributes <- get_model_metadata(.f) 
-    model_flow_area_name <- get_model_flow_area_name(.f)
-    model_center_coordinates <- get_model_center_coordinates(.f, model_flow_area_name)
+    timestamps <- hec_timestamps_(.f)
+    attrs <- hec_info_(.f) 
+    area_name <- hec_flow_area_(.f)
+    model_center_coordinates <- hec_center_coords_(.f, area_name)
     
     if (!is.null(time_stamp)) {
       time_idx <- which(model_timestamps == time_stamp)
@@ -77,7 +77,7 @@ extract_ts2 <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
 
 # the structure of the return is a matrix with columns are cells and rows
 # are x, y coordinates i.e m[, 1] gives coordinates of cell 1 in column vector form
-get_model_center_coordinates <- function(f, area_name) {
+hec_center_coords_ <- function(f, area_name) {
   d <- f[[hdf_paths$GEOM_2D_AREAS]][[area_name]][["Cells Center Coordinate"]]
   on.exit(d$close())
   
@@ -89,7 +89,7 @@ get_nearest_cell_center_index <- function(coords, nodes) {
   which.min(dist)[1]
 }
 
-get_model_flow_area_name <- function(f) {
+hec_flow_area_ <- function(f) {
   hdf5r::list.groups(f[[hdf_paths$GEOM_2D_AREAS]])[1]
 }
 
