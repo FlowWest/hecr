@@ -30,11 +30,11 @@ hec_two <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
     model_center_coordinates <- hec_center_coords_(.f, area_name)
     
     if (!is.null(time_stamp)) {
-      time_idx <- which(model_timestamps == time_stamp)
+      time_idx <- which(timestamps == time_stamp)
       if (length(time_idx) == 0) stop("supplied value for time_stamp was not found in the model", 
                                       call. = FALSE)
     } else {
-      time_idx <- seq_len(length(model_timestamps))
+      time_idx <- seq_len(length(timestamps))
     }
     
     input_coordinates <- make_coordinate_matrix(xy)
@@ -51,15 +51,15 @@ hec_two <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
               call. = FALSE)
     }
     
-    time_series <- .f[[hdf_paths$RES_2D_FLOW_AREAS]][[model_flow_area_name]][[ts_type]][nearest_cell_index_values, time_idx]
+    time_series <- .f[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][nearest_cell_index_values, time_idx]
     stacked_time_series <- matrix(t(time_series), ncol=1, byrow = TRUE)
     
     hdf_cell_index <- nearest_cell_index_values - 1
     
     tibble::tibble(
-      "datetime" = rep(model_timestamps[time_idx], length(nearest_cell_index_values)), 
-      "plan_id" = model_attributes$plan_id,
-      "plan_file" = model_attributes$plan_file,
+      "datetime" = rep(timestamps[time_idx], length(nearest_cell_index_values)), 
+      "plan_id" = attrs$plan_short_id,
+      "plan_file" = attrs$plan_file,
       "time_series_type" = ts_type, 
       "hdf_cell_index" = rep(hdf_cell_index, each = length(time_idx)), 
       "values" = as.vector(stacked_time_series)
@@ -70,13 +70,29 @@ hec_two <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
   
 }
 
-
-
+#' Show center coordinates
+#' @description show the center coordinates for items in a collection
+#' @param hc a hec_collection object
+#' @export
+hec_coordinates <- function(hc) {
+  if (!is_hec_collection(hc)) {
+    stop("hc is not a hec_collection")
+  }
+  purrr::map(hc$collection, ~hec_center_coords_(., area_name = hec_flow_area_(.))) %>% 
+    purrr::set_names(hc$files)
+}
 
 # INTERNALS
 
 # the structure of the return is a matrix with columns are cells and rows
 # are x, y coordinates i.e m[, 1] gives coordinates of cell 1 in column vector form
+
+hec_flow_area_ <- function(f) {
+  path_to_areas <- "Results/Unsteady/Output/Output Blocks/Base Output/Unsteady Time Series/2D Flow Areas"
+  names(f[[path_to_areas]])
+}
+
+
 hec_center_coords_ <- function(f, area_name) {
   d <- f[[hdf_paths$GEOM_2D_AREAS]][[area_name]][["Cells Center Coordinate"]]
   on.exit(d$close())
@@ -89,9 +105,6 @@ get_nearest_cell_center_index <- function(coords, nodes) {
   which.min(dist)[1]
 }
 
-hec_flow_area_ <- function(f) {
-  hdf5r::list.groups(f[[hdf_paths$GEOM_2D_AREAS]])[1]
-}
 
 make_coordinate_matrix <- function(x) {
   if (is.matrix(x)) {

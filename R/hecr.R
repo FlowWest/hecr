@@ -1,3 +1,13 @@
+#' \code{hecr} package
+#' 
+#' hecr an R interface to HEC-Ras Output
+#' 
+#' @docType package
+#' @name hecr
+#' @importFrom dplyr %>%
+#' 
+NULL
+
 #' Print list of datasets 
 #' @description given a hec_collection object passed through one of 'hec_one' or 'hec_two' 
 #' print the available data sets to query
