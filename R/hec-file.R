@@ -1,34 +1,37 @@
-#' Read HEC-Ras Output Data 
-#' @description Function will read in a single hdf file when the path parameter points to a single
-#' file, or a collection of these when the path is a directory. User can further specify only a 
-#' certain number of these within the directory to be read using the plan_numbers argument.
-#' @param path directory path to either a single hdf file or a directory of a collection of these
-#' @param plan_numbers a vector of plan number associated with hdf files. For use when path is a directory.
-#' Default action is to read all hdf files in path.
-#' @return a "hec_collection" object 
+#' @title Read HEC-RAS Output Data
+#' @description Either read or create a "hec" object from an HDF output file from
+#' HEC-RAS.
+#' @param x path or object
+#' @param ... additional arguments
 #' @examples 
 #' \dontrun{
-#' # read in a single hdf file
-#' a <- hec_file("examples/ArdenwoodCreek.p50.hdf")
-#' 
-#' # read in a collection of hdf files in this directory
-#' b <- hec_file("examples/") 
-#' 
-#' # read in hdf files in this directory matching 50 and 60 plan numbers
-#' c <- hec_file("examples/", plan_numbers = c(50, 60))
+#' f <- hec_file("~/Documents/ArdenwoodModelRub.p04.hdf") # read from file
+#' g <- hec_file(hc) # read from existing h5File object
 #' }
+#' @rdname hec_file
 #' @export
-hec_file <- function(path, plan_numbers = NULL) {
+hec_file <- function(x, ...) {
+  UseMethod("hec_file", x)
+}
+
+#' @return hec object
+#' 
+#' @rdname hec_file
+#' @param plan_numbers refine path to only these plan numbers
+#' @param mode read in hdf file in "r" read or "w" write mode ("r" by default)
+#' @method hec_file character
+#' @export 
+hec_file.character <- function(x, plan_numbers = NULL, mode = "r") {
   
-  if (is_dir(path)) { 
-    hdf_files <- list_hec_files_in_dir(path, plan_numbers)
+  if (is_dir(x)) { 
+    hdf_files <- list_hec_files_in_dir(x, plan_numbers)
   } else {
     
     if(!is.null(plan_numbers))
-      message("plan number(s) supplied but ignored, since 'path' points to a single file")
+      message("plan number(s) supplied but ignored, since 'x' points to a single file")
     
-    file_dir <- dirname(path)
-    file_name <- basename(path)
+    file_dir <- dirname(x)
+    file_name <- basename(x)
     
     hdf_files <- list.files(path = file_dir, pattern = file_name, full.names = TRUE)
     
@@ -37,7 +40,8 @@ hec_file <- function(path, plan_numbers = NULL) {
   }
   
   # map all relevant files onto the h5::h5file read function
-  f <- purrr::map(hdf_files, ~hdf5r::H5File$new(.))
+  f <- purrr::map_if(hdf_files, hdf5r::is_hdf5, ~hdf5r::H5File$new(., mode = mode)) %>% 
+    purrr::set_names(hdf_files)
   
   # return a hec_collection object
   structure(
@@ -45,9 +49,23 @@ hec_file <- function(path, plan_numbers = NULL) {
       collection = f, 
       files = hdf_files
     ), 
-    class = c("hec_collection", "list")
+    class = c("hec", "list")
   )
 }
+
+#' @rdname hec_file
+#' @export
+hec_file.H5File <- function(x) {
+  structure(
+    list(
+      collection = list(x), 
+      files = x$filename
+    ), 
+    class = "hec"
+  )
+}
+
+
 
 # INTERNAL 
 
@@ -88,7 +106,7 @@ or_collapse <- function(x) paste(x, collapse = "|")
 
 #' print hec_collection
 #' @export 
-print.hec_collection <- function(h) {
+print.hec <- function(h) {
   items_in_collection <- length(h$collection)
   cat("A hec collection with", items_in_collection, "item(s)\n")
   cat("Files in collection\n", sprintf("name: %s\n", h$files), "\n")

@@ -2,33 +2,35 @@
 % Please edit documentation in R/hec-file.R
 \name{hec_file}
 \alias{hec_file}
-\title{Read HEC-Ras Output Data}
+\alias{hec_file.character}
+\alias{hec_file.H5File}
+\title{Read HEC-RAS Output Data}
 \usage{
-hec_file(path, plan_numbers = NULL)
+hec_file(x, ...)
+
+\method{hec_file}{character}(x, plan_numbers = NULL, mode = "r")
+
+\method{hec_file}{H5File}(x)
 }
 \arguments{
-\item{path}{directory path to either a single hdf file or a directory of a collection of these}
+\item{x}{path or object}
 
-\item{plan_numbers}{a vector of plan number associated with hdf files. For use when path is a directory.
-Default action is to read all hdf files in path.}
+\item{...}{additional arguments}
+
+\item{plan_numbers}{refine path to only these plan numbers}
+
+\item{mode}{read in hdf file in "r" read or "w" write mode ("r" by default)}
 }
 \value{
-a "hec_collection" object
+hec object
 }
 \description{
-Function will read in a single hdf file when the path parameter points to a single
-file, or a collection of these when the path is a directory. User can further specify only a 
-certain number of these within the directory to be read using the plan_numbers argument.
+Either read or create a "hec" object from an HDF output file from
+HEC-RAS.
 }
 \examples{
 \dontrun{
-# read in a single hdf file
-a <- hec_file("examples/ArdenwoodCreek.p50.hdf")
-
-# read in a collection of hdf files in this directory
-b <- hec_file("examples/") 
-
-# read in hdf files in this directory matching 50 and 60 plan numbers
-c <- hec_file("examples/", plan_numbers = c(50, 60))
+f <- hec_file("~/Documents/ArdenwoodModelRub.p04.hdf") # read from file
+g <- hec_file(hc) # read from existing h5File object
 }
 }

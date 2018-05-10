@@ -92,7 +92,6 @@ hec_flow_area_ <- function(f) {
   names(f[[path_to_areas]])
 }
 
-
 hec_center_coords_ <- function(f, area_name) {
   d <- f[[hdf_paths$GEOM_2D_AREAS]][[area_name]][["Cells Center Coordinate"]]
   on.exit(d$close())
@@ -104,7 +103,6 @@ get_nearest_cell_center_index <- function(coords, nodes) {
   dist <- colSums(sqrt((coords - nodes)^2))
   which.min(dist)[1]
 }
-
 
 make_coordinate_matrix <- function(x) {
   if (is.matrix(x)) {
