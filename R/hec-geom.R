@@ -6,25 +6,16 @@
 #' @return data frame 
 #' @export
 hec_crosssections <- function(hc) {
-  if (!is_hec_collection(hc)) {
-    stop("supplied argument is not a hec_collection", call. = FALSE)
+  if (!inherits(hc, "hec")) {
+    stop("supplied argument is not a 'hec' object", call. = FALSE)
   }
   
-  purrr::set_names(purrr::map(hc$collection, ~hec_crosssections_(.)), 
-                   hc$files)
-}
-
-hec_crosssections_ <- function(h) {
-  if (!has_crossections_(h)) {
-    stop("supplied plan has no cross sections defined (has_crosssections)", 
-         call. = FALSE)
-  }
-  trimws(h[['Geometry/Cross Sections/River Stations']]$read())
+  trimws(hc$object[['Geometry/Cross Sections/River Stations']]$read())
 }
 
 
 has_crossections_ <- function(h) {
-  "Cross Sections" %in% names(h[["Geometry"]])
+  "Cross Sections" %in% names(h$object[["Geometry"]])
 }
 
 

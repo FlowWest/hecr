@@ -4,7 +4,7 @@
 \alias{hec_one}
 \title{Query one dimensional domains}
 \usage{
-hec_one(hc, station_name = NULL, ts_type = NULL, time_stamp = NULL)
+hec_one(hc, station_name, ts_type, time_stamp = NULL)
 }
 \arguments{
 \item{hc}{a hec_collection object produced by calling hec_file()}

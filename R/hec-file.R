@@ -1,117 +1,68 @@
-#' @title Read HEC-RAS Output Data
-#' @description Either read or create a "hec" object from an HDF output file from
-#' HEC-RAS.
-#' @param x path or object
-#' @param ... additional arguments
-#' @examples 
-#' \dontrun{
-#' f <- hec_file("~/Documents/ArdenwoodModelRub.p04.hdf") # read from file
-#' g <- hec_file(hc) # read from existing h5File object
-#' }
-#' @rdname hec_file
+#' @title Read hec file
+#' @description read in a hdf file resulting from a hec-ras model run
+#' @param path string path to hdf file
 #' @export
-hec_file <- function(x, ...) {
-  UseMethod("hec_file", x)
-}
-
-#' @return hec object
-#' 
-#' @rdname hec_file
-#' @param plan_numbers refine path to only these plan numbers
-#' @param mode read in hdf file in "r" read or "w" write mode ("r" by default)
-#' @method hec_file character
-#' @export 
-hec_file.character <- function(x, plan_numbers = NULL, mode = "r") {
-  
-  if (is_dir(x)) { 
-    hdf_files <- list_hec_files_in_dir(x, plan_numbers)
-  } else {
-    
-    if(!is.null(plan_numbers))
-      message("plan number(s) supplied but ignored, since 'x' points to a single file")
-    
-    file_dir <- dirname(x)
-    file_name <- basename(x)
-    
-    hdf_files <- list.files(path = file_dir, pattern = file_name, full.names = TRUE)
-    
-    if (!length(hdf_files)) stop(paste0("file: '", file_name, "' was not found in '", file_dir, "'"))
-    if (!hdf5r::is_hdf5(hdf_files[1])) stop("Supplied file is not an hdf5 file.")
-  }
-  
-  # map all relevant files onto the h5::h5file read function
-  f <- purrr::map_if(hdf_files, hdf5r::is_hdf5, ~hdf5r::H5File$new(., mode = mode)) %>% 
-    purrr::set_names(hdf_files)
-  
-  # return a hec_collection object
+#' @return a hec object
+hec_file <- function(path, mode="r") {
+  filename <- basename(path)
+  hec <- hdf5r::H5File$new(path, mode=mode)
+  info <- hec_info_(hec)
   structure(
     list(
-      collection = f, 
-      files = hdf_files
+      filename=basename(hec$filename),
+      attrs=info,
+      object=hec
     ), 
-    class = c("hec", "list")
-  )
-}
-
-#' @rdname hec_file
-#' @export
-hec_file.H5File <- function(x) {
-  structure(
-    list(
-      collection = list(x), 
-      files = x$filename
-    ), 
-    class = "hec"
+    class="hec"
   )
 }
 
 
-
-# INTERNAL 
-
-is_dir <- function(file) {
-  dir.exists(file)
+#' @title Hec attributes
+#' @description get all attributes relating to a hec object
+#' @param hc a hec objet
+#' @return list of attributes
+#' @export
+hec_info <- function(hc) {
+  return(hc$attr)
 }
 
-is_file <- function(file) {
-  file.exists(file)
+#' Print hec 
+#' @export
+print.hec <- function(f) {
+  cat("A hec object----\n")
+  cat("Plan File:", f$attrs$plan_file, "\n")
+  cat("Plan Name:", f$attrs$plan_name, "\n")
+  cat("Geom Name:", f$attrs$geometry_name, "\n")
+  cat("Out Inteval:", f$attrs$output_interval, "\n")
 }
 
-list_hec_files_in_dir <- function(path, plan_numbers) {
-  hdf_files <- list.files(path, pattern = "p[0-9][0-9].hdf$", full.names = TRUE)
+
+#' Get Plan Information
+hec_info_ <- function(hc) {
   
-  if (!length(hdf_files)) stop(paste("No hdf files found in:", path)) # no hdf files found
+  # if (!inherits(hc, "hec")) {
+  #   stop("argument is not a 'hec' object")
+  # }
   
-  msg <- paste0("found ", length(hdf_files), " hdf file(s) in ", path) # helpful msg
+  info_path <- "Plan Data/Plan Information"
   
-  # plan numbers supplied
-  if (!is.null(plan_numbers)) {
-    re <- or_collapse(plan_numbers)
-    hdf_files <- hdf_files[stringr::str_detect(hdf_files, re)]
-    msg <- paste0("found ", length(hdf_files), " hdf files in ", path, " matching plan numbers criteria")
-    
-    # no matching plan numbers
-    if (!length(hdf_files)) stop(paste("No hdf files found in:", path, "with plan numbers(s):", 
-                                       paste(plan_numbers, collapse = ", ")))
-    # only some were matched
-    if (length(hdf_files) != length(plan_numbers)) {
-      warning("One or more hdf files were not read in correctly")
-    }
-  }
-  message(msg)
-  return(hdf_files)
+  list(
+    plan_short_id = hdf5r::h5attr(hc[[info_path]], 
+                                  which = "Plan ShortID"),
+    plan_name = hdf5r::h5attr(hc[[info_path]], 
+                              which = "Plan Name"), 
+    plan_file = stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
+                                                   which = "Plan File"), 
+                                     "[A-Za-z0-9_-]+\\.[a-z0-9]+$"), 
+    computation_time_step = hdf5r::h5attr(hc[[info_path]], 
+                                          which = "Computation Time Step"), 
+    geometry_name = stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
+                                                       which = "Geometry Name"), "[A-Za-z0-9_-]+\\.[a-z0-9]+$"), 
+    geometry_title = hdf5r::h5attr(hc[[info_path]], 
+                                   which = "Geometry Title"), 
+    output_interval = hdf5r::h5attr(hc[[info_path]], 
+                                    which = "Output Interval")
+  )
+  
 }
-
-or_collapse <- function(x) paste(x, collapse = "|")
-
-#' print hec_collection
-#' @export 
-print.hec <- function(h) {
-  items_in_collection <- length(h$collection)
-  cat("A hec collection with", items_in_collection, "item(s)\n")
-  cat("Files in collection\n", sprintf("name: %s\n", h$files), "\n")
-}
-
-
-
-

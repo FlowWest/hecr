@@ -1,23 +1,2 @@
-Notes:
-
-@created(17-09-19 09:59)
-- Currently working on querying out long profiles from an hdf files
-  - we can find the time step for the model run  under the plan information metadata
-  - we can create a sequence based on this with seq(start, end, by = "timeInterval min")
-
-@created(17-09-19 13:33) @critical
- - There is a bug that on the one-dimension query. Where a user is not able to query multiple stations
-   The error message reads:
-     Error: Columns `datetime`, `plan_id`, `river_name`, `reach_name`, `values` must be length 1 or 10582, not 10101, 10101, 10101, 10101, 10101 
- - we know that 481 * length(s) = 10582 
- - When we print a debug statement with all of the lengths we get:
-   length on creation -----------------------
-   the length of datetime -  481 
-   the length of river_name -  21 
-   the length of values -  10101 
-   the length of cross_section -  22 
-   lengths in the tibble ----------------------
-   the length of datetime -  10101 
-   the length of river_name -  10101 
-   the length of values -  10101 
-   the length of cross_section -  22 
+@created(18-05-10 13:32) 
+Currently making things 

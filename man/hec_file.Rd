@@ -2,35 +2,16 @@
 % Please edit documentation in R/hec-file.R
 \name{hec_file}
 \alias{hec_file}
-\alias{hec_file.character}
-\alias{hec_file.H5File}
-\title{Read HEC-RAS Output Data}
+\title{Read hec file}
 \usage{
-hec_file(x, ...)
-
-\method{hec_file}{character}(x, plan_numbers = NULL, mode = "r")
-
-\method{hec_file}{H5File}(x)
+hec_file(path, mode = "r")
 }
 \arguments{
-\item{x}{path or object}
-
-\item{...}{additional arguments}
-
-\item{plan_numbers}{refine path to only these plan numbers}
-
-\item{mode}{read in hdf file in "r" read or "w" write mode ("r" by default)}
+\item{path}{string path to hdf file}
 }
 \value{
-hec object
+a hec object
 }
 \description{
-Either read or create a "hec" object from an HDF output file from
-HEC-RAS.
-}
-\examples{
-\dontrun{
-f <- hec_file("~/Documents/ArdenwoodModelRub.p04.hdf") # read from file
-g <- hec_file(hc) # read from existing h5File object
-}
+read in a hdf file resulting from a hec-ras model run
 }
