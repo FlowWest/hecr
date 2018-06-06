@@ -79,6 +79,169 @@ print(datasets$one)
 ```
 
 
+## Putting it all together
+
+We can now perform a basic query by the pieces explored above.
+
+```{r}
+data <- 
+  hec_one(model_data, station_name = cs[300], ts_type = "Water Surface")
+
+print(data)
+```
+
+
+The data returned is a tidy tibble. Here we visualize,
+
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+
+data %>% 
+  ggplot(aes(datetime, values)) + geom_line() + labs(y="Water Surface (ft)", 
+                                                     x="DateTime")
+```
+
+
+We are not limited to one station, 
+
+
+```{r, warning=FALSE}
+data <- 
+  hec_one(model_data, station_name = cs[295:300], ts_type = "Water Surface")
+
+data %>% 
+  ggplot(aes(datetime, values, color=station)) + 
+  geom_line() + 
+  labs(y="Water Surface (ft)", 
+       x="DateTime") + 
+  scale_color_brewer(palette = "Dark2")
+```
+
+### Fixing Time 
+
+We can fix the timestamp, and query for all stations to get "snapshot" of all 
+the cross sections at a point in time.
+
+```{r}
+data <- hec_one(model_data, station_name = cs, 
+                ts_type = "Water Surface", time_stamp = "2005-12-30 02:15:00")
+
+data %>% 
+  ggplot(aes(readr::parse_number(station), values)) + 
+  geom_line() +
+  labs(x="Station", y="Water Surface (ft)", title="Water Surface on December 30th at 2:15 am")
+```
+
+## Expanding Queries with purrr
+
+In this section we start to explore more advanced queries by integrating the 
+`purrr` package. We point out limitattion for each of the examples above, and 
+showcase the purrr solution to alleviate. 
+
+### Multiple Plan (File) Queries 
+
+```{r}
+library(purrr)
+
+plans <- list.files("~/Documents/ardenwood/", full.names = TRUE)
+
+model_collection <- map(plans, hec_file)
+
+print(model_collection) # a list of hec objects
+```
+
+From now on operations need to act on a list, but this easy using purrr.
+
+
+#### Water Surface for a Station across plans
+
+Here we use a single station and query it across all these plans, furthermore
+since we know that the result of `hec_one` will be a tibble we use the map 
+variant `map_df` that will return a dataframe composed of each of the calls to
+`hec_one`.
+
+```{r}
+collection_data <- 
+  map_df(model_collection, ~hec_one(., station_name = cs[300], ts_type = "Water Surface"))
+```
+
+
+We can plot this,
+
+```{r}
+collection_data %>% 
+  ggplot(aes(datetime, values, color=plan_id)) + 
+  geom_line() + 
+  labs(x="DateTime", y="Water Surface (ft)", color="Plan")
+```
+
+
+#### Multiple Snapshots for a single plan
+
+```{r}
+set.seed(3)
+# select random datetimes for this example
+dts <- sample(collection_data$datetime, 4)
+
+snapshots <- 
+  map_df(dts, ~hec_one(model_data, station_name = cs, 
+                    ts_type = "Water Surface", time_stamp = .))
+```
+
+And now visualize it, 
+
+
+```{r}
+snapshots %>% 
+  ggplot(aes(readr::parse_number(station), values, color=as.character(datetime))) + 
+  geom_line() + 
+  labs(x="station", y="Water Surfce (ft)", color="Time")
+```
+
+
+#### Multiple Snapshots for multiple plans
+
+```{r}
+set.seed(3)
+# select random datetimes for this example
+dts <- sample(collection_data$datetime, 4)
+
+snapshot_collection <- 
+  map_df(model_collection, function(m) {
+  map_df(dts, ~hec_one(hc=m, station_name = cs, ts_type = "Water Surface", time_stamp = .))
+})
+```
+
+And now visualize it, 
+
+
+```{r}
+# obviously the plot can be improved but this shows the functionality
+snapshot_collection %>% 
+  ggplot(aes(readr::parse_number(station), values, color=as.character(datetime))) + 
+  geom_line() + 
+  facet_grid(. ~ plan_id) + 
+  labs(x="station", y="Water Surfce (ft)", color="Time")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
