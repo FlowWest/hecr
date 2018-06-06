@@ -21,3 +21,12 @@ print(length(cs))
 # what are the first couple?
 print(head(cs))
 
+## ------------------------------------------------------------------------
+datasets <-
+  hec_datasets(model_data, domain = 'one') # set domain to one
+
+print(datasets)
+
+## ------------------------------------------------------------------------
+print(datasets$one)
+

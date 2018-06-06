@@ -135,6 +135,42 @@
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">print</span>(<span class="kw">head</span>(cs))</a></code></pre></div>
 <pre><code>## [1] "9078.845" "8827.918" "8734.11*" "8633.985" "8477.167" "8266.646"</code></pre>
 </div>
+<div id="listing-available-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#listing-available-data" class="anchor"></a>Listing Available Data</h2>
+<p>HEC-RAS mode results output a set of time series, we can list the available datasets using <code>hec_datasets</code>. Note this does not return any data, simply avaialble data to query on.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">datasets &lt;-</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../reference/hec_datasets.html">hec_datasets</a></span>(model_data, <span class="dt">domain =</span> <span class="st">'one'</span>) <span class="co"># set domain to one</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">print</span>(datasets)</a></code></pre></div>
+<pre><code>## One Dim ------
+##               name       dim
+## 1             Flow 319 x 481
+## 2     Flow Lateral 319 x 481
+## 3 Velocity Channel 319 x 481
+## 4   Velocity Total 319 x 481
+## 5    Water Surface 319 x 481</code></pre>
+<p>The print function for <code>hec_datasets</code> shows the name of the dataset, as well as the dimension. A user can access the full representation from <code>hdf5r</code> with,</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">print</span>(datasets<span class="op">$</span>one)</a></code></pre></div>
+<pre><code>##               name     link.type      object.type object.num_attrs
+## 1             Flow H5L_TYPE_HARD H5O_TYPE_DATASET                3
+## 2     Flow Lateral H5L_TYPE_HARD H5O_TYPE_DATASET                1
+## 3 Velocity Channel H5L_TYPE_HARD H5O_TYPE_DATASET                1
+## 4   Velocity Total H5L_TYPE_HARD H5O_TYPE_DATASET                1
+## 5    Water Surface H5L_TYPE_HARD H5O_TYPE_DATASET                3
+##   group.nlinks group.mounted dataset.rank dataset.dims dataset.maxdims
+## 1           NA            NA            2    319 x 481       319 x Inf
+## 2           NA            NA            2    319 x 481       319 x Inf
+## 3           NA            NA            2    319 x 481       319 x Inf
+## 4           NA            NA            2    319 x 481       319 x Inf
+## 5           NA            NA            2    319 x 481       319 x Inf
+##   dataset.type_class dataset.space_class committed_type
+## 1          H5T_FLOAT          H5S_SIMPLE           &lt;NA&gt;
+## 2          H5T_FLOAT          H5S_SIMPLE           &lt;NA&gt;
+## 3          H5T_FLOAT          H5S_SIMPLE           &lt;NA&gt;
+## 4          H5T_FLOAT          H5S_SIMPLE           &lt;NA&gt;
+## 5          H5T_FLOAT          H5S_SIMPLE           &lt;NA&gt;</code></pre>
+</div>
 </div>
   </div>
 
@@ -147,6 +183,7 @@
       <li>
 <a href="#one-dimension-domain-recipes">One Dimension Domain Recipes</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#finding-a-cross-section">Finding a Cross Section</a></li>
+      <li><a href="#listing-available-data">Listing Available Data</a></li>
       </ul>
 </li>
       </ul>

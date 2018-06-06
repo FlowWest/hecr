@@ -64,10 +64,19 @@ HEC-RAS mode results output a set of time series, we can list the available data
 using `hec_datasets`. Note this does not return any data, simply avaialble data to 
 query on.
 
+```{r}
+datasets <-
+  hec_datasets(model_data, domain = 'one') # set domain to one
 
+print(datasets)
+```
 
+The print function for `hec_datasets` shows the name of the dataset, as well as the 
+dimension. A user can access the full representation from `hdf5r` with, 
 
-
+```{r}
+print(datasets$one)
+```
 
 
 

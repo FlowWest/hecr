@@ -6,21 +6,27 @@
 #' @export 
 hec_datasets <- function(hc, domain=NULL) {
   one_path <- "Results/Unsteady/Output/Output Blocks/Base Output/Unsteady Time Series/Cross Sections"
+  two_path <- glue::glue(
+    "Results/Unsteady/Output/Output Blocks/Base Output/Unsteady Time Series/2D Flow Areas/{area}", 
+    area = get_plan_area(hc)
+    )
   
+  cat(two_path, "\n")
   one <- NULL
   two <- NULL
   
   if (is.null(domain)) {
-    
+    one <- hc$object[[one_path]]$ls()
+    two <- hc$object[[two_path]]$ls()
   } else if (domain == 'one') {
     one <- hc$object[[one_path]]$ls()
   } else if (domain == 'two') {
-    
+    two <- hc$object[[two_path]]$ls()
   }
   structure(
     list(
       'one' = one,
-      'two' = NULL
+      'two' = two
     ), 
     class="hec_datasets"
   )
@@ -34,6 +40,10 @@ print.hec_datasets <- function(x, ...) {
     cat('One Dim ------\n')
     print(dplyr::select(x$one, name, "dim" = dataset.dims))
   }
+  if (!is.null(x$two)) {
+    cat('Two Dim ------\n')
+    print(dplyr::select(x$two, name, "dim" = dataset.dims))
+  }
 }
 
 has_crossections <- function(h) {
@@ -44,3 +54,17 @@ hec_timestamps_ <- function(h) {
   as.POSIXct(h$object[["Results/Unsteady/Output/Output Blocks/Base Output/Unsteady Time Series/Time Date Stamp"]]$read(), 
              format = "%d%b%Y %H:%M:%S")
 }
+
+
+get_plan_area <- function(hc) {
+  trimws(hc$object[["Results/Unsteady/Output/Output Blocks/Base Output/Unsteady Time Series/2D Flow Areas/"]]$ls()$name[1])
+}
+
+
+
+
+
+
+
+
+
