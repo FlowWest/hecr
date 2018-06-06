@@ -1,0 +1,81 @@
+---
+title: "hecr Recipes"
+author: "Emanuel and Bethany"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{hecr Recipes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This article outlines several recipes for creating complex queries using hecr. We 
+also outline several solutions for automation. Files resulting from HEC-RAS model
+run are big, from our work these are usually around ~200mb, these examples use a real
+output from a model, but packaging this with the package is too big. .... blah blah blah.
+
+# Getting Started 
+
+Here we read in the model using the `hec_file` function.
+
+```{r}
+# devtools::install_github("flowwest/hecr")
+
+library(hecr)
+
+model_data <- hec_file("~/Documents/ardenwood/ArdenwoodCreek.p02.hdf")
+```
+
+Right away we can get some information, 
+
+```{r}
+print(model_data)
+```
+
+We can access attributes relating to the model directly
+
+```{r, eval=FALSE}
+model_data$object # the R representation of hdf file using hdf5r package (hdf5 object)
+model_data$attrs  # root level attributes associated with the plan (R list)
+```
+
+# One Dimension Domain Recipes
+
+This section shows solutions for one dimensional queries.
+
+## Finding a Cross Section
+
+hecr allows user to query a vector of all defined cross sections. These are 
+represented by a numeric value, indicating distance from an origin.
+
+```{r}
+cs <- hec_crosssections(model_data)
+
+# how many cross sections are defined?
+print(length(cs))
+
+# what are the first couple?
+print(head(cs))
+```
+
+## Listing Available Data 
+
+HEC-RAS mode results output a set of time series, we can list the available datasets 
+using `hec_datasets`. Note this does not return any data, simply avaialble data to 
+query on.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

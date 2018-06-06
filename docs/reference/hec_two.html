@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Hec attributes — hec_info • hecr</title>
+<title>Query coordinate 2d data — hec_two • hecr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,9 +28,9 @@
 
 
 
-<meta property="og:title" content="Hec attributes — hec_info" />
+<meta property="og:title" content="Query coordinate 2d data — hec_two" />
 
-<meta property="og:description" content="get all attributes relating to a hec object" />
+<meta property="og:description" content="Function extracts a time series from a 2D portion of hec ras model." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -115,41 +115,61 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Hec attributes</h1>
-    <small class="dont-index">Source: <a href='https://github.com/FlowWest/hecr/blob/master/R/hec-file.R'><code>R/hec-file.R</code></a></small>
-    <div class="hidden name"><code>hec_info.Rd</code></div>
+    <h1>Query coordinate 2d data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/FlowWest/hecr/blob/master/R/hec-two.R'><code>R/hec-two.R</code></a></small>
+    <div class="hidden name"><code>hec_two.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>get all attributes relating to a hec object</p>
+    <p>Function extracts a time series from a 2D portion of hec ras model.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>hec_info</span>(<span class='no'>hc</span>)</pre>
+    <pre class="usage"><span class='fu'>hec_two</span>(<span class='no'>f</span>, <span class='no'>xy</span>, <span class='kw'>ts_type</span> <span class='kw'>=</span> <span class='st'>"Water Surface"</span>, <span class='kw'>time_stamp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>hc</th>
-      <td><p>a hec objet</p></td>
+      <th>xy</th>
+      <td><p>a coordinate or set of coordinates either in a dataframe or matrix 
+with columns x and y</p></td>
+    </tr>
+    <tr>
+      <th>ts_type</th>
+      <td><p>the time series to extract, option defaults to Water Surface</p></td>
+    </tr>
+    <tr>
+      <th>.f</th>
+      <td><p>an hdf file read in with hec_file</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>list of attributes</p>
-    
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'>## first read in file</span>
+<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hec_file.html'>hec_file</a></span>(<span class='st'>"examples/ArdenwoodCreek.p50.hdf"</span>)
 
+<span class='co'>## water surface time series at the coordinate 4567654.0, 2167453.0</span>
+<span class='no'>ws</span> <span class='kw'>&lt;-</span> <span class='fu'>extract_ts2</span>(<span class='no'>f</span>, <span class='kw'>xy</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>4567654.0</span>, <span class='fl'>2167453.0</span>), <span class='st'>"Water Surface"</span>)
+
+<span class='co'>## water surface time series at multiple coordinates</span>
+<span class='no'>coords</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>4567654.0</span>, <span class='fl'>2167453.0</span>, <span class='fl'>3456124.0</span>, <span class='fl'>7856124.0</span>)
+<span class='no'>ws</span> <span class='kw'>&lt;-</span> <span class='fu'>extract_ts2</span>(<span class='no'>f</span>, <span class='kw'>xy</span><span class='kw'>=</span><span class='no'>coords</span>, <span class='st'>"Water Surface"</span>)
+
+<span class='co'>## water surface for a fixed timestamp, useful when querying for large amounts of coordinates. </span>
+<span class='no'>ws</span> <span class='kw'>&lt;-</span> <span class='fu'>extract_ts2</span>(<span class='no'>f</span>, <span class='kw'>xy</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>4567654.0</span>, <span class='fl'>2167453.0</span>), <span class='st'>"Water Surface"</span>, <span class='kw'>timestamp</span><span class='kw'>=</span><span class='st'>"2005-09-12 00:00:00"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-          </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

@@ -1,10 +1,15 @@
 #' @title Query one dimensional domains
 #' @description provide station(s), a type of time series and optionally a timestamp
 #' to query out data from an hdf5 file resulting from a HEC-RAS model run
-#' @param hc a hec_collection object produced by calling hec_file()
-#' @param station_name name(s) for station(s) defined in the model run
+#' @param hc a hec object. See ?hec_file for more.
+#' @param station_name name(s) for station(s) defined in the model run. See ?hec_crosssections for more.
 #' @param ts_type a valid time series type defined in the model run
 #' @export 
+#' @examples 
+#' \dontrun{
+#' h <- hec_file("~/Docs/hec-model-run.hdf")
+#' data <- hec_one(hc=h, station="19135.6", ts_type="Water Surface")
+#' }
 hec_one <- function(hc, station_name, ts_type, time_stamp=NULL) {
   
   if (!inherits(hc, "hec")) {
@@ -44,6 +49,19 @@ hec_one <- function(hc, station_name, ts_type, time_stamp=NULL) {
     "values" = as.vector(time_series_stacked)
   )
   
+}
+
+#' Plan Cross Sections
+#' @description Extract the crossections for a given hec collection
+#' @param hc a hec_collection
+#' @return data frame 
+#' @export
+hec_crosssections <- function(hc) {
+  if (!inherits(hc, "hec")) {
+    stop("supplied argument is not a 'hec' object", call. = FALSE)
+  }
+  
+  trimws(hc$object[['Geometry/Cross Sections/River Stations']]$read())
 }
 
 # INTERNALS 

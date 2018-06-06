@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read HEC-Ras Output Data — hec_file • hecr</title>
+<title>Read hec file — hec_file • hecr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,11 +28,9 @@
 
 
 
-<meta property="og:title" content="Read HEC-Ras Output Data — hec_file" />
+<meta property="og:title" content="Read hec file — hec_file" />
 
-<meta property="og:description" content="Function will read in a single hdf file when the path parameter points to a single
-file, or a collection of these when the path is a directory. User can further specify only a 
-certain number of these within the directory to be read using the plan_numbers argument." />
+<meta property="og:description" content="read in a hdf file resulting from a hec-ras model run" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -86,6 +84,9 @@ certain number of these within the directory to be read using the plan_numbers a
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/Recipes.html">hecr Recipes</a>
+    </li>
+    <li>
       <a href="../articles/Tutorial.html">hecr Tutorial</a>
     </li>
   </ul>
@@ -114,55 +115,33 @@ certain number of these within the directory to be read using the plan_numbers a
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Read HEC-Ras Output Data</h1>
+    <h1>Read hec file</h1>
     <small class="dont-index">Source: <a href='https://github.com/FlowWest/hecr/blob/master/R/hec-file.R'><code>R/hec-file.R</code></a></small>
     <div class="hidden name"><code>hec_file.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Function will read in a single hdf file when the path parameter points to a single
-file, or a collection of these when the path is a directory. User can further specify only a 
-certain number of these within the directory to be read using the plan_numbers argument.</p>
+    <p>read in a hdf file resulting from a hec-ras model run</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>hec_file</span>(<span class='no'>path</span>, <span class='kw'>plan_numbers</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>hec_file</span>(<span class='no'>path</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"r"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>path</th>
-      <td><p>directory path to either a single hdf file or a directory of a collection of these</p></td>
-    </tr>
-    <tr>
-      <th>plan_numbers</th>
-      <td><p>a vector of plan number associated with hdf files. For use when path is a directory.
-Default action is to read all hdf files in path.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>additional options.</p></td>
+      <td><p>string path to hdf file</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a "hec_collection" object</p>
+    <p>a hec object</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># read in a single hdf file</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>hec_file</span>(<span class='st'>"examples/ArdenwoodCreek.p50.hdf"</span>)
-
-<span class='co'># read in a collection of hdf files in this directory</span>
-<span class='no'>b</span> <span class='kw'>&lt;-</span> <span class='fu'>hec_file</span>(<span class='st'>"examples/"</span>)
-
-<span class='co'># read in hdf files in this directory matching 50 and 60 plan numbers</span>
-<span class='no'>c</span> <span class='kw'>&lt;-</span> <span class='fu'>hec_file</span>(<span class='st'>"examples/"</span>, <span class='kw'>plan_numbers</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>50</span>, <span class='fl'>60</span>))
-<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -170,9 +149,7 @@ Default action is to read all hdf files in path.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>
