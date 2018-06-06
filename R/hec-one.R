@@ -10,7 +10,7 @@
 #' h <- hec_file("~/Docs/hec-model-run.hdf")
 #' data <- hec_one(hc=h, station="19135.6", ts_type="Water Surface")
 #' }
-hec_one <- function(hc, station_name, ts_type, time_stamp=NULL) {
+hec_one <- memoise::memoise(function(hc, station_name, ts_type, time_stamp=NULL) {
   
   if (!inherits(hc, "hec")) {
     stop("hc is not an object of type 'hec', use hec_file() to read in data", 
@@ -49,7 +49,7 @@ hec_one <- function(hc, station_name, ts_type, time_stamp=NULL) {
     "values" = as.vector(time_series_stacked)
   )
   
-}
+})
 
 #' Plan Cross Sections
 #' @description Extract the crossections for a given hec collection

@@ -22,7 +22,8 @@ Imports:
     config,
     dplyr,
     purrr,
-    hdf5r
+    hdf5r,
+    memoise
 RoxygenNote: 6.0.1
 Suggests:
     knitr,
