@@ -4,7 +4,7 @@
 \alias{hec_two}
 \title{Query coordinate 2d data}
 \usage{
-hec_two(f, xy, ts_type = "Water Surface", time_stamp = NULL)
+hec_two(hc, xy, ts_type = "Water Surface", time_stamp = NULL)
 }
 \arguments{
 \item{xy}{a coordinate or set of coordinates either in a dataframe or matrix 
