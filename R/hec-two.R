@@ -36,28 +36,24 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
   }
   
   input_coordinates <- make_coordinate_matrix(xy)
+  values_df <- make_coordinate_df(xy)
+  
   
   nearest_cell_index <- sapply(seq_len(nrow(input_coordinates)), function(i) {
     get_nearest_cell_center_index(input_coordinates[i,], model_center_coordinates)
   }) 
   
   mapped_to_existing_cell <- duplicated(unlist(nearest_cell_index))
-  nearest_cell_index_values <- sort(unique(unlist(nearest_cell_index)))
+  nearest_cell_index_values <- unique(unlist(nearest_cell_index))
   
   # Warn the user when some coordinates provided were within the same cell
   if (length(nearest_cell_index) != length(nearest_cell_index_values)) {
     warning("some of the coordinates provided were mapped to the same cell", 
             call. = FALSE)
   }
-  
-  print(class(nearest_cell_index_values))  
-  print(length(nearest_cell_index_values))
-  print(nearest_cell_index_values)
-  
+
   time_series <- hc$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][nearest_cell_index_values, time_idx]
-  
-  print(class(time_series))
-  print(length(time_series))
+
   stacked_time_series <- matrix(t(time_series), ncol=1, byrow = TRUE)
   
   hdf_cell_index <- nearest_cell_index_values - 1
@@ -116,3 +112,23 @@ make_coordinate_matrix <- function(x) {
     }
   }
 }
+
+make_coordinate_df <- function(x) {
+  if (is.matrix(x)) {
+    if (anyDuplicated(x)) {
+      warning("Duplicate values found in coordinate pairs, only unique pairs were kept")
+      return(as.data.frame(matrix(x[!duplicated(x), ], ncol=2, byrow=TRUE), col.names = c("x", "y")))
+    } else 
+      return(as.data.frame(x, col.names = c("x", "y"))) 
+  } else { 
+    if (length(x) %% 2 != 0) stop("vector must have pairs of coordinates, your vector is of odd length", call. = FALSE)
+    m <- matrix(x, ncol=2, byrow=TRUE)
+    if (anyDuplicated(m)) {
+      warning("Duplicate values found in coodinate pairs, only unique pairs were kept")
+      return(as.data.frame(matrix(m[!duplicated(m), ], ncol=2, byrow=TRUE)), col.names=c("x", "y"))
+    } else {
+      return(as.data.frame(m, col.names=c("x", "y")))
+    }
+  }
+}
+
