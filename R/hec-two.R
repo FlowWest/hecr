@@ -41,6 +41,7 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
     get_nearest_cell_center_index(input_coordinates[i,], model_center_coordinates)
   }) 
   
+  mapped_to_existing_cell <- duplicated(unlist(nearest_cell_index))
   nearest_cell_index_values <- sort(unique(unlist(nearest_cell_index)))
   
   # Warn the user when some coordinates provided were within the same cell
@@ -49,7 +50,14 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
             call. = FALSE)
   }
   
+  print(class(nearest_cell_index_values))  
+  print(length(nearest_cell_index_values))
+  print(nearest_cell_index_values)
+  
   time_series <- hc$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][nearest_cell_index_values, time_idx]
+  
+  print(class(time_series))
+  print(length(time_series))
   stacked_time_series <- matrix(t(time_series), ncol=1, byrow = TRUE)
   
   hdf_cell_index <- nearest_cell_index_values - 1
@@ -60,6 +68,8 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
     "plan_file" = attrs$plan_file,
     "time_series_type" = ts_type, 
     "hdf_cell_index" = rep(hdf_cell_index, each = length(time_idx)), 
+    "xin" = rep(input_coordinates[!mapped_to_existing_cell, 1], each = length(time_idx)),
+    "yin" = rep(input_coordinates[!mapped_to_existing_cell, 2], each = length(time_idx)),
     "values" = as.vector(stacked_time_series)
   )
 
