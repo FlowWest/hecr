@@ -37,6 +37,13 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
   }
   
   input_coordinates <- make_coordinate_df(xy)
+  colnames(input_coordinates) <- c("V1", "V2")
+  
+  print("Diagnostic Results:")
+  print(paste("The class of coordinate structure", class(input_coordinates)))
+  print(paste("The colnames are", colnames(input_coordinates)))
+  
+  
   cordinates_df <- make_coordinate_df(xy) %>% 
     dplyr::mutate(
       nearest_cell_index = 
