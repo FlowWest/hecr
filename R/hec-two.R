@@ -27,6 +27,7 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
   area_name <- hec_flow_area_(hc)
   model_center_coordinates <- hec_center_coords_(hc, area_name)
   
+  
   if (!is.null(time_stamp)) {
     time_idx <- which(timestamps == time_stamp)
     if (length(time_idx) == 0) stop("supplied value for time_stamp was not found in the model", 
@@ -35,13 +36,14 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
     time_idx <- seq_len(length(timestamps))
   }
   
-  input_coordinates <- make_coordinate_matrix(xy)
+  input_coordinates <- make_coordinate_df(xy)
   cordinates_df <- make_coordinate_df(xy) %>% 
     dplyr::mutate(
       nearest_cell_index = 
         purrr::map2_dbl(V1, V2, ~get_nearest_cell_center_index(c(.x, .y), model_center_coordinates))
     ) %>% 
-    arrange(nearest_cell_index)
+    dplyr::distinct(nearest_cell_index, .keep_all = TRUE) %>% 
+    dplyr::arrange(nearest_cell_index)
 
   nearest_cell_index <- sapply(seq_len(nrow(input_coordinates)), function(i) {
     get_nearest_cell_center_index(input_coordinates[i,], model_center_coordinates)
@@ -56,7 +58,7 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
             call. = FALSE)
   }
 
-  time_series <- hc$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][nearest_cell_index_values, time_idx]
+  time_series <- hc$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][cordinates_df$nearest_cell_index, time_idx]
 
   stacked_time_series <- matrix(t(time_series), ncol=1, byrow = TRUE)
   
@@ -68,8 +70,8 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
     "plan_file" = attrs$plan_file,
     "time_series_type" = ts_type, 
     "hdf_cell_index" = rep(hdf_cell_index, each = length(time_idx)), 
-    "xin" = rep(input_coordinates[!mapped_to_existing_cell, 1], each = length(time_idx)),
-    "yin" = rep(input_coordinates[!mapped_to_existing_cell, 2], each = length(time_idx)),
+    "xin" = rep(cordinates_df$V1, each = length(time_idx)),
+    "yin" = rep(cordinates_df$V2, each = length(time_idx)),
     "values" = as.vector(stacked_time_series)
   )
 
