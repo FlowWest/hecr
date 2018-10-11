@@ -43,42 +43,31 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
   print(paste("The class of coordinate structure", class(input_coordinates)))
   print(paste("The colnames are", colnames(input_coordinates)))
   
-  
-  cordinates_df <- make_coordinate_df(xy) %>% 
+  coordinates_df <- input_coordinates %>% 
     dplyr::mutate(
       nearest_cell_index = 
         purrr::map2_dbl(V1, V2, ~get_nearest_cell_center_index(c(.x, .y), model_center_coordinates))
     ) %>% 
     dplyr::distinct(nearest_cell_index, .keep_all = TRUE) %>% 
     dplyr::arrange(nearest_cell_index)
-
-  nearest_cell_index <- sapply(seq_len(nrow(input_coordinates)), function(i) {
-    get_nearest_cell_center_index(input_coordinates[i,], model_center_coordinates)
-  }) 
   
-  mapped_to_existing_cell <- duplicated(unlist(nearest_cell_index))
-  nearest_cell_index_values <- unique(unlist(nearest_cell_index))
-  
-  # Warn the user when some coordinates provided were within the same cell
-  if (length(nearest_cell_index) != length(nearest_cell_index_values)) {
-    warning("some of the coordinates provided were mapped to the same cell", 
-            call. = FALSE)
-  }
+  print(colnames(coordinates_df))
+  print(head(coordinates_df))
 
-  time_series <- hc$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][cordinates_df$nearest_cell_index, time_idx]
+  time_series <- hc$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][coordinates_df[["nearest_cell_index"]], time_idx]
 
   stacked_time_series <- matrix(t(time_series), ncol=1, byrow = TRUE)
   
-  hdf_cell_index <- nearest_cell_index_values - 1
+  hdf_cell_index <- coordinates_df[["nearest_cell_index"]] - 1
   
   tibble::tibble(
-    "datetime" = rep(timestamps[time_idx], length(nearest_cell_index_values)), 
+    "datetime" = rep(timestamps[time_idx], nrow(coordinates_df)), 
     "plan_id" = attrs$plan_short_id,
     "plan_file" = attrs$plan_file,
     "time_series_type" = ts_type, 
     "hdf_cell_index" = rep(hdf_cell_index, each = length(time_idx)), 
-    "xin" = rep(cordinates_df$V1, each = length(time_idx)),
-    "yin" = rep(cordinates_df$V2, each = length(time_idx)),
+    "xin" = rep(coordinates_df$V1, each = length(time_idx)),
+    "yin" = rep(coordinates_df$V2, each = length(time_idx)),
     "values" = as.vector(stacked_time_series)
   )
 
