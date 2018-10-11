@@ -36,20 +36,19 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
   }
   
   input_coordinates <- make_coordinate_matrix(xy)
+  cordinates_df <- make_coordinate_df(xy) %>% 
+    dplyr::mutate(
+      nearest_cell_index = 
+        purrr::map2_dbl(V1, V2, ~get_nearest_cell_center_index(c(.x, .y), model_center_coordinates))
+    ) %>% 
+    arrange(nearest_cell_index)
 
-  
   nearest_cell_index <- sapply(seq_len(nrow(input_coordinates)), function(i) {
     get_nearest_cell_center_index(input_coordinates[i,], model_center_coordinates)
   }) 
   
-  print(class(nearest_cell_index))
-  print(length(nearest_cell_index))
-  
   mapped_to_existing_cell <- duplicated(unlist(nearest_cell_index))
   nearest_cell_index_values <- unique(unlist(nearest_cell_index))
-  
-  print(class(nearest_cell_index_values))
-  print(length(nearest_cell_index_values))
   
   # Warn the user when some coordinates provided were within the same cell
   if (length(nearest_cell_index) != length(nearest_cell_index_values)) {
@@ -136,4 +135,3 @@ make_coordinate_df <- function(x) {
     }
   }
 }
-
