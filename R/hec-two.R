@@ -1,8 +1,9 @@
 #' @title Query coordinate 2d data
 #' @description Function extracts a time series from a 2D portion of hec ras model.
-#' @param .f an hdf file read in with hec_file
+#' @param f an hdf file read in with the hec_file() function
 #' @param ts_type the time series to extract, option defaults to Water Surface
 #' @param xy a coordinate or set of coordinates either in a dataframe or matrix 
+#' @param time_stamp return only values with this timestamp
 #' with columns x and y
 #' @examples
 #' \dontrun{
@@ -10,14 +11,14 @@
 #' f <- hec_file("examples/ArdenwoodCreek.p50.hdf")
 #' 
 #' ## water surface time series at the coordinate 4567654.0, 2167453.0
-#' ws <- extract_ts2(f, xy=c(4567654.0, 2167453.0), "Water Surface")
+#' ws <- hec_two(f, xy=c(4567654.0, 2167453.0), "Water Surface")
 #' 
 #' ## water surface time series at multiple coordinates
 #' coords <- c(4567654.0, 2167453.0, 3456124.0, 7856124.0)
-#' ws <- extract_ts2(f, xy=coords, "Water Surface")
+#' ws <- hec_two(f, xy=coords, "Water Surface")
 #' 
 #' ## water surface for a fixed timestamp, useful when querying for large amounts of coordinates. 
-#' ws <- extract_ts2(f, xy=c(4567654.0, 2167453.0), "Water Surface", timestamp="2005-09-12 00:00:00")
+#' ws <- hec_two(f, xy=c(4567654.0, 2167453.0), "Water Surface", timestamp="2005-09-12 00:00:00")
 #' }
 #' @export
 hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
@@ -27,7 +28,8 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
   area_name <- hec_flow_area_(hc)
   model_center_coordinates <- hec_center_coords_(hc, area_name)
   
-  
+  # if stamp is supplied make sure it exists, other use all timestamps
+  # in the model as the timestamp
   if (!is.null(time_stamp)) {
     time_idx <- which(timestamps == time_stamp)
     if (length(time_idx) == 0) stop("supplied value for time_stamp was not found in the model", 
@@ -37,12 +39,8 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
   }
   
   input_coordinates <- make_coordinate_df(xy)
-  colnames(input_coordinates) <- c("V1", "V2")
-  
-  print("Diagnostic Results:")
-  print(paste("The class of coordinate structure", class(input_coordinates)))
-  print(paste("The colnames are", colnames(input_coordinates)))
-  
+  # colnames(input_coordinates) <- c("V1", "V2")
+
   coordinates_df <- input_coordinates %>% 
     dplyr::mutate(
       nearest_cell_index = 
@@ -50,9 +48,6 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
     ) %>% 
     dplyr::distinct(nearest_cell_index, .keep_all = TRUE) %>% 
     dplyr::arrange(nearest_cell_index)
-  
-  print(colnames(coordinates_df))
-  print(head(coordinates_df))
 
   time_series <- hc$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][coordinates_df[["nearest_cell_index"]], time_idx]
 
