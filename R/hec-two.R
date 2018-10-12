@@ -21,12 +21,12 @@
 #' ws <- hec_two(f, xy=c(4567654.0, 2167453.0), "Water Surface", timestamp="2005-09-12 00:00:00")
 #' }
 #' @export
-hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
+hec_two <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
   
-  timestamps <- hec_timestamps_(hc)
-  attrs <- hec_info(hc) 
-  area_name <- hec_flow_area_(hc)
-  model_center_coordinates <- hec_center_coords_(hc, area_name)
+  timestamps <- hec_timestamps_(f)
+  attrs <- hec_info(f) 
+  area_name <- hec_flow_area_(f)
+  model_center_coordinates <- hec_center_coords_(f, area_name)
   
   # if stamp is supplied make sure it exists, other use all timestamps
   # in the model as the timestamp
@@ -49,7 +49,7 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
     dplyr::distinct(nearest_cell_index, .keep_all = TRUE) %>% 
     dplyr::arrange(nearest_cell_index)
 
-  time_series <- hc$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][coordinates_df[["nearest_cell_index"]], time_idx]
+  time_series <- f$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][coordinates_df[["nearest_cell_index"]], time_idx]
 
   stacked_time_series <- matrix(t(time_series), ncol=1, byrow = TRUE)
   
@@ -67,7 +67,6 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
   )
 
 }
-
 
 # INTERNALS
 
@@ -89,25 +88,6 @@ hec_center_coords_ <- function(f, area_name) {
 get_nearest_cell_center_index <- function(coords, nodes) {
   dist <- colSums(sqrt((coords - nodes)^2))
   which.min(dist)[1]
-}
-
-make_coordinate_matrix <- function(x) {
-  if (is.matrix(x)) {
-    if (anyDuplicated(x)) {
-      warning("Duplicate values found in coordinate pairs, only unique pairs were kept")
-      return(matrix(x[!duplicated(x), ], ncol=2, byrow=TRUE))
-    } else 
-      return(x) 
-  } else { 
-    if (length(x) %% 2 != 0) stop("vector must have pairs of coordinates, your vector is of odd length", call. = FALSE)
-    m <- matrix(x, ncol=2, byrow=TRUE)
-    if (anyDuplicated(m)) {
-      warning("Duplicate values found in coodinate pairs, only unique pairs were kept")
-      return(matrix(m[!duplicated(m), ], ncol=2, byrow=TRUE))
-    } else {
-      return(m)
-    }
-  }
 }
 
 make_coordinate_df <- function(x) {
