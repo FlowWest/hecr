@@ -30,11 +30,11 @@ hec_info <- function(hc) {
 #' Print hec 
 #' @export
 print.hec <- function(f) {
-  cat("A hec object----\n")
-  cat("Plan File:", f$attrs$plan_file, "\n")
-  cat("Plan Name:", f$attrs$plan_name, "\n")
-  cat("Geom Name:", f$attrs$geometry_name, "\n")
-  cat("Out Inteval:", f$attrs$output_interval, "\n")
+  cat("A hec object ----\n")
+  cat("  Plan File:", f$attrs$plan_file, "\n")
+  cat("  Plan Name:", f$attrs$plan_name, "\n")
+  cat("  Geom Name:", f$attrs$geometry_name, "\n")
+  cat("  Out Inteval:", f$attrs$output_interval, "\n")
 }
 
 

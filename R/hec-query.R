@@ -21,7 +21,13 @@
 #' ws <- hec_two(f, xy=c(4567654.0, 2167453.0), "Water Surface", timestamp="2005-09-12 00:00:00")
 #' }
 #' @export
-hec_query2 <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
+hec2_query <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
+  
+  if (!inherits(f, "hec")) {
+    stop("object passed to hec2_query() does not appear to be a 'hec' object", 
+         call. = FALSE)
+  }
+
   
   timestamps <- hec_timestamps_(f)
   attrs <- hec_info(f) 
@@ -83,7 +89,7 @@ hec_query2 <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
 hec_query <- function(hc, station_name, ts_type, time_stamp=NULL) {
   
   if (!inherits(hc, "hec")) {
-    stop("hc is not an object of type 'hec', use hec_file() to read in data", 
+    stop("object passed to hec_query() does not appear to be a 'hec' object", 
          call. = FALSE)
   }
   
