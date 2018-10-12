@@ -85,14 +85,24 @@ tree <- function(f, depth=2) {
           for (v in f$object[[i]][[j]][[z]][[w]]$ls()$name) {
             if (depth==4) next
             if (is.null(v)) next
-            cat("\t\t\t|\n")
-            cat("\t\t\t--", v)
-            if (is_dataset(f$object[[i]][[j]][[z]][[w]])) {
+            cat("\t\t\t\t|\n")
+            cat("\t\t\t\t--", v)
+            if (is_dataset(f$object[[i]][[j]][[z]][[w]][[v]])) {
               cat(" (dataset)*\n")
               next
             } 
             cat("\n")
-            
+            for (v2 in f$object[[i]][[j]][[z]][[w]][[v]]$ls()$name) {
+              if (depth==5) next
+              if (is.null(v2)) next
+              cat("\t\t\t\t|\n")
+              cat("\t\t\t\t--", v2)
+              if (is_dataset(f$object[[i]][[j]][[z]][[w]][[v]][[v2]])) {
+                cat(" (dataset)*\n")
+                next
+              } 
+              cat("\n")
+            }
           }
         }
       }
