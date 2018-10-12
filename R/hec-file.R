@@ -38,8 +38,15 @@ print.hec <- function(f) {
 }
 
 #' Show tree directory of hdf file
+#' @description Currently an experimental function used for visualizing 
+#' the data structure in the hdf file.
+#' @param f a hec object
+#' @param depth how deep to print the tree? Currently capped at 4
 #' @export
 tree <- function(f, depth=2) {
+  
+  if (depth > 6) stop("Sorry we currently support max depth 6", call. = F)
+  
   is_dataset <- function(x) {
     inherits(x, "H5D")
   }
@@ -69,7 +76,24 @@ tree <- function(f, depth=2) {
           if (depth==3) next
           if (is.null(w)) next
           cat("\t\t\t|\n")
-          cat("\t\t\t--", w, "\n")
+          cat("\t\t\t--", w)
+          if (is_dataset(f$object[[i]][[j]][[z]][[w]])) {
+            cat(" (dataset)*\n")
+            next
+          } 
+          cat("\n")
+          for (v in f$object[[i]][[j]][[z]][[w]]$ls()$name) {
+            if (depth==4) next
+            if (is.null(v)) next
+            cat("\t\t\t|\n")
+            cat("\t\t\t--", v)
+            if (is_dataset(f$object[[i]][[j]][[z]][[w]])) {
+              cat(" (dataset)*\n")
+              next
+            } 
+            cat("\n")
+            
+          }
         }
       }
     }
