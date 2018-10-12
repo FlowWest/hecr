@@ -37,6 +37,46 @@ print.hec <- function(f) {
   cat("  Out Inteval:", f$attrs$output_interval, "\n")
 }
 
+#' Show tree directory of hdf file
+#' @export
+tree <- function(f, depth=2) {
+  is_dataset <- function(x) {
+    inherits(x, "H5D")
+  }
+  
+  if (!inherits(f, "hec")) {
+    stop("argument is not a 'hec' object")
+  }
+  
+  for (i in f$object$ls()$name) {
+    cat("*Group: ", i, "\n")
+    for (j in f$object[[i]]$ls()$name) {
+      if (depth==1) next
+      if (is.null(j)) next
+      cat("\t|\n")
+      cat("\t--", j, "\n")
+      for (z in f$object[[i]][[j]]$ls()$name) {
+        if (depth==2) next
+        if (is.null(z)) next
+        cat("\t\t|\n")
+        cat("\t\t--", z)
+        if (is_dataset(f$object[[i]][[j]][[z]])) {
+          cat(" (dataset)*\n")
+          next
+        } 
+        cat("\n")
+        for (w in f$object[[i]][[j]][[z]]$ls()$name) {
+          if (depth==3) next
+          if (is.null(w)) next
+          cat("\t\t\t|\n")
+          cat("\t\t\t--", w, "\n")
+        }
+      }
+    }
+    cat("\n")
+  }
+}
+
 
 #' Get Plan Information
 hec_info_ <- function(hc) {
