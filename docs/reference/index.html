@@ -11,7 +11,7 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -21,14 +21,17 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
 
 <meta property="og:title" content="Function reference" />
+
 
 
 <!-- mathjax -->
@@ -45,7 +48,7 @@
   <body>
     <div class="container template-reference-index">
       <header>
-      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -81,7 +84,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Recipes.html">hecr Recipes</a>
+      <a href="../articles/1d_recipe.html">hecr 1D Recipes</a>
+    </li>
+    <li>
+      <a href="../articles/2d_recipe.html">hecr 2D Recipes</a>
     </li>
     <li>
       <a href="../articles/Tutorial.html">hecr Tutorial</a>
@@ -118,6 +124,7 @@
     <table class="ref-index">
 
     <colgroup>
+      
       <col class="alias" />
       <col class="title" />
     </colgroup>
@@ -130,7 +137,7 @@
         </th>
       </tr>
       <tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="hec_file.html">hec_file()</a></code> </p>
         </td>
@@ -144,96 +151,96 @@
         </th>
       </tr>
       <tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="get_model_metadata.html">get_model_metadata()</a></code> </p>
         </td>
         <td><p>Get model metadata</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="get_model_timestamps.html">get_model_timestamps()</a></code> </p>
         </td>
         <td><p>Get model timestamps 
 This should correspond with the width of raw time series dataframes</p></td>
       </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="hec_coordinates.html">hec_coordinates()</a></code> </p>
-        </td>
-        <td><p>Show center coordinates</p></td>
-      </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="hec_crosssections.html">hec_crosssections()</a></code> </p>
         </td>
         <td><p>Plan Cross Sections</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="hec_datasets.html">hec_datasets()</a></code> </p>
         </td>
         <td><p>List Available data</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="hec_extract.html">hec_extract()</a></code> </p>
         </td>
         <td><p>Extract a time series</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="hec_file.html">hec_file()</a></code> </p>
         </td>
         <td><p>Read hec file</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="hec_info.html">hec_info()</a></code> </p>
         </td>
         <td><p>Hec attributes</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="hec_info_.html">hec_info_()</a></code> </p>
         </td>
         <td><p>Get Plan Information</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="hec_ls.html">hec_ls()</a></code> </p>
         </td>
         <td><p>Print list of datasets</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="hec_one.html">hec_one()</a></code> </p>
         </td>
         <td><p>Query one dimensional domains</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="hec_two.html">hec_two()</a></code> </p>
         </td>
         <td><p>Query coordinate 2d data</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="hecr.html">hecr</a></code> </p>
         </td>
         <td><p><code>hecr</code> package</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="print.hec.html">print(<i>&lt;hec&gt;</i>)</a></code> </p>
         </td>
         <td><p>Print hec</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="print.hec_datasets.html">print(<i>&lt;hec_datasets&gt;</i>)</a></code> </p>
         </td>
         <td><p>Print datasets</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tree.html">tree()</a></code> </p>
+        </td>
+        <td><p>Show tree directory of hdf file</p></td>
       </tr>
     </tbody>
     </table>

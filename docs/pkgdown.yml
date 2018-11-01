@@ -1,8 +1,9 @@
-pandoc: 2.2.1
-pkgdown: 1.0.0
+pandoc: 1.19.2.1
+pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
-  Recipes: Recipes.html
+  1d_recipe: 1d_recipe.html
+  2d_recipe: 2d_recipe.html
   Tutorial: Tutorial.html
   hecr: hecr.html
 

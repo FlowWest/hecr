@@ -66,3 +66,79 @@ hec_info_ <- function(hc) {
   )
   
 }
+
+
+#' Show tree directory of hdf file
+#' @description Currently an experimental function used for visualizing 
+#' the data structure in the hdf file.
+#' @param f a hec object
+#' @param depth how deep to print the tree? Currently capped at 6
+#' @export
+tree <- function(f, depth=2) {
+  
+  if (depth > 6) stop("Sorry we currently support max depth 6", call. = F)
+  
+  is_dataset <- function(x) {
+    inherits(x, "H5D")
+  }
+  
+  if (!inherits(f, "hec")) {
+    stop("argument is not a 'hec' object")
+  }
+  
+  for (i in f$object$ls()$name) {
+    cat("*Group: ", i, "\n")
+    for (j in f$object[[i]]$ls()$name) {
+      if (depth==1) next
+      if (is.null(j)) next
+      cat("\t|\n")
+      cat("\t--", j, "\n")
+      for (z in f$object[[i]][[j]]$ls()$name) {
+        if (depth==2) next
+        if (is.null(z)) next
+        cat("\t\t|\n")
+        cat("\t\t--", z)
+        if (is_dataset(f$object[[i]][[j]][[z]])) {
+          cat(" (dataset)*\n")
+          next
+        } 
+        cat("\n")
+        for (w in f$object[[i]][[j]][[z]]$ls()$name) {
+          if (depth==3) next
+          if (is.null(w)) next
+          cat("\t\t\t|\n")
+          cat("\t\t\t--", w)
+          if (is_dataset(f$object[[i]][[j]][[z]][[w]])) {
+            cat(" (dataset)*\n")
+            next
+          } 
+          cat("\n")
+          for (v in f$object[[i]][[j]][[z]][[w]]$ls()$name) {
+            if (depth==4) next
+            if (is.null(v)) next
+            cat("\t\t\t\t|\n")
+            cat("\t\t\t\t--", v)
+            if (is_dataset(f$object[[i]][[j]][[z]][[w]][[v]])) {
+              cat(" (dataset)*\n")
+              next
+            } 
+            cat("\n")
+            for (v2 in f$object[[i]][[j]][[z]][[w]][[v]]$ls()$name) {
+              if (depth==5) next
+              if (is.null(v2)) next
+              cat("\t\t\t\t\t|\n")
+              cat("\t\t\t\t\t--", v2)
+              if (is_dataset(f$object[[i]][[j]][[z]][[w]][[v]][[v2]])) {
+                cat(" (dataset)*\n")
+                next
+              } 
+              cat("\n")
+            }
+          }
+        }
+      }
+    }
+    cat("\n")
+  }
+}
+

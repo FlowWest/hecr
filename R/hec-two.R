@@ -28,7 +28,7 @@ hec_two <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
   area_name <- hec_flow_area_(f)
   model_center_coordinates <- hec_center_coords_(f, area_name)
   
-  # if stamp is supplied make sure it exists, other use all timestamps
+  # if stamp is supplied make sure it exists, otherwise use all timestamps
   # in the model as the timestamp
   if (!is.null(time_stamp)) {
     time_idx <- which(timestamps == time_stamp)

@@ -1,6 +1,10 @@
 template:
   params:
-    bootswatch: simplex
+    bootswatch: yeti
+    
+navbar:
+  title: "hecr"
+  type: inverse
 
 reference:
   - title: Read

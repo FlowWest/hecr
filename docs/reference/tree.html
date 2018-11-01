@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title><code>hecr</code> package — hecr • hecr</title>
+<title>Show tree directory of hdf file — tree • hecr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="<code>hecr</code> package — hecr" />
+<meta property="og:title" content="Show tree directory of hdf file — tree" />
 
-<meta property="og:description" content="hecr an R interface to HEC-Ras Output" />
+<meta property="og:description" content="Currently an experimental function used for visualizing 
+the data structure in the hdf file." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -121,23 +122,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1><code>hecr</code> package</h1>
-    <small class="dont-index">Source: <a href='https://github.com/FlowWest/hecr/blob/master/R/hecr.R'><code>R/hecr.R</code></a></small>
-    <div class="hidden name"><code>hecr.Rd</code></div>
+    <h1>Show tree directory of hdf file</h1>
+    <small class="dont-index">Source: <a href='https://github.com/FlowWest/hecr/blob/master/R/hec-file.R'><code>R/hec-file.R</code></a></small>
+    <div class="hidden name"><code>tree.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>hecr an R interface to HEC-Ras Output</p>
+    <p>Currently an experimental function used for visualizing 
+the data structure in the hdf file.</p>
     
     </div>
 
-        
+    <pre class="usage"><span class='fu'>tree</span>(<span class='no'>f</span>, <span class='kw'>depth</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>f</th>
+      <td><p>a hec object</p></td>
+    </tr>
+    <tr>
+      <th>depth</th>
+      <td><p>how deep to print the tree? Currently capped at 6</p></td>
+    </tr>
+    </table>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
   </div>

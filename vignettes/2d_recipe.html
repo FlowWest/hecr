@@ -14,10 +14,48 @@
 
 <meta name="date" content="2018-11-01" />
 
-<title>hecr Tutorial</title>
+<title>hecr 2D Recipes</title>
 
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
 
 
 
@@ -30,19 +68,80 @@
 
 
 
-<h1 class="title toc-ignore">hecr Tutorial</h1>
+<h1 class="title toc-ignore">hecr 2D Recipes</h1>
 <h4 class="author"><em>Emanuel and Bethany</em></h4>
 <h4 class="date"><em>2018-11-01</em></h4>
 
 
 
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
-<p>The goal of the hecr package is to give a user a simple and consistent interface to retrieving data from an hdf file produced by running a HEC-RAS model. Data resulting from hecr function calls are all in a tidy form, thus allowing a user to use any tidyverse tool. The consistancy in hecr interface and the data returned from it, allows for the possibility of automation, a topic to be covered in an advanced tutorial.</p>
-<p>In the remaining of this document, we cover in detail the usage and real world application of the hecr package.</p>
-<div id="what-is-an-hdf5-file" class="section level2">
-<h2>What is an HDF5 File</h2>
+<p>This article documents a set of solutions for different types of queries carried out on output from 2d hec-ras models.</p>
+<p>Most of these recipes will make use of <strong>dplyr</strong>, <strong>purrr</strong> as well as <strong>ggplot2</strong> and <strong>plotly</strong> for visualizations. Make sure these are installed before running examples.</p>
+<div id="read-and-explore" class="section level2">
+<h2>Read and Explore</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(hecr)
+h &lt;-<span class="st"> </span><span class="kw">hec_file</span>(<span class="st">&quot;../inst/examples/DeerCreek.p01.hdf&quot;</span>)
+
+<span class="kw">print</span>(h)
+
+<span class="co"># A hec object ----</span>
+<span class="co">#   Plan File: DeerCreek.p01 </span>
+<span class="co">#   Plan Name: Existing Conditions </span>
+<span class="co">#   Geom Name: DeerCreek.g01 </span>
+<span class="co">#   Out Inteval: 1HOUR </span></code></pre></div>
+<div id="glimpse-at-hdf-structure" class="section level4">
+<h4>Glimpse at HDF Structure</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tree</span>(h)
+
+<span class="co"># *Group:  Event Conditions </span>
+<span class="co">#   |</span>
+<span class="co">#   -- Steady </span>
+<span class="co"># </span>
+<span class="co"># *Group:  Geometry </span>
+<span class="co">#   |</span>
+<span class="co">#   -- Cross Section Interpolation Surfaces </span>
+<span class="co">#   |</span>
+<span class="co">#   -- Cross Sections </span>
+<span class="co">#   |</span>
+<span class="co">#   -- Junctions </span>
+<span class="co">#   |</span>
+<span class="co">#   -- Land Cover (Manning's n) </span>
+<span class="co">#   |</span>
+<span class="co">#   -- River Bank Lines </span>
+<span class="co">#   |</span>
+<span class="co">#   -- River Centerlines </span>
+<span class="co">#   |</span>
+<span class="co">#   -- River Edge Lines </span>
+<span class="co">#   |</span>
+<span class="co">#   -- Structures </span>
+<span class="co"># </span>
+<span class="co"># *Group:  Plan Data </span>
+<span class="co">#   |</span>
+<span class="co">#   -- Plan Information </span>
+<span class="co">#   |</span>
+<span class="co">#   -- Plan Parameters </span>
+<span class="co"># </span>
+<span class="co"># *Group:  Results </span>
+<span class="co">#   |</span>
+<span class="co">#   -- Steady </span>
+<span class="co">#   |</span>
+<span class="co">#   -- Summary </span></code></pre></div>
+<p>You can glimpse deeper into the structure by passing the <code>depth</code> value to <code>tree()</code>. This is a nice utility to have, but for in depth exploration we recommend using <strong>HDFView</strong> available from the <a href="https://www.hdfgroup.org/">HDF Group</a>.</p>
 </div>
+</div>
+<div id="one-plan-one-coordinate" class="section level2">
+<h2>One plan one coordinate</h2>
+<p>The most basic query is one coordinate and one plan. There is no additional manipulation of <code>hec2_query()</code> to make this query happen.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coord &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)
+<span class="kw">hec_two</span>(h, coord)</code></pre></div>
+</div>
+<div id="one-plan-multiple-coordinates" class="section level2">
+<h2>One plan multiple coordinates</h2>
+</div>
+<div id="one-plan-mutiple-coodinates-for-one-timestamp-profile-line" class="section level2">
+<h2>One Plan, mutiple coodinates for one timestamp (Profile Line)</h2>
+</div>
+<div id="multiple-plans-multiple-coordinates-for-one-timestamp-profile-lines" class="section level2">
+<h2>Multiple plans, multiple coordinates for one timestamp (Profile Lines)</h2>
 </div>
 
 

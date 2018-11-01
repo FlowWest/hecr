@@ -4,15 +4,17 @@
 \alias{hec_two}
 \title{Query coordinate 2d data}
 \usage{
-hec_two(hc, xy, ts_type = "Water Surface", time_stamp = NULL)
+hec_two(f, xy, ts_type = "Water Surface", time_stamp = NULL)
 }
 \arguments{
-\item{xy}{a coordinate or set of coordinates either in a dataframe or matrix 
-with columns x and y}
+\item{f}{an hdf file read in with the hec_file() function}
+
+\item{xy}{a coordinate or set of coordinates either in a dataframe or matrix}
 
 \item{ts_type}{the time series to extract, option defaults to Water Surface}
 
-\item{.f}{an hdf file read in with hec_file}
+\item{time_stamp}{return only values with this timestamp
+with columns x and y}
 }
 \description{
 Function extracts a time series from a 2D portion of hec ras model.
@@ -23,13 +25,13 @@ Function extracts a time series from a 2D portion of hec ras model.
 f <- hec_file("examples/ArdenwoodCreek.p50.hdf")
 
 ## water surface time series at the coordinate 4567654.0, 2167453.0
-ws <- extract_ts2(f, xy=c(4567654.0, 2167453.0), "Water Surface")
+ws <- hec_two(f, xy=c(4567654.0, 2167453.0), "Water Surface")
 
 ## water surface time series at multiple coordinates
 coords <- c(4567654.0, 2167453.0, 3456124.0, 7856124.0)
-ws <- extract_ts2(f, xy=coords, "Water Surface")
+ws <- hec_two(f, xy=coords, "Water Surface")
 
 ## water surface for a fixed timestamp, useful when querying for large amounts of coordinates. 
-ws <- extract_ts2(f, xy=c(4567654.0, 2167453.0), "Water Surface", timestamp="2005-09-12 00:00:00")
+ws <- hec_two(f, xy=c(4567654.0, 2167453.0), "Water Surface", timestamp="2005-09-12 00:00:00")
 }
 }
