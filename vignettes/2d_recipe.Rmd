@@ -127,6 +127,19 @@ length vector of coordinates. The matrix must be *mx2* here *m* is the number of
 coordinates, therefore of even length. We currently support vector since we plan to integrate clipboard
 compatability in the near future. 
 
+```{r eval=FALSE}
+coords <- c(6570468.12123,	1881034.38489,
+            6570186.03222,	1880216.19001,
+            6570167.9381,	1879820.21836,
+            6570141.81282,	1879703.42988,
+            6570114.02745,	1879601.38152,
+            6570108.19281,	1879582.69751,
+            6569969.28791,	1879291.13936
+)
+
+data <- hec_two(h, coords)
+```
+
 ## One Plan, mutiple coodinates for one timestamp (Profile Line)
 
 ## Multiple plans, multiple coordinates for one timestamp (Profile Lines)
