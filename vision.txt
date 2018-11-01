@@ -1,0 +1,21 @@
+hecr vignettes and tutorials:
+
+Get started Page:
+
+1. how to install
+2. what is the mission of the project
+3. one example of 1d 
+4. one example of 2d
+5. links to the full tutorial 
+
+One Dim Queries:
+
+1. 
+
+Two Dim Queries (add this page to tutorial site):
+
+1. one plan- Basic one coordinate one ts type
+2. one plan-Multiple coords and one ts type (facet plot)
+3. one plan-Multiple coords and one ts type and one timestamp (profile line)
+4  multiple plans, multiple coords and one ts type fix timestamp (profile line across different plans)
+5. one of the above for depth

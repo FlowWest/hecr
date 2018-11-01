@@ -41,7 +41,7 @@ print.hec <- function(f) {
 #' @description Currently an experimental function used for visualizing 
 #' the data structure in the hdf file.
 #' @param f a hec object
-#' @param depth how deep to print the tree? Currently capped at 4
+#' @param depth how deep to print the tree? Currently capped at 6
 #' @export
 tree <- function(f, depth=2) {
   
@@ -95,8 +95,8 @@ tree <- function(f, depth=2) {
             for (v2 in f$object[[i]][[j]][[z]][[w]][[v]]$ls()$name) {
               if (depth==5) next
               if (is.null(v2)) next
-              cat("\t\t\t\t|\n")
-              cat("\t\t\t\t--", v2)
+              cat("\t\t\t\t\t|\n")
+              cat("\t\t\t\t\t--", v2)
               if (is_dataset(f$object[[i]][[j]][[z]][[w]][[v]][[v2]])) {
                 cat(" (dataset)*\n")
                 next
