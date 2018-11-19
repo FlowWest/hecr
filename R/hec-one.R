@@ -75,6 +75,3 @@ cross_section_index <- function(model_stations, station) {
   
   cross_section_idx
 }
-
-
-

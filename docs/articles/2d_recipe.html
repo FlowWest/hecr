@@ -91,7 +91,7 @@
       <h1>hecr 2D Recipes</h1>
                         <h4 class="author">Emanuel and Bethany</h4>
             
-            <h4 class="date">2018-11-01</h4>
+            <h4 class="date">2018-11-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/FlowWest/hecr/blob/master/vignettes/2d_recipe.Rmd"><code>vignettes/2d_recipe.Rmd</code></a></small>
       <div class="hidden name"><code>2d_recipe.Rmd</code></div>
@@ -158,6 +158,28 @@ h &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hec_file.
 <span class="co">#   -- Unsteady </span></code></pre></div>
 <p>You can glimpse deeper into the structure by passing the <code>depth</code> value to <code><a href="../reference/tree.html">tree()</a></code>. This is a nice utility to have, but for in depth exploration we recommend using <strong>HDFView</strong> available from the <a href="https://www.hdfgroup.org/">HDF Group</a>.</p>
 </div>
+<div id="hdf5r" class="section level3">
+<h3 class="hasAnchor">
+<a href="#hdf5r" class="anchor"></a>hdf5r</h3>
+<p>The HDF backend for the package is provided through <code>hdf5r</code>. A user is able to explore using the <code>hdf5r</code> API by exposing the HDF5 object:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># h is still the 'hec-file' object from above</span>
+hdf_obj &lt;-<span class="st"> </span>h<span class="op">$</span>object
+
+<span class="kw">print</span>(hdf_obj)
+
+<span class="co"># Class: H5File</span>
+<span class="co"># Filename: /home/emanuel/Projects/hecr/inst/examples/LowerDeerCreek_2018.p10.hdf</span>
+<span class="co"># Access type: H5F_ACC_RDONLY</span>
+<span class="co"># Attributes: File Type, Units System, File Version, Projection</span>
+<span class="co"># Listing:</span>
+<span class="co">#              name  obj_type dataset.dims dataset.type_class</span>
+<span class="co">#  Event Conditions H5I_GROUP         &lt;NA&gt;               &lt;NA&gt;</span>
+<span class="co">#          Geometry H5I_GROUP         &lt;NA&gt;               &lt;NA&gt;</span>
+<span class="co">#         Plan Data H5I_GROUP         &lt;NA&gt;               &lt;NA&gt;</span>
+<span class="co">#           Results H5I_GROUP         &lt;NA&gt;               &lt;NA&gt;</span></code></pre></div>
+<p>Learn more about <a href="https://github.com/hhoeflin/hdf5r">hdf5r here</a></p>
+<p>The rest of this article focuses on common queries.</p>
+</div>
 </div>
 <div id="one-plan-one-coordinate" class="section level2">
 <h2 class="hasAnchor">
@@ -179,57 +201,71 @@ data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hec_tw
 <span class="co"># $ yin              &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, ...</span>
 <span class="co"># $ values           &lt;dbl&gt; 196.020980834961, 196.02098083...</span></code></pre></div>
 <p>The structure of the data is as follows:</p>
-<table style="width:44%;" class="table">
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="25%">
-<col width="19%">
+<col width="20%">
+<col width="79%">
 </colgroup>
 <thead><tr class="header">
-<th>Column Name</th>
-<th>Description</th>
+<th align="left">Column Nmae</th>
+<th align="left">Description</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>datetime</td>
-<td>a datatime object with date and time of record</td>
+<td align="left">datetime</td>
+<td align="left">a datatime object with date and time of record</td>
 </tr>
 <tr class="even">
-<td>plan_id</td>
-<td>a string with the name of the plan</td>
+<td align="left">plan_id</td>
+<td align="left">a string with the name of the plan</td>
 </tr>
 <tr class="odd">
-<td>plan_file</td>
-<td>a string with the name of file queried from</td>
+<td align="left">plan_file</td>
+<td align="left">a string with the name of file queried from</td>
 </tr>
 <tr class="even">
-<td>time_series_type</td>
-<td>the time series that was queried</td>
+<td align="left">time_series_type</td>
+<td align="left">the time series that was queried</td>
 </tr>
 <tr class="odd">
-<td>hdf_cell_index</td>
-<td>the cell index from the hdf file that was chosen for the coordinate</td>
+<td align="left">hdf_cell_index</td>
+<td align="left">the cell index from the hdf file that was chosen for the coordinate</td>
 </tr>
 <tr class="even">
-<td>xin</td>
-<td>the corresponding x-coordinate supplied</td>
+<td align="left">xin</td>
+<td align="left">the corresponding x-coordinate supplied</td>
 </tr>
 <tr class="odd">
-<td>yin</td>
-<td>the corresponding y-coordinate supplied</td>
+<td align="left">yin</td>
+<td align="left">the corresponding y-coordinate supplied</td>
 </tr>
 <tr class="even">
-<td>values</td>
-<td>the value of the time series</td>
+<td align="left">values</td>
+<td align="left">the value of the time series</td>
 </tr>
 </tbody>
 </table>
 <p>We can plot this data using ggplot2</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(datetime, values)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>()</code></pre></div>
+<div class="figure">
+<img src="images/2d-recipes-one-plan-one-coord.png" alt="one plan"><p class="caption">one plan</p>
+</div>
 </div>
 <div id="one-plan-multiple-coordinates" class="section level2">
 <h2 class="hasAnchor">
 <a href="#one-plan-multiple-coordinates" class="anchor"></a>One plan multiple coordinates</h2>
 <p>To query multiple coordinates out of the hdf file, simply provide a matrix, or an even length vector of coordinates. The matrix must be <em>mx2</em> here <em>m</em> is the number of coordinates and 2 is the <em>x</em> and <em>y</em> coordinates (in that order). There is no limit on <em>m</em>. The other option is a vector of pairs of coordinates, therefore of even length. We currently support vector since we plan to integrate clipboard compatability in the near future.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coords &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">6570468.12123</span>,  <span class="fl">1881034.38489</span>,
+            <span class="fl">6570186.03222</span>,  <span class="fl">1880216.19001</span>,
+            <span class="fl">6570167.9381</span>,   <span class="fl">1879820.21836</span>,
+            <span class="fl">6570141.81282</span>,  <span class="fl">1879703.42988</span>,
+            <span class="fl">6570114.02745</span>,  <span class="fl">1879601.38152</span>,
+            <span class="fl">6570108.19281</span>,  <span class="fl">1879582.69751</span>,
+            <span class="fl">6569969.28791</span>,  <span class="fl">1879291.13936</span>
+)
+
+data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hec_two.html">hec_two</a></span>(h, coords)</code></pre></div>
 </div>
 <div id="one-plan-mutiple-coodinates-for-one-timestamp-profile-line" class="section level2">
 <h2 class="hasAnchor">

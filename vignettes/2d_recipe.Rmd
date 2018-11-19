@@ -78,6 +78,33 @@ You can glimpse deeper into the structure by passing the `depth` value to `tree(
 recommend using **HDFView** available from the [HDF Group](https://www.hdfgroup.org/). 
 
 
+### hdf5r 
+
+The HDF backend for the package is provided through `hdf5r`. A user is able to 
+explore using the `hdf5r` API by exposing the HDF5 object:
+
+```{r eval=FALSE}
+# h is still the 'hec-file' object from above
+hdf_obj <- h$object
+
+print(hdf_obj)
+
+# Class: H5File
+# Filename: /home/emanuel/Projects/hecr/inst/examples/LowerDeerCreek_2018.p10.hdf
+# Access type: H5F_ACC_RDONLY
+# Attributes: File Type, Units System, File Version, Projection
+# Listing:
+#              name  obj_type dataset.dims dataset.type_class
+#  Event Conditions H5I_GROUP         <NA>               <NA>
+#          Geometry H5I_GROUP         <NA>               <NA>
+#         Plan Data H5I_GROUP         <NA>               <NA>
+#           Results H5I_GROUP         <NA>               <NA>
+```
+
+Learn more about [hdf5r here](https://github.com/hhoeflin/hdf5r)
+
+The rest of this article focuses on common queries.
+
 ## One plan one coordinate
 
 The most basic query is one coordinate and one plan. There is no additional 
@@ -103,22 +130,25 @@ glimpse(data)
 
 The structure of the data is as follows:
 
-|Column Name      | Description |
-|-----------------|-------------|
-|datetime| a datatime object with date and time of record|
-|plan_id          | a string with the name of the plan |
-|plan_file        | a string with the name of file queried from |
-|time_series_type | the time series that was queried |
-|hdf_cell_index   | the cell index from the hdf file that was chosen for the coordinate |
-|xin              | the corresponding x-coordinate supplied |
-|yin              | the corresponding y-coordinate supplied |
-|values           | the value of the time series |
+|Column Nmae      |Description                                                         |
+|:----------------|:-------------------------------------------------------------------|
+|datetime         |a datatime object with date and time of record                      |
+|plan_id          |a string with the name of the plan                                  |
+|plan_file        |a string with the name of file queried from                         |
+|time_series_type |the time series that was queried                                    |
+|hdf_cell_index   |the cell index from the hdf file that was chosen for the coordinate |
+|xin              |the corresponding x-coordinate supplied                             |
+|yin              |the corresponding y-coordinate supplied                             |
+|values           |the value of the time series                                        |
 
 We can plot this data using ggplot2
 
 ```{r eval=FALSE}
+library(ggplot2)
 data %>% ggplot(aes(datetime, values)) + geom_line()
 ```
+
+![one plan](images/2d-recipes-one-plan-one-coord.png)
 
 ## One plan multiple coordinates
 

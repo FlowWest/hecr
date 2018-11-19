@@ -12,7 +12,7 @@
 
 <meta name="author" content="Emanuel and Bethany" />
 
-<meta name="date" content="2018-11-01" />
+<meta name="date" content="2018-11-19" />
 
 <title>hecr 2D Recipes</title>
 
@@ -70,47 +70,50 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">hecr 2D Recipes</h1>
 <h4 class="author"><em>Emanuel and Bethany</em></h4>
-<h4 class="date"><em>2018-11-01</em></h4>
+<h4 class="date"><em>2018-11-19</em></h4>
 
 
 
+<p><strong>DRAFT</strong></p>
 <p>This article documents a set of solutions for different types of queries carried out on output from 2d hec-ras models.</p>
 <p>Most of these recipes will make use of <strong>dplyr</strong>, <strong>purrr</strong> as well as <strong>ggplot2</strong> and <strong>plotly</strong> for visualizations. Make sure these are installed before running examples.</p>
 <div id="read-and-explore" class="section level2">
 <h2>Read and Explore</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(hecr)
-h &lt;-<span class="st"> </span><span class="kw">hec_file</span>(<span class="st">&quot;../inst/examples/DeerCreek.p01.hdf&quot;</span>)
+h &lt;-<span class="st"> </span><span class="kw">hec_file</span>(<span class="st">&quot;../inst/examples/LowerDeerCreek_2018.p10.hdf&quot;</span>)
 
 <span class="kw">print</span>(h)
 
-<span class="co"># A hec object ----</span>
-<span class="co">#   Plan File: DeerCreek.p01 </span>
-<span class="co">#   Plan Name: Existing Conditions </span>
-<span class="co">#   Geom Name: DeerCreek.g01 </span>
-<span class="co">#   Out Inteval: 1HOUR </span></code></pre></div>
+<span class="co"># A hec object----</span>
+<span class="co"># Plan File: LowerDeerCreek_2018.p10 </span>
+<span class="co"># Plan Name: Existing_LidarCalib_20180830 </span>
+<span class="co"># Geom Name: LowerDeerCreek_2018.g13 </span>
+<span class="co"># Out Inteval: 15MIN </span></code></pre></div>
 <div id="glimpse-at-hdf-structure" class="section level4">
 <h4>Glimpse at HDF Structure</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tree</span>(h)
 
 <span class="co"># *Group:  Event Conditions </span>
 <span class="co">#   |</span>
-<span class="co">#   -- Steady </span>
+<span class="co">#   -- Unsteady </span>
 <span class="co"># </span>
 <span class="co"># *Group:  Geometry </span>
 <span class="co">#   |</span>
-<span class="co">#   -- Cross Section Interpolation Surfaces </span>
+<span class="co">#   -- 2D Flow Area Break Lines </span>
 <span class="co">#   |</span>
-<span class="co">#   -- Cross Sections </span>
+<span class="co">#   -- 2D Flow Areas </span>
 <span class="co">#   |</span>
-<span class="co">#   -- Junctions </span>
+<span class="co">#   -- Boundary Condition Lines </span>
 <span class="co">#   |</span>
 <span class="co">#   -- Land Cover (Manning's n) </span>
 <span class="co">#   |</span>
 <span class="co">#   -- River Bank Lines </span>
 <span class="co">#   |</span>
-<span class="co">#   -- River Centerlines </span>
-<span class="co">#   |</span>
 <span class="co">#   -- River Edge Lines </span>
+<span class="co">#   |</span>
+<span class="co">#   -- River Flow Paths </span>
+<span class="co">#   |</span>
+<span class="co">#   -- River Stationing </span>
 <span class="co">#   |</span>
 <span class="co">#   -- Structures </span>
 <span class="co"># </span>
@@ -122,20 +125,98 @@ h &lt;-<span class="st"> </span><span class="kw">hec_file</span>(<span class="st
 <span class="co"># </span>
 <span class="co"># *Group:  Results </span>
 <span class="co">#   |</span>
-<span class="co">#   -- Steady </span>
+<span class="co">#   -- Summary </span>
 <span class="co">#   |</span>
-<span class="co">#   -- Summary </span></code></pre></div>
+<span class="co">#   -- Unsteady </span></code></pre></div>
 <p>You can glimpse deeper into the structure by passing the <code>depth</code> value to <code>tree()</code>. This is a nice utility to have, but for in depth exploration we recommend using <strong>HDFView</strong> available from the <a href="https://www.hdfgroup.org/">HDF Group</a>.</p>
+</div>
+<div id="hdfr" class="section level3">
+<h3>HDFR</h3>
+<p>The HDF backend for the package is provided through <code>hdfr</code>. A user is able to explore using the <code>hdfr</code> API by exposing the HDF5 object:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hdf_obj &lt;-<span class="st"> </span>h<span class="op">$</span>object</code></pre></div>
 </div>
 </div>
 <div id="one-plan-one-coordinate" class="section level2">
 <h2>One plan one coordinate</h2>
-<p>The most basic query is one coordinate and one plan. There is no additional manipulation of <code>hec2_query()</code> to make this query happen.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coord &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)
-<span class="kw">hec_two</span>(h, coord)</code></pre></div>
+<p>The most basic query is one coordinate and one plan. There is no additional manipulation of <code>hec_two()</code> to make this query happen.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coord &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">6570468.12123</span>, <span class="fl">1881034.38489</span>)
+data &lt;-<span class="st"> </span><span class="kw">hec_two</span>(h, coord)
+
+<span class="kw">glimpse</span>(data)
+
+<span class="co"># Observations: 97</span>
+<span class="co"># Variables: 8</span>
+<span class="co"># $ datetime         &lt;dttm&gt; 2018-02-07 00:00:00, 2018-02-...</span>
+<span class="co"># $ plan_id          &lt;chr&gt; &quot;Existing_LidarCalib_20180830&quot;...</span>
+<span class="co"># $ plan_file        &lt;chr&gt; &quot;LowerDeerCreek_2018.p10&quot;, &quot;Lo...</span>
+<span class="co"># $ time_series_type &lt;chr&gt; &quot;Water Surface&quot;, &quot;Water Surfac...</span>
+<span class="co"># $ hdf_cell_index   &lt;dbl&gt; 445700, 445700, 445700, 445700...</span>
+<span class="co"># $ xin              &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...</span>
+<span class="co"># $ yin              &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, ...</span>
+<span class="co"># $ values           &lt;dbl&gt; 196.020980834961, 196.02098083...</span></code></pre></div>
+<p>The structure of the data is as follows:</p>
+<table style="width:44%;">
+<colgroup>
+<col width="25%"></col>
+<col width="19%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>datetime</td>
+<td>a datatime object with date and time of record</td>
+</tr>
+<tr class="even">
+<td>plan_id</td>
+<td>a string with the name of the plan</td>
+</tr>
+<tr class="odd">
+<td>plan_file</td>
+<td>a string with the name of file queried from</td>
+</tr>
+<tr class="even">
+<td>time_series_type</td>
+<td>the time series that was queried</td>
+</tr>
+<tr class="odd">
+<td>hdf_cell_index</td>
+<td>the cell index from the hdf file that was chosen for the coordinate</td>
+</tr>
+<tr class="even">
+<td>xin</td>
+<td>the corresponding x-coordinate supplied</td>
+</tr>
+<tr class="odd">
+<td>yin</td>
+<td>the corresponding y-coordinate supplied</td>
+</tr>
+<tr class="even">
+<td>values</td>
+<td>the value of the time series</td>
+</tr>
+</tbody>
+</table>
+<p>We can plot this data using ggplot2</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(datetime, values)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
 </div>
 <div id="one-plan-multiple-coordinates" class="section level2">
 <h2>One plan multiple coordinates</h2>
+<p>To query multiple coordinates out of the hdf file, simply provide a matrix, or an even length vector of coordinates. The matrix must be <em>mx2</em> here <em>m</em> is the number of coordinates and 2 is the <em>x</em> and <em>y</em> coordinates (in that order). There is no limit on <em>m</em>. The other option is a vector of pairs of coordinates, therefore of even length. We currently support vector since we plan to integrate clipboard compatability in the near future.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coords &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">6570468.12123</span>,  <span class="fl">1881034.38489</span>,
+            <span class="fl">6570186.03222</span>,  <span class="fl">1880216.19001</span>,
+            <span class="fl">6570167.9381</span>,   <span class="fl">1879820.21836</span>,
+            <span class="fl">6570141.81282</span>,  <span class="fl">1879703.42988</span>,
+            <span class="fl">6570114.02745</span>,  <span class="fl">1879601.38152</span>,
+            <span class="fl">6570108.19281</span>,  <span class="fl">1879582.69751</span>,
+            <span class="fl">6569969.28791</span>,  <span class="fl">1879291.13936</span>
+)
+
+data &lt;-<span class="st"> </span><span class="kw">hec_two</span>(h, coords)</code></pre></div>
 </div>
 <div id="one-plan-mutiple-coodinates-for-one-timestamp-profile-line" class="section level2">
 <h2>One Plan, mutiple coodinates for one timestamp (Profile Line)</h2>
