@@ -294,6 +294,32 @@ dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.
 <div id="one-plan-mutiple-coodinates-for-one-timestamp-profile-line" class="section level2">
 <h2 class="hasAnchor">
 <a href="#one-plan-mutiple-coodinates-for-one-timestamp-profile-line" class="anchor"></a>One Plan, mutiple coodinates for one timestamp (Profile Line)</h2>
+<p>With the optional time stamp parameter, you can fix the time portion of query to a desired stamp and query values for a large number of coordinates. Although you could query all data then perform a filter to a time stamp (which you can totally do), passing in the time stamp allows you to save a lot memory resources since the package will only read in the time stamp desired straight from the hdf file (using hdf5r).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coords_m
+
+tstamp &lt;-<span class="st"> "2018-02-07 01:15:00"</span>
+
+data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hec_two.html">hec_two</a></span>(f, coords_m, <span class="dt">time_stamp =</span> tstamp)
+
+<span class="kw">glimpse</span>(data)
+
+<span class="co"># Observations: 7</span>
+<span class="co"># Variables: 8</span>
+<span class="co"># $ datetime         &lt;dttm&gt; 2018-02-07 01:15:00, 2018-02-07 01:15:00, 2018-02-07 01:15:00, ...</span>
+<span class="co"># $ plan_id          &lt;chr&gt; "Existing_LidarCalib_20180830", "Existing_LidarCalib_20180830", ...</span>
+<span class="co"># $ plan_file        &lt;chr&gt; "LowerDeerCreek_2018.p10", "LowerDeerCreek_2018.p10", "LowerDeer...</span>
+<span class="co"># $ time_series_type &lt;chr&gt; "Water Surface", "Water Surface", "Water Surface", "Water Surfac...</span>
+<span class="co"># $ hdf_cell_index   &lt;dbl&gt; 391410, 391542, 391596, 391612, 391626, 391628, 391674</span>
+<span class="co"># $ xin              &lt;dbl&gt; 6570468.12123, 6570186.03222, 6570167.93810, 6570141.81282, 6570...</span>
+<span class="co"># $ yin              &lt;dbl&gt; 1881034.38489, 1880216.19001, 1879820.21836, 1879703.42988, 1879...</span>
+<span class="co"># $ values           &lt;dbl&gt; 403.998809814453, 396.334991455078, 395.906250000000, 395.625000...</span></code></pre></div>
+<p>As expected the output now only has 7 observations, one for each coordinate, each reporting the value observed at the time specified.</p>
+<p>Here we plot this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(hdf_cell_index, values)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>()</code></pre></div>
+<div class="figure">
+<img src="images/2d-recipes-one-plan-multiple-coords-timestamp.png" alt="profile line"><p class="caption">profile line</p>
+</div>
 </div>
 <div id="multiple-plans-multiple-coordinates-for-one-timestamp-profile-lines" class="section level2">
 <h2 class="hasAnchor">
