@@ -1,5 +1,14 @@
 # hecr.Rmd file
 
+## Todo (winter break)
+The goal is to complete the teims in this list before the winter break so that 
+is before Decemeber 21st. 
+
+[ ] finish the vignettes for the 2-d recipes
+[ ] refactor the hec_two function 
+[ ] integrate any changes that were planned for the redesign back into the mater branch
+[ ] 
+
 ## After the usage section before one-d examples
 
 **#EMANUEL: CAN WE PUT SOMETHING ABOUT UPCOMMING FEATURES HERE? 

@@ -50,7 +50,21 @@
 #  # 	-- Unsteady
 
 ## ----eval=FALSE----------------------------------------------------------
+#  # h is still the 'hec-file' object from above
 #  hdf_obj <- h$object
+#  
+#  print(hdf_obj)
+#  
+#  # Class: H5File
+#  # Filename: /home/emanuel/Projects/hecr/inst/examples/LowerDeerCreek_2018.p10.hdf
+#  # Access type: H5F_ACC_RDONLY
+#  # Attributes: File Type, Units System, File Version, Projection
+#  # Listing:
+#  #              name  obj_type dataset.dims dataset.type_class
+#  #  Event Conditions H5I_GROUP         <NA>               <NA>
+#  #          Geometry H5I_GROUP         <NA>               <NA>
+#  #         Plan Data H5I_GROUP         <NA>               <NA>
+#  #           Results H5I_GROUP         <NA>               <NA>
 
 ## ----eval=FALSE----------------------------------------------------------
 #  coord <- c(6570468.12123, 1881034.38489)
@@ -70,6 +84,7 @@
 #  # $ values           <dbl> 196.020980834961, 196.02098083...
 
 ## ----eval=FALSE----------------------------------------------------------
+#  library(ggplot2)
 #  data %>% ggplot(aes(datetime, values)) + geom_line()
 
 ## ----eval=FALSE----------------------------------------------------------

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Query coordinate 2d data — hec_two • hecr</title>
+<title>Query 2d Model Results — hec_two • hecr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Query coordinate 2d data — hec_two" />
+<meta property="og:title" content="Query 2d Model Results — hec_two" />
 
-<meta property="og:description" content="Function extracts a time series from a 2D portion of hec ras model." />
+<meta property="og:description" content="hec_two allows you query a time series from a hec-ras model result
+using one more coordinates and an optional time stamp." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -121,14 +122,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Query coordinate 2d data</h1>
+    <h1>Query 2d Model Results</h1>
     <small class="dont-index">Source: <a href='https://github.com/FlowWest/hecr/blob/master/R/hec-two.R'><code>R/hec-two.R</code></a></small>
     <div class="hidden name"><code>hec_two.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Function extracts a time series from a 2D portion of hec ras model.</p>
+    <p>hec_two allows you query a time series from a hec-ras model result
+using one more coordinates and an optional time stamp.</p>
     
     </div>
 
@@ -143,7 +145,8 @@
     </tr>
     <tr>
       <th>xy</th>
-      <td><p>a coordinate or set of coordinates either in a dataframe or matrix</p></td>
+      <td><p>a coordinate or set of coordinates either in a dataframe, matrix, or vector form. See
+details below for more information.</p></td>
     </tr>
     <tr>
       <th>ts_type</th>
@@ -151,10 +154,17 @@
     </tr>
     <tr>
       <th>time_stamp</th>
-      <td><p>return only values with this timestamp
-with columns x and y</p></td>
+      <td><p>return only values with this timestamp</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>You can supply the coordinate(s) to hec_two in a number of ways. A vector with even length, 
+here it is assumed that subsequent pairs are coordinates (i.e c(1, 2, 3, 4) is two coordinates
+(1, 2) and (3, 4)). You can also supply coordinates in as a matrix. The matrix must have two columns, 
+the first corresponding to the x the second to y. Lastly you can supply a dataframe with any number 
+columns as long as the coordinates columns are labeled 'x' and 'y'.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -177,7 +187,9 @@ with columns x and y</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#details">Details</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

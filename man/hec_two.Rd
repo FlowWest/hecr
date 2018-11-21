@@ -2,22 +2,30 @@
 % Please edit documentation in R/hec-two.R
 \name{hec_two}
 \alias{hec_two}
-\title{Query coordinate 2d data}
+\title{Query 2d Model Results}
 \usage{
 hec_two(f, xy, ts_type = "Water Surface", time_stamp = NULL)
 }
 \arguments{
 \item{f}{an hdf file read in with the hec_file() function}
 
-\item{xy}{a coordinate or set of coordinates either in a dataframe or matrix}
+\item{xy}{a coordinate or set of coordinates either in a dataframe, matrix, or vector form. See
+details below for more information.}
 
 \item{ts_type}{the time series to extract, option defaults to Water Surface}
 
-\item{time_stamp}{return only values with this timestamp
-with columns x and y}
+\item{time_stamp}{return only values with this timestamp}
 }
 \description{
-Function extracts a time series from a 2D portion of hec ras model.
+hec_two allows you query a time series from a hec-ras model result
+using one more coordinates and an optional time stamp.
+}
+\details{
+You can supply the coordinate(s) to hec_two in a number of ways. A vector with even length, 
+here it is assumed that subsequent pairs are coordinates (i.e c(1, 2, 3, 4) is two coordinates
+(1, 2) and (3, 4)). You can also supply coordinates in as a matrix. The matrix must have two columns, 
+the first corresponding to the x the second to y. Lastly you can supply a dataframe with any number 
+columns as long as the coordinates columns are labeled 'x' and 'y'.
 }
 \examples{
 \dontrun{
