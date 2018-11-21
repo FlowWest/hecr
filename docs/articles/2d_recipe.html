@@ -255,8 +255,9 @@ data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a 
 <div id="one-plan-multiple-coordinates" class="section level2">
 <h2 class="hasAnchor">
 <a href="#one-plan-multiple-coordinates" class="anchor"></a>One plan multiple coordinates</h2>
-<p>To query multiple coordinates out of the hdf file, simply provide a matrix, or an even length vector of coordinates. The matrix must be <em>mx2</em> here <em>m</em> is the number of coordinates and 2 is the <em>x</em> and <em>y</em> coordinates (in that order). There is no limit on <em>m</em>. The other option is a vector of pairs of coordinates, therefore of even length. We currently support vector since we plan to integrate clipboard compatability in the near future.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coords &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">6570468.12123</span>,  <span class="fl">1881034.38489</span>,
+<p>To query multiple coordinates out of the hdf file, simply provide a matrix, or an even length vector of coordinates. The matrix must be <em>mx2</em> here <em>m</em> is the number of coordinates and 2 is the <em>x</em> and <em>y</em> coordinates (in that order). There is no limit on <em>m</em>. The other option is a vector of pairs of coordinates, therefore of even length. We currently support vector for quick queries and testing but a sophisicated script should be supplying a matrix as input.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># define a vector of coordinates</span>
+coords_vs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">6570468.12123</span>,   <span class="fl">1881034.38489</span>,
             <span class="fl">6570186.03222</span>,  <span class="fl">1880216.19001</span>,
             <span class="fl">6570167.9381</span>,   <span class="fl">1879820.21836</span>,
             <span class="fl">6570141.81282</span>,  <span class="fl">1879703.42988</span>,
@@ -265,7 +266,30 @@ data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a 
             <span class="fl">6569969.28791</span>,  <span class="fl">1879291.13936</span>
 )
 
-data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hec_two.html">hec_two</a></span>(h, coords)</code></pre></div>
+<span class="co"># you can also supply a matrix</span>
+coords_m &lt;-<span class="st"> </span><span class="kw">matrix</span>(coords_vs, <span class="dt">ncol=</span><span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)
+
+data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hec_two.html">hec_two</a></span>(h, coords_m)
+
+dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/reexports.html">glimpse</a></span>(data)
+
+<span class="co"># Observations: 679</span>
+<span class="co"># Variables: 8</span>
+<span class="co"># $ datetime         &lt;dttm&gt; 2018-02-07 00:00:00, 2018-02-07 00:15:00, 2018-02-07 00:30:00, ...</span>
+<span class="co"># $ plan_id          &lt;chr&gt; "Existing_LidarCalib_20180830", "Existing_LidarCalib_20180830", ...</span>
+<span class="co"># $ plan_file        &lt;chr&gt; "LowerDeerCreek_2018.p10", "LowerDeerCreek_2018.p10", "LowerDeer...</span>
+<span class="co"># $ time_series_type &lt;chr&gt; "Water Surface", "Water Surface", "Water Surface", "Water Surfac...</span>
+<span class="co"># $ hdf_cell_index   &lt;dbl&gt; 391410, 391410, 391410, 391410, 391410, 391410, 391410, 391410, ...</span>
+<span class="co"># $ xin              &lt;dbl&gt; 6570468.12123, 6570468.12123, 6570468.12123, 6570468.12123, 6570...</span>
+<span class="co"># $ yin              &lt;dbl&gt; 1881034.38489, 1881034.38489, 1881034.38489, 1881034.38489, 1881...</span>
+<span class="co"># $ values           &lt;dbl&gt; 403.998809814453, 403.998809814453, 403.998809814453, 403.998809...</span></code></pre></div>
+<p>When you query multiple coordinates, the “hdf_cell_index” becomes an importnat attribute, it maps the input coordinate (that you supplied) to the corresponding cell in the model that hecr determined to be the closest. You can use this attrbute to, group by, color and other “group” operations.</p>
+<p>Here we plot the time series based on these inputs, and color by the cell index. Note that the cell index a numeric and thus needs to casted to factor or character for ggplot to properly display these are different time series.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(datetime, values, <span class="dt">color=</span><span class="kw">as.factor</span>(hdf_cell_index))) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>()</code></pre></div>
+<div class="figure">
+<img src="images/2d-recipes-one-plan-multiple-coords.png" alt="multiple coords"><p class="caption">multiple coords</p>
+</div>
 </div>
 <div id="one-plan-mutiple-coodinates-for-one-timestamp-profile-line" class="section level2">
 <h2 class="hasAnchor">

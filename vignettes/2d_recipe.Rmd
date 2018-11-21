@@ -154,11 +154,12 @@ data %>% ggplot(aes(datetime, values)) + geom_line()
 
 To query multiple coordinates out of the hdf file, simply provide a matrix, or an even
 length vector of coordinates. The matrix must be *mx2* here *m* is the number of coordinates and 2 is the *x* and *y* coordinates (in that order). There is no limit on *m*. The other option is a vector of pairs of
-coordinates, therefore of even length. We currently support vector since we plan to integrate clipboard
-compatability in the near future. 
+coordinates, therefore of even length. We currently support vector for quick queries and testing
+but a sophisicated script should be supplying a matrix as input.
 
 ```{r eval=FALSE}
-coords <- c(6570468.12123,	1881034.38489,
+# define a vector of coordinates
+coords_vs <- c(6570468.12123,	1881034.38489,
             6570186.03222,	1880216.19001,
             6570167.9381,	1879820.21836,
             6570141.81282,	1879703.42988,
@@ -167,8 +168,41 @@ coords <- c(6570468.12123,	1881034.38489,
             6569969.28791,	1879291.13936
 )
 
-data <- hec_two(h, coords)
+# you can also supply a matrix
+coords_m <- matrix(coords_vs, ncol=2, byrow = TRUE)
+
+data <- hec_two(h, coords_m)
+
+dplyr::glimpse(data)
+
+# Observations: 679
+# Variables: 8
+# $ datetime         <dttm> 2018-02-07 00:00:00, 2018-02-07 00:15:00, 2018-02-07 00:30:00, ...
+# $ plan_id          <chr> "Existing_LidarCalib_20180830", "Existing_LidarCalib_20180830", ...
+# $ plan_file        <chr> "LowerDeerCreek_2018.p10", "LowerDeerCreek_2018.p10", "LowerDeer...
+# $ time_series_type <chr> "Water Surface", "Water Surface", "Water Surface", "Water Surfac...
+# $ hdf_cell_index   <dbl> 391410, 391410, 391410, 391410, 391410, 391410, 391410, 391410, ...
+# $ xin              <dbl> 6570468.12123, 6570468.12123, 6570468.12123, 6570468.12123, 6570...
+# $ yin              <dbl> 1881034.38489, 1881034.38489, 1881034.38489, 1881034.38489, 1881...
+# $ values           <dbl> 403.998809814453, 403.998809814453, 403.998809814453, 403.998809...
 ```
+
+When you query multiple coordinates, the "hdf_cell_index" becomes an importnat attribute, it maps
+the input coordinate (that you supplied) to the corresponding cell in the model that hecr 
+determined to be the closest. You can use this attrbute to, group by, color and other "group"
+operations. 
+
+Here we plot the time series based on these inputs, and color by the cell index. Note that
+the cell index a numeric and thus needs to casted to factor or character for ggplot to properly
+display these are different time series. 
+
+```{r eval=FALSE}
+data %>% ggplot(aes(datetime, values, color=as.factor(hdf_cell_index))) + 
+  geom_line()
+```
+
+![multiple coords](images/2d-recipes-one-plan-multiple-coords.png)
+
 
 ## One Plan, mutiple coodinates for one timestamp (Profile Line)
 

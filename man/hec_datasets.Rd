@@ -9,9 +9,9 @@ hec_datasets(hc, domain = NULL)
 \arguments{
 \item{hc}{a "hec" object}
 
-\item{domain}{which domain to list data for, will default to both options are 'one' or 'two'}
+\item{domain}{which domain to list data for, will default to both, options are 'one' or 'two'}
 }
 \description{
-list the data that is avaialble to query on. This values
-depends on whether a query is set to 'one' or 'two' dimensional domains
+list the datasets available in the hdf file. Use domain to show only one of 
+'two' dimensions or 'one' crossetions. By default it will show both (if available).
 }

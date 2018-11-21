@@ -1,8 +1,8 @@
 #' List Available data
-#' @description list the data that is avaialble to query on. This values
-#' depends on whether a query is set to 'one' or 'two' dimensional domains
+#' @description list the datasets available in the hdf file. Use domain to show only one of 
+#' 'two' dimensions or 'one' crossetions. By default it will show both (if available).
 #' @param hc a "hec" object 
-#' @param domain which domain to list data for, will default to both options are 'one' or 'two'
+#' @param domain which domain to list data for, will default to both, options are 'one' or 'two'
 #' @export 
 hec_datasets <- function(hc, domain=NULL) {
   one_path <- "Results/Unsteady/Output/Output Blocks/Base Output/Unsteady Time Series/Cross Sections"
