@@ -7,7 +7,7 @@
 hec_datasets(hc, domain = NULL)
 }
 \arguments{
-\item{hc}{a hec object}
+\item{hc}{a "hec" object}
 
 \item{domain}{which domain to list data for, will default to both options are 'one' or 'two'}
 }
