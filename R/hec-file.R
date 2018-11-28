@@ -34,7 +34,7 @@ print.hec <- function(f) {
   cat("Plan File:", f$attrs$plan_file, "\n")
   cat("Plan Name:", f$attrs$plan_name, "\n")
   cat("Geom Name:", f$attrs$geometry_name, "\n")
-  cat("Out Inteval:", f$attrs$output_interval, "\n")
+  # cat("Out Inteval:", f$attrs$output_interval, "\n")
 }
 
 
@@ -60,6 +60,17 @@ hec_info_ <- function(hc) {
                           error = function(e) NULL)
   }
   
+  geometry_name <- tryCatch(stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
+                                                               which = "Geometry Name"), "[A-Za-z0-9_-]+\\.[a-z0-9]+$"), 
+                        error = function(e) NULL)
+  
+  if (is.null(geometry_name)) {
+    plan_file <- tryCatch(stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
+                                                             which = "Geometry Filename"), "[A-Za-z0-9_-]+\\.[a-z0-9]+$"), 
+                          error = function(e) NULL)
+  }
+  
+
   
   # plan_file <- stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
   #                                                which = "Plan File"), 
@@ -75,12 +86,12 @@ hec_info_ <- function(hc) {
     plan_file=plan_file,
     # computation_time_step = hdf5r::h5attr(hc[[info_path]], 
     #                                       which = "Computation Time Step"), 
-    geometry_name = stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
-                                                       which = "Geometry Name"), "[A-Za-z0-9_-]+\\.[a-z0-9]+$"), 
+    geometry_name = geometry_name, 
     geometry_title = hdf5r::h5attr(hc[[info_path]], 
-                                   which = "Geometry Title"), 
-    output_interval = hdf5r::h5attr(hc[[info_path]], 
-                                    which = "Output Interval")
+                                   which = "Geometry Title")
+    # , 
+    # output_interval = hdf5r::h5attr(hc[[info_path]], 
+    #                                 which = "Output Interval")
   )
   
 }
