@@ -47,14 +47,32 @@ hec_info_ <- function(hc) {
   
   info_path <- "Plan Data/Plan Information"
   
+  
+  plan_file <- tryCatch(stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
+                                                   which = "Plan File"), 
+                                     "[A-Za-z0-9_-]+\\.[a-z0-9]+$"), 
+                error = function(e) NULL)
+  
+  if (is.null(plan_file)) {
+    plan_file <- tryCatch(stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
+                                                             which = "Plan Filename"), 
+                                               "[A-Za-z0-9_-]+\\.[a-z0-9]+$"), 
+                          error = function(e) NULL)
+  }
+  
+  
+  # plan_file <- stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
+  #                                                which = "Plan File"), 
+  #                                  "[A-Za-z0-9_-]+\\.[a-z0-9]+$")
+  # 
+  
+  
   list(
     plan_short_id = hdf5r::h5attr(hc[[info_path]], 
                                   which = "Plan ShortID"),
     plan_name = hdf5r::h5attr(hc[[info_path]], 
                               which = "Plan Name"), 
-    plan_file = stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
-                                                   which = "Plan File"), 
-                                     "[A-Za-z0-9_-]+\\.[a-z0-9]+$"), 
+    plan_file=plan_file,
     computation_time_step = hdf5r::h5attr(hc[[info_path]], 
                                           which = "Computation Time Step"), 
     geometry_name = stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
