@@ -46,7 +46,9 @@ hec_two <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
   }
   
   input_coordinates <- make_coordinate_df(xy)
-  # colnames(input_coordinates) <- c("V1", "V2")
+  colnames(input_coordinates) <- c("V1", "V2")
+  
+  cat(colnames(input_coordinates))
 
   coordinates_df <- input_coordinates %>% 
     dplyr::mutate(
