@@ -13,7 +13,7 @@ is before Decemeber 21st.
 
 ## After the usage section before one-d examples
 
-**#EMANUEL: CAN WE PUT SOMETHING ABOUT UPCOMMING FEATURES HERE? 
+**#EMANUEL: CAN WE PUT SOMETHING ABOUT UPCOMMING FEATURES HERE?   
 +Pulling terrain elevations along 1-D and 2-D profiles   
 +2-D profiles (one timestep, values at multiple points and draw a line to 
 connect the dots). I think this can already be done w/ what we have, but I 
