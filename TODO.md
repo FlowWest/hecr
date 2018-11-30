@@ -2,13 +2,13 @@
 
 ## Todo (winter break)
 The goal is to complete the items in this list before the winter break so that 
-is before Decemeber 21st. 
+is before Decemeber 21st.   
 
-[ ] finish the vignettes for the 2-d recipes
-[ ] refactor the hec_two function 
-[ ] integrate any changes that were planned for the redesign back into the mater branch
-[ ] add HEC-RAS version numbers supported (5.0.5 and 5.0.6)
-[ ] Update code to report plan file rather than geometry file for new RAS version
+[ ] finish the vignettes for the 2-d recipes   
+[ ] refactor the hec_two function   
+[ ] integrate any changes that were planned for the redesign back into the mater branch   
+[ ] add HEC-RAS version numbers supported (5.0.5 and 5.0.6)   
+[ ] Update code to report plan file rather than geometry file for new RAS version   
 [ ] 
 
 ## After the usage section before one-d examples
