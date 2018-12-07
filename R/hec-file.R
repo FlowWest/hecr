@@ -46,8 +46,13 @@ hecras_version <- function(hc) {
 }
 
 
-#' Get Plan Information
-hec_info_ <- function(hc) {
+
+#' @title Hec attributes
+#' @description get all attributes relating to a hec object
+#' @param hc a hec objet
+#' @return list of attributes
+#' @export
+hec_info <- function(hc) {
   
   # if (!inherits(hc, "hec")) {
   #   stop("argument is not a 'hec' object")

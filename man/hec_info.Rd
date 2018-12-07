@@ -5,13 +5,21 @@
 \title{Hec attributes}
 \usage{
 hec_info(hc)
+
+hec_info(hc)
 }
 \arguments{
+\item{hc}{a hec objet}
+
 \item{hc}{a hec objet}
 }
 \value{
 list of attributes
+
+list of attributes
 }
 \description{
+get all attributes relating to a hec object
+
 get all attributes relating to a hec object
 }
