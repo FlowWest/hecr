@@ -39,8 +39,10 @@ print.hec <- function(f) {
 
 #' check hecras version 
 hecras_version <- function(hc) {
-  str_extract(h5attr(hc, "File Version"),
-              "[0-9]{1}\\.[0-9]{1}\\.[0-9]{1}")
+  x <- stringr::str_match(hdf5r::h5attr(hc, "File Version"),
+              "([0-9]{1})\\.([0-9]{1})\\.([0-9]{1})")
+  
+  list(full=x[1, 1],first=x[1,2], second=x[1,3], third=x[4])
 }
 
 
@@ -53,7 +55,7 @@ hec_info_ <- function(hc) {
   
   info_path <- "Plan Data/Plan Information"
   
-  if (hecras_version(hc) == "5.0.6") {
+  if (hecras_version(hc)$full == "5.0.6") {
     
     list(
       plan_short_id = hdf5r::h5attr(hc[[info_path]], 
