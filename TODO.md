@@ -9,7 +9,7 @@ is before Decemeber 21st.
 [ ] integrate any changes that were planned for the redesign back into the mater branch   
 [ ] add HEC-RAS version numbers supported (5.0.5 and 5.0.6)   
 [ ] Update code to report plan file rather than geometry file for new RAS version   
-[ ] 
+[ ] Look at duplicate values function. Had issues with deer creek eliminating more than are actually duplicated.
 
 ## After the usage section before one-d examples
 
