@@ -9,7 +9,8 @@ is before Decemeber 21st.
 [ ] integrate any changes that were planned for the redesign back into the mater branch   
 [ ] add HEC-RAS version numbers supported (5.0.5 and 5.0.6)   
 [ ] Update code to report plan file rather than geometry file for new RAS version   
-[ ] 
+[ ] If duplicate XY pairs are given, throw error and tell person to clean up data
+[ ] Report all duplicate hdf cell values instead of filtering for unique values. give message saying # of duplicate hdf cell values.
 
 ## After the usage section before one-d examples
 
