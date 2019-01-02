@@ -6,3 +6,4 @@ raw-data/*
 *.hdf
 inst/doc
 _scratch
+inst/

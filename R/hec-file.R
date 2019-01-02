@@ -6,7 +6,7 @@
 hec_file <- function(path, mode="r") {
   filename <- basename(path)
   hec <- hdf5r::H5File$new(path, mode=mode)
-  info <- hec_info_(hec)
+  info <- hec_info(hec)
   structure(
     list(
       filename=basename(hec$filename),
@@ -17,15 +17,15 @@ hec_file <- function(path, mode="r") {
   )
 }
 
-
-#' @title Hec attributes
-#' @description get all attributes relating to a hec object
-#' @param hc a hec objet
-#' @return list of attributes
-#' @export
-hec_info <- function(hc) {
-  return(hc$attr)
-}
+# 
+# #' @title Hec attributes
+# #' @description get all attributes relating to a hec object
+# #' @param hc a hec objet
+# #' @return list of attributes
+# #' @export
+# hec_info <- function(hc) {
+#   return(hc$attr)
+# }
 
 #' Print hec 
 #' @export

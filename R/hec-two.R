@@ -31,7 +31,7 @@
 hec_two <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
   
   timestamps <- hec_timestamps_(f)
-  attrs <- hec_info(f) 
+  attrs <- hec_info(f$object) 
   area_name <- hec_flow_area_(f)
   model_center_coordinates <- hec_center_coords_(f, area_name)
   
@@ -48,8 +48,7 @@ hec_two <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
   input_coordinates <- make_coordinate_df(xy)
   colnames(input_coordinates) <- c("V1", "V2")
   
-  cat(colnames(input_coordinates))
-
+  cat("number of rows after transformation: ", nrow(input_coordinates), "\n")
   coordinates_df <- input_coordinates %>% 
     dplyr::mutate(
       nearest_cell_index = 
@@ -57,6 +56,8 @@ hec_two <- function(f, xy, ts_type = "Water Surface", time_stamp = NULL) {
     ) %>% 
     dplyr::distinct(nearest_cell_index, .keep_all = TRUE) %>% 
     dplyr::arrange(nearest_cell_index)
+  
+  cat("no rows after center cell mapping", nrow(coordinates_df), "\n")
 
   time_series <- f$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][coordinates_df[["nearest_cell_index"]], time_idx]
 
