@@ -1,3 +1,4 @@
+^inst$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^inst/raw-data/$

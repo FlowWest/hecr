@@ -60,7 +60,10 @@ hec_info <- function(hc) {
   
   info_path <- "Plan Data/Plan Information"
   
-  if (hecras_version(hc)$full == "5.0.6") {
+  hecras_file_version <- hecras_version(hc)
+  
+  if (hecras_file_version$full == "5.0.6" ||
+      hecras_file_version$full == "5.0.5") {
     
     list(
       plan_short_id = hdf5r::h5attr(hc[[info_path]], 
