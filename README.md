@@ -1,6 +1,14 @@
 # hecr 
 
-# Currently rewritting entire package to use new HDF interface
+**current status**
+
+I have started revisiting this packages after several months. The goal
+is to simplify it, and remove redundant code. Consitency is also key 
+in this effort, function signatures should be consistent, naming conventions
+and documentation as well.
+
+<hr>
+
 
 A simple R package for interacting with hdf5 files resulting from a HEC-RAS 
 model run. `hecr` uses the `hdf5r` package and wraps around it functions that enable 
