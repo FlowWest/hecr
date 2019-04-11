@@ -4,7 +4,7 @@
 \alias{hecras_version}
 \title{check hecras version}
 \usage{
-hecras_version(hc)
+hecras_version(hdf5_object)
 }
 \description{
 check hecras version

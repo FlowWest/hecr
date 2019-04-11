@@ -55,20 +55,23 @@ print.hec_datasets <- function(x, ...) {
   }
 }
 
-has_crossections <- function(h) {
-  "Cross Sections" %in% names(h$object[["Geometry"]])
+# operates on a hec object
+has_crossections <- function(hc) {
+  "Cross Sections" %in% names(hc$object[["Geometry"]])
 }
 
-has_2d <- function(h) {
-  "2D Flow Areas" %in% names(h$object[["Geometry"]])
+# operates on the hec object
+has_2d <- function(hc) {
+  "2D Flow Areas" %in% names(hc$object[["Geometry"]])
 }
 
-hec_timestamps_ <- function(h) {
-  as.POSIXct(h$object[["Results/Unsteady/Output/Output Blocks/Base Output/Unsteady Time Series/Time Date Stamp"]]$read(), 
+# operates on a hec object
+hec_timestamps <- function(hc) {
+  as.POSIXct(hc$object[["Results/Unsteady/Output/Output Blocks/Base Output/Unsteady Time Series/Time Date Stamp"]]$read(), 
              format = "%d%b%Y %H:%M:%S")
 }
 
-
+# opearates on a hec object
 get_plan_area <- function(hc) {
   trimws(hc$object[["Results/Unsteady/Output/Output Blocks/Base Output/Unsteady Time Series/2D Flow Areas/"]]$ls()$name[1])
 }

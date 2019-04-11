@@ -17,8 +17,8 @@ hec_one <- function(hc, station_name, ts_type, time_stamp=NULL) {
          call. = FALSE)
   }
   
-  model_timestamps <- hec_timestamps_(hc) 
-  model_stations <- hec_crosssections(hc)
+  model_timestamps <- hec_timestamps(hc) 
+  model_stations <- trimws(hc$object[['Geometry/Cross Sections/River Stations']]$read())
   
   # when user supplied a timestamp
   if (!is.null(time_stamp)) {
@@ -30,9 +30,24 @@ hec_one <- function(hc, station_name, ts_type, time_stamp=NULL) {
   }
   
   
-  cross_section_index <- cross_section_index(model_stations, station_name)
-  cross_section_reach <- trimws(hc$object[[hdf_paths$GEOM_CROSS]][["Reach Names"]]$read()[cross_section_index])[1]
-  cross_section_river <- trimws(hc$object[[hdf_paths$GEOM_CROSS]][["River Names"]]$read()[cross_section_index])[1]
+  cross_section_index <- which(model_stations %in% station_name)
+  
+  if (length(cross_section_index) == 0L) {
+    stop("supplied stations were not found in the model")
+  }
+  
+  valid_stations <- station_name[which(station_name %in% model_stations)]
+  
+  if (length(cross_section_index) != length(station_name)) {
+    warning("not all stations supplied were found in the model, using valid stations only. \n", 
+            "The following were not found and ignored:\n- ", 
+            paste(station_name[which(!(station_name %in% model_stations))], collapse = "\n- "),
+            call. = FALSE)
+  }
+  
+  
+  cross_section_reach <- trimws(hc$object[[hdf_paths$GEOM_CROSS]][["Reach Names"]]$read()[cross_section_index])
+  cross_section_river <- trimws(hc$object[[hdf_paths$GEOM_CROSS]][["River Names"]]$read()[cross_section_index])
   
   time_series <- hc$object[[hdf_paths$RES_CROSS_SECTIONS]][[ts_type]][cross_section_index, time_idx]
   other_attr_lengths <- length(station_name) * length(time_idx)
@@ -43,35 +58,10 @@ hec_one <- function(hc, station_name, ts_type, time_stamp=NULL) {
     "plan_id" = hc$attrs$plan_short_id, 
     "plan_name" = hc$attrs$plan_name,
     "plan_file" = hc$attrs$plan_file,
-    "cross_section_reach" = cross_section_reach, 
-    "cross_section_river" = cross_section_river, 
-    "station" = rep(station_name, each = length(time_idx)),
+    "cross_section_reach" = rep(cross_section_reach, each = length(time_idx)), 
+    "cross_section_river" = rep(cross_section_river, each=length(time_idx)), 
+    "station" = rep(valid_stations, each = length(time_idx)),
     "values" = as.vector(time_series_stacked)
   )
   
-}
-
-#' Plan Cross Sections
-#' @description Extract the crossections for a given hec collection
-#' @param hc a hec_collection
-#' @return data frame 
-#' @export
-hec_crosssections <- function(hc) {
-  if (!inherits(hc, "hec")) {
-    stop("supplied argument is not a 'hec' object", call. = FALSE)
-  }
-  
-  trimws(hc$object[['Geometry/Cross Sections/River Stations']]$read())
-}
-
-# INTERNALS 
-
-cross_section_index <- function(model_stations, station) {
-  cross_section_idx <- which(model_stations %in% station)
-  
-  if (is_empty(cross_section_idx)) {
-    stop(sprintf("supplied station '%s' not found in model", station), call. = FALSE)
-  }
-  
-  cross_section_idx
 }

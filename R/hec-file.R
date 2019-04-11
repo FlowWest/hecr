@@ -3,9 +3,9 @@
 #' @param path string path to hdf file
 #' @export
 #' @return a hec object
-hec_file <- function(path, mode="r") {
+hec_file <- function(path) {
   filename <- basename(path)
-  hec <- hdf5r::H5File$new(path, mode=mode)
+  hec <- hdf5r::H5File$new(path, mode="r")
   info <- hec_info(hec)
   structure(
     list(
@@ -17,16 +17,6 @@ hec_file <- function(path, mode="r") {
   )
 }
 
-# 
-# #' @title Hec attributes
-# #' @description get all attributes relating to a hec object
-# #' @param hc a hec objet
-# #' @return list of attributes
-# #' @export
-# hec_info <- function(hc) {
-#   return(hc$attr)
-# }
-
 #' Print hec 
 #' @export
 print.hec <- function(f) {
@@ -34,12 +24,11 @@ print.hec <- function(f) {
   cat("Plan File:", f$attrs$plan_file, "\n")
   cat("Plan Name:", f$attrs$plan_name, "\n")
   cat("Geom Name:", f$attrs$geometry_name, "\n")
-  # cat("Out Inteval:", f$attrs$output_interval, "\n")
 }
 
 #' check hecras version 
-hecras_version <- function(hc) {
-  x <- stringr::str_match(hdf5r::h5attr(hc, "File Version"),
+hecras_version <- function(hdf5_object) {
+  x <- stringr::str_match(hdf5r::h5attr(hdf5_object, "File Version"),
               "([0-9]{1})\\.([0-9]{1})\\.([0-9]{1})")
   
   list(full=x[1, 1],first=x[1,2], second=x[1,3], third=x[4])
@@ -47,11 +36,7 @@ hecras_version <- function(hc) {
 
 
 
-#' @title Hec attributes
-#' @description get all attributes relating to a hec object
-#' @param hc a hec objet
-#' @return list of attributes
-#' @export
+# get all the top level attributes for the hecras hdf5 file
 hec_info <- function(hc) {
   
   # if (!inherits(hc, "hec")) {
@@ -106,79 +91,3 @@ hec_info <- function(hc) {
   
   
 }
-
-
-#' Show tree directory of hdf file
-#' @description Currently an experimental function used for visualizing 
-#' the data structure in the hdf file.
-#' @param f a hec object
-#' @param depth how deep to print the tree? Currently capped at 6
-#' @export
-tree <- function(f, depth=2) {
-  
-  if (depth > 6) stop("Sorry we currently support max depth 6", call. = F)
-  
-  is_dataset <- function(x) {
-    inherits(x, "H5D")
-  }
-  
-  if (!inherits(f, "hec")) {
-    stop("argument is not a 'hec' object")
-  }
-  
-  for (i in f$object$ls()$name) {
-    cat("*Group: ", i, "\n")
-    for (j in f$object[[i]]$ls()$name) {
-      if (depth==1) next
-      if (is.null(j)) next
-      cat("\t|\n")
-      cat("\t--", j, "\n")
-      for (z in f$object[[i]][[j]]$ls()$name) {
-        if (depth==2) next
-        if (is.null(z)) next
-        cat("\t\t|\n")
-        cat("\t\t--", z)
-        if (is_dataset(f$object[[i]][[j]][[z]])) {
-          cat(" (dataset)*\n")
-          next
-        } 
-        cat("\n")
-        for (w in f$object[[i]][[j]][[z]]$ls()$name) {
-          if (depth==3) next
-          if (is.null(w)) next
-          cat("\t\t\t|\n")
-          cat("\t\t\t--", w)
-          if (is_dataset(f$object[[i]][[j]][[z]][[w]])) {
-            cat(" (dataset)*\n")
-            next
-          } 
-          cat("\n")
-          for (v in f$object[[i]][[j]][[z]][[w]]$ls()$name) {
-            if (depth==4) next
-            if (is.null(v)) next
-            cat("\t\t\t\t|\n")
-            cat("\t\t\t\t--", v)
-            if (is_dataset(f$object[[i]][[j]][[z]][[w]][[v]])) {
-              cat(" (dataset)*\n")
-              next
-            } 
-            cat("\n")
-            for (v2 in f$object[[i]][[j]][[z]][[w]][[v]]$ls()$name) {
-              if (depth==5) next
-              if (is.null(v2)) next
-              cat("\t\t\t\t\t|\n")
-              cat("\t\t\t\t\t--", v2)
-              if (is_dataset(f$object[[i]][[j]][[z]][[w]][[v]][[v2]])) {
-                cat(" (dataset)*\n")
-                next
-              } 
-              cat("\n")
-            }
-          }
-        }
-      }
-    }
-    cat("\n")
-  }
-}
-

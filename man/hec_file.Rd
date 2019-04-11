@@ -4,7 +4,7 @@
 \alias{hec_file}
 \title{Read hec file}
 \usage{
-hec_file(path, mode = "r")
+hec_file(path)
 }
 \arguments{
 \item{path}{string path to hdf file}
