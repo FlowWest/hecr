@@ -5,13 +5,3 @@ template:
 navbar:
   title: "hecr"
   type: inverse
-
-reference:
-  - title: Read
-    desc: Read in an hdf file reasulting from HEC-RAS model run
-    contents:
-      - hec_file
-  - title: Query Data
-    desc: Query data out of an hdf file.
-    contents:
-      - starts_with("extract_")

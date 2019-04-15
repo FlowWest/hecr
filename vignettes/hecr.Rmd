@@ -8,23 +8,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-An R package for interacting with hdf5 files resulting from HEC-RAS 
-model runs. `hecr` uses the `hdf5r` package and wraps around it functions that enable 
-a user to quickly query out desired data in a tidy dataframe format.
-
-## Installation 
-
-The install requires `devtools`, you can install with `install.packages("devtools")`.
-With `devtools` installed, you can install `hecr` with:
-
-```r 
-devtools::install_github("flowwest/hecr")
-```
-
-Installing hecr will install as dependencies: hdf5r, dplyr, purrr, and config. If detected
-on the system these will not install, but an update might be required. The latest
-versions of both purrr and dplyr are required for hecr to function properly.
-
 ## Usage 
 
 The main goal of hecr is to streamline and automate the process of obtaining 
@@ -50,13 +33,15 @@ library(hecr)
 # first read in the plan hdf file using the hec_file function
 f <- hecr::hec_file("inst/raw-data/ArdenwoodCreek.p50.hdf")
 
-print(f) # to view details of what was read
+print(f)
 
-# extract timeseries output at a 1-D cross-section using the extract_ts1
-water_surface <- hecr::extract_ts1(f, station_name = 6863.627, ts_type = "Water Surface")
+# A hec object----
+# Plan File: ArdenwoodCreek.p50 
+# Plan Name: Q100_ExistBaseline_Wet_20170307 
+# Geom Name: ArdenwoodCreek.g06 
 
-# A list of all cross sections from any hdf file can be generated
-cross_sections_in_model <- hecr::get_xs_river_stations(f)
+# extract timeseries output at a 1-D cross-section using the hec_one function
+water_surface <- hecr::hec_one(f, station_name = 6863.627, ts_type = "Water Surface")
 
 # plot
 water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
@@ -76,18 +61,19 @@ querying multiple plans at multiple locations within the model domain.
 
 ### 1-D Timeseries Output for Multiple Plans
 
-In this example, we read in a collection of hdf files. This can be accomplished
-using the same `hec_file()` function, but this time supply it a directory 
-containing the hdf files we are interested in. 
+In order to keep hecr interface simple we limit queries to just one plan 
+file at a time. We instead encourage the use of `purrr` to facilitate multiple
+station queries. Here we show a simple example of this. More example 
+of using purrr with hecr can be found in [this article](#)
 
 ```r
-# path to directory with hdf files we wish to query on
-f <- hecr::hec_file("inst/raw-data/")
+plans <- list.files("~/Documents/hecr-examples/examples/", full.names = TRUE)[1:2]
 
-water_surface <- hecr::extract_ts1(f, station_name = 6863.627, ts_type = "Water Surface")
+water_surfaces <- purrr::map_df(plans, ~hecr::hec_file(.) %>% 
+                                          hec_one(., 6863.627, "Water Surface"))
 
 # plot
-water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
+water_surfaces %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 ```
 
 ![](images/cross_section_wse_multiple_plans.png)
