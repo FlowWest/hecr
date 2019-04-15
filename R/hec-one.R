@@ -61,7 +61,7 @@ hec_one <- function(hc, station_name, ts_type, time_stamp=NULL) {
     "cross_section_reach" = rep(cross_section_reach, each = length(time_idx)), 
     "cross_section_river" = rep(cross_section_river, each=length(time_idx)), 
     "station" = rep(valid_stations, each = length(time_idx)),
-    "values" = as.vector(time_series_stacked)
+    "value" = as.vector(time_series_stacked)
   )
   
 }
