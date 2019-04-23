@@ -1,3 +1,12 @@
+hecr 0.1.1
+===========
+
+**General Updates**
+
+Refactor and make API much more consistent. Refine the list of exported functions.
+
+
+
 hecr 0.1.0
 ===========
 
