@@ -1,8 +1,8 @@
 #' @title Query 2d Model Results
 #' @description hec_two allows you query a time series from a hec-ras model result
-#' using one more coordinates and an optional time stamp.
-#' @param f an hdf file read in with the hec_file() function
-#' @param ts_type the time series to extract, option defaults to Water Surface
+#' using one or more coordinates and an optional time stamp.
+#' @param hc an hdf file read in with the hec_file() function
+#' @param ts_type the time series to extract
 #' @param xy a coordinate or set of coordinates either in a dataframe or matrix structure. See
 #' details below for more information. 
 #' @param time_stamp return only values with this timestamp

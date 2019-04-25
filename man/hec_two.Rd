@@ -7,14 +7,14 @@
 hec_two(hc, xy, ts_type = "Water Surface", time_stamp = NULL)
 }
 \arguments{
+\item{hc}{an hdf file read in with the hec_file() function}
+
 \item{xy}{a coordinate or set of coordinates either in a dataframe or matrix structure. See
 details below for more information.}
 
 \item{ts_type}{the time series to extract, option defaults to Water Surface}
 
 \item{time_stamp}{return only values with this timestamp}
-
-\item{f}{an hdf file read in with the hec_file() function}
 }
 \description{
 hec_two allows you query a time series from a hec-ras model result
