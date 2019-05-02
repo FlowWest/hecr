@@ -12,13 +12,13 @@ hec_two(hc, xy, ts_type = "Water Surface", time_stamp = NULL)
 \item{xy}{a coordinate or set of coordinates either in a dataframe or matrix structure. See
 details below for more information.}
 
-\item{ts_type}{the time series to extract, option defaults to Water Surface}
+\item{ts_type}{the time series to extract}
 
 \item{time_stamp}{return only values with this timestamp}
 }
 \description{
 hec_two allows you query a time series from a hec-ras model result
-using one more coordinates and an optional time stamp.
+using one or more coordinates and an optional time stamp.
 }
 \details{
 You can supply coordinates in as a matrix. The matrix must have two columns, 

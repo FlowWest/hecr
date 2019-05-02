@@ -106,5 +106,7 @@ make_coordinate_df <- function(x) {
       colnames(x) <- c("x", "y")
       return(x)
     }
+  } else {
+    stop("input coordinates format must be one of matrix or data.frame", call. = FALSE)
   }
 }

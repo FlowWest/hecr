@@ -19,11 +19,11 @@ hec_file <- function(path) {
 
 #' Print hec 
 #' @export
-print.hec <- function(f) {
+print.hec <- function(hc) {
   cat("A hec object----\n")
-  cat("Plan File:", f$attrs$plan_file, "\n")
-  cat("Plan Name:", f$attrs$plan_name, "\n")
-  cat("Geom Name:", f$attrs$geometry_name, "\n")
+  cat("Plan File:", hc$attrs$plan_file, "\n")
+  cat("Plan Name:", hc$attrs$plan_name, "\n")
+  cat("Geom Name:", hc$attrs$geometry_name, "\n")
 }
 
 #' check hecras version 
@@ -39,17 +39,12 @@ hecras_version <- function(hdf5_object) {
 # get all the top level attributes for the hecras hdf5 file
 hec_info <- function(hc) {
   
-  # if (!inherits(hc, "hec")) {
-  #   stop("argument is not a 'hec' object")
-  # }
-  
   info_path <- "Plan Data/Plan Information"
   
   hecras_file_version <- hecras_version(hc)
   
-  if (hecras_file_version$full == "5.0.6" ||
-      hecras_file_version$full == "5.0.5" ||
-      hecras_file_version$full == "5.0.7") {
+  # these new versions have a new names for the attributes 
+  if (as.numeric(hecras_file_version$third) >= 6) {
     
     list(
       plan_short_id = hdf5r::h5attr(hc[[info_path]], 
