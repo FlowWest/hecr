@@ -4,7 +4,7 @@
 \alias{print.hec}
 \title{Print hec}
 \usage{
-\method{print}{hec}(f)
+\method{print}{hec}(hc)
 }
 \description{
 Print hec
