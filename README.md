@@ -1,16 +1,6 @@
 # hecr 
 
-**current status**
-
-I have started revisiting this packages after several months. The goal
-is to simplify it, and remove redundant code. Consitency is also key 
-in this effort, function signatures should be consistent, naming conventions
-and documentation as well.
-
-<hr>
-
-
-A simple R package for interacting with hdf5 files resulting from a HEC-RAS 
+An R package for interacting with hdf5 files resulting from a HEC-RAS 
 model run. `hecr` uses the `hdf5r` package and wraps around it functions that enable 
 a user to quickly query out desired data in a tidy dataframe format.
 
@@ -25,7 +15,7 @@ devtools::install_github("flowwest/hecr")
 
 Installing hecr will install as dependencies: hdf5r, dplyr, and purrr. If detected
 on the system these will not install, but an update might be required. Both purrr and dplyr
-need to be in the latest version for hecr to work.
+need to be the latest version.
 
 ## Usage 
 
@@ -35,8 +25,7 @@ hecr makes it easy to query data from an hdf by giving the user a consistent app
 to querying the data. Both time series from cross sections and 2d portions of a model
 run can be obtained using the hecr package.
 
-Below we walk through simple examples of queries, more complex examples and real world
-applications can be found in the [Tutorial (Coming Soon)](#)
+Here is an example of reading and querying out a time series.
 
 
 ```r
@@ -55,13 +44,7 @@ water_surface %>% ggplot(aes(datetime, values, color = plan_name)) + geom_line()
 
 ![](images/cross_section_single_file.png)
 
-### Details 
 
-The `hec_one` function simply attaches a "hec_one" class to the collection of 
-hdf files, with this a set of function become available to be dispatched on it, including 
-`hec_extract` which requires a station, and time series type. These are exposed through 
-the `hec_one` function to make it quick and easy to query out data.
-Doing so this way allows for a user to explore 
 
 
 
