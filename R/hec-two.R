@@ -52,7 +52,7 @@ hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
     dplyr::distinct(nearest_cell_index, .keep_all = TRUE) %>% 
     dplyr::arrange(nearest_cell_index)
 
-  time_series <- f$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][coordinates_df[["nearest_cell_index"]], time_idx]
+  time_series <- hc$object[[hdf_paths$RES_2D_FLOW_AREAS]][[area_name]][[ts_type]][coordinates_df[["nearest_cell_index"]], time_idx]
 
   stacked_time_series <- matrix(t(time_series), ncol=1, byrow = TRUE)
   
