@@ -71,7 +71,7 @@ hec_info <- function(hc) {
       plan_name = hdf5r::h5attr(hc[[info_path]], 
                                 which = "Plan Name"), 
       plan_file = stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
-                                                     which = "Plan File"), 
+                                                     which = "Plan Filename"), 
                                        "[A-Za-z0-9_-]+\\.[a-z0-9]+$"), 
       computation_time_step = hdf5r::h5attr(hc[[info_path]], 
                                             which = "Computation Time Step"), 
