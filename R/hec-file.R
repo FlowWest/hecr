@@ -44,7 +44,7 @@ hec_info <- function(hc) {
   hecras_file_version <- hecras_version(hc)
   
   # these new versions have a new names for the attributes 
-  if (as.numeric(hecras_file_version$third) >= 6) {
+  if (as.numeric(hecras_file_version$first) >= 6) {
     
     list(
       plan_short_id = hdf5r::h5attr(hc[[info_path]], 
