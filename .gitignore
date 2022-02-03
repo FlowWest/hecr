@@ -7,3 +7,4 @@ raw-data/*
 inst/doc
 _scratch
 inst/
+.data-test/

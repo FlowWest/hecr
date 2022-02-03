@@ -28,6 +28,10 @@
 #' @export
 hec_two <- function(hc, xy, ts_type = "Water Surface", time_stamp = NULL) {
   
+  if (!hc$object$is_valid) {
+    stop("hc object is invalid, please re-read the hec file", call. = FALSE)
+  }
+  
   timestamps <- hec_timestamps(hc)
   area_name <- hec_flow_area(hc)
   model_center_coordinates <- hec_center_coords(hc, area_name)

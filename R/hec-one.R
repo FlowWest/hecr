@@ -12,12 +12,21 @@
 #' }
 hec_one <- function(hc, station_name, ts_type, time_stamp=NULL) {
   
+  if (!hc$object$is_valid) {
+    stop("hc object is invalid, please re-read the hec file", call. = FALSE)
+  }
+  
   if (!inherits(hc, "hec")) {
     stop("hc is not an object of type 'hec', use hec_file() to read in data", 
          call. = FALSE)
   }
   
   model_timestamps <- hec_timestamps(hc) 
+  
+  if (!has_crossections(hc)) {
+    stop("model file does not have 1-dimension domain", call. = FALSE)
+  }
+  
   model_stations <- trimws(hc$object[['Geometry/Cross Sections/River Stations']]$read())
   
   # when user supplied a timestamp
