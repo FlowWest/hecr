@@ -29,7 +29,7 @@ print.hec <- function(hc) {
 #' check hecras version 
 hecras_version <- function(hdf5_object) {
   x <- stringr::str_match(hdf5r::h5attr(hdf5_object, "File Version"),
-              "([0-9]{1})\\.([0-9]{1})\\.([0-9]{1})")
+              "([0-9]+)\\.([0-9]+)\\.*([0-9])*")
   
   list(full=x[1, 1],first=x[1,2], second=x[1,3], third=x[4])
 }
