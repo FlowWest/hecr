@@ -132,3 +132,84 @@ make_coordinate_df_new(A)
     ## 1 1 2
     ## 2 3 4
     ## 3 5 6
+
+What if there is a Z value?
+
+``` r
+B = matrix(
+  c(1, 2, 7, 
+    3, 4, 8,  
+    3, 4, 9,
+    5, 6, 10), 
+  ncol = 3,
+  byrow = TRUE)
+colnames(B) = c("X", "Y", "Z")
+print(B)
+```
+
+    ##      X Y  Z
+    ## [1,] 1 2  7
+    ## [2,] 3 4  8
+    ## [3,] 3 4  9
+    ## [4,] 5 6 10
+
+``` r
+dfz <- as.data.frame(B)
+print(dfz)
+```
+
+    ##   X Y  Z
+    ## 1 1 2  7
+    ## 2 3 4  8
+    ## 3 3 4  9
+    ## 4 5 6 10
+
+This version of the function ignores all but the first two columns
+
+``` r
+make_coordinate_df_new2 <- function(x) {
+  x <- x[, 1:2]
+  if (is.matrix(x)) {
+    if (anyDuplicated(x)) {
+      warning("Duplicate values found in coordinate pairs, only unique pairs were kept")
+      return(as.data.frame(matrix(x[!duplicated(x), ], ncol=2, byrow=FALSE, dimnames = list(NULL, c("x", "y")))))
+    } else 
+      return(as.data.frame(matrix(x, ncol=2, dimnames = list(NULL, c("x", "y"))))) 
+  } else if (is.data.frame(x)) {
+    if (anyDuplicated(x)) {
+      warning("Duplicate values found in coordinates, only unique pairs will be used")
+      colnames(x) <- c("x", "y")
+      return(x[!duplicated(x), ])
+    } else {
+      colnames(x) <- c("x", "y")
+      return(x)
+    }
+  } else {
+    stop("input coordinates format must be one of matrix or data.frame", call. = FALSE)
+  }
+}
+
+# works fine for data frames
+make_coordinate_df_new2(dfz)
+```
+
+    ## Warning in make_coordinate_df_new2(dfz): Duplicate values found in coordinates,
+    ## only unique pairs will be used
+
+    ##   x y
+    ## 1 1 2
+    ## 2 3 4
+    ## 4 5 6
+
+``` r
+# works for matrices too
+make_coordinate_df_new2(B)
+```
+
+    ## Warning in make_coordinate_df_new2(B): Duplicate values found in coordinate
+    ## pairs, only unique pairs were kept
+
+    ##   x y
+    ## 1 1 2
+    ## 2 3 4
+    ## 3 5 6
