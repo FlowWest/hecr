@@ -29,7 +29,7 @@ print.hec <- function(hc) {
 #' check hecras version 
 hecras_version <- function(hdf5_object) {
   x <- stringr::str_match(hdf5r::h5attr(hdf5_object, "File Version"),
-              "([0-9]{1})\\.([0-9]{1})\\.([0-9]{1})")
+              "([0-9]+)\\.([0-9]+)\\.*([0-9])*")
   
   list(full=x[1, 1],first=x[1,2], second=x[1,3], third=x[4])
 }
@@ -44,7 +44,7 @@ hec_info <- function(hc) {
   hecras_file_version <- hecras_version(hc)
   
   # these new versions have a new names for the attributes 
-  if (as.numeric(hecras_file_version$third) >= 6) {
+  if (as.numeric(hecras_file_version$first) >= 6) {
     
     list(
       plan_short_id = hdf5r::h5attr(hc[[info_path]], 
@@ -71,7 +71,7 @@ hec_info <- function(hc) {
       plan_name = hdf5r::h5attr(hc[[info_path]], 
                                 which = "Plan Name"), 
       plan_file = stringr::str_extract(hdf5r::h5attr(hc[[info_path]], 
-                                                     which = "Plan File"), 
+                                                     which = "Plan Filename"), 
                                        "[A-Za-z0-9_-]+\\.[a-z0-9]+$"), 
       computation_time_step = hdf5r::h5attr(hc[[info_path]], 
                                             which = "Computation Time Step"), 

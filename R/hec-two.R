@@ -91,10 +91,11 @@ get_nearest_cell_center_index <- function(coords, nodes) {
 }
 
 make_coordinate_df <- function(x) {
+  x <- x[, 1:2, drop = FALSE]
   if (is.matrix(x)) {
     if (anyDuplicated(x)) {
       warning("Duplicate values found in coordinate pairs, only unique pairs were kept")
-      return(as.data.frame(matrix(x[!duplicated(x), ], ncol=2, byrow=TRUE, dimnames = list(NULL, c("x", "y")))))
+      return(as.data.frame(matrix(x[!duplicated(x), ], ncol=2, byrow=FALSE, dimnames = list(NULL, c("x", "y")))))
     } else 
       return(as.data.frame(matrix(x, ncol=2, dimnames = list(NULL, c("x", "y"))))) 
   } else if (is.data.frame(x)) {
